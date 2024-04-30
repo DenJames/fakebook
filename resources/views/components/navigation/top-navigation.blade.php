@@ -55,7 +55,7 @@
                     </x-slot:trigger>
 
                     <x-slot:content>
-                        <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem"
+                        <a href="{{ route('profile.edit') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem"
                            tabindex="-1" id="user-menu-item-0">Your profile</a>
                         <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem"
                            tabindex="-1" id="user-menu-item-1">Sign out</a>

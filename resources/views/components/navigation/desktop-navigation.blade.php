@@ -11,7 +11,7 @@
                 <li>
                     <ul role="list" class="-mx-2 space-y-1">
                         @guest
-                            <x-navigation.side-nav-link  :href="route('login')">
+                            <x-navigation.side-nav-link :href="route('login')">
                                 <x-slot:icon>
                                     <x-icons.signin />
                                 </x-slot:icon>

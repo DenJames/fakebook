@@ -35,6 +35,14 @@
                                 Dashboard
                             </x-navigation.side-nav-link>
                         @endguest
+
+                        <x-navigation.side-nav-link :href="route('dashboard')">
+                            <x-slot:icon>
+                                <x-icons.chat />
+                            </x-slot:icon>
+
+                            Chat
+                        </x-navigation.side-nav-link>
                     </ul>
                 </li>
             </ul>

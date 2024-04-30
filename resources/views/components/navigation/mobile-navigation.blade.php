@@ -1,4 +1,4 @@
-<div class="relative z-50 lg:hidden" role="dialog" aria-modal="true">
+<div class="relative z-50 lg:hidden" role="dialog" aria-modal="true" x-cloak>
     <div class="fixed inset-0 bg-gray-900/80"
          x-show="isSidebarOpen"
          x-transition:enter="transition-opacity ease-linear duration-300"

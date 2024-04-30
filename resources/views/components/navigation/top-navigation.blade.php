@@ -57,8 +57,14 @@
                     <x-slot:content>
                         <a href="{{ route('profile.edit') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem"
                            tabindex="-1" id="user-menu-item-0">Your profile</a>
-                        <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem"
-                           tabindex="-1" id="user-menu-item-1">Sign out</a>
+
+                        <button class="block px-3 py-1 text-sm leading-6 text-gray-900" @click.prevent="document.getElementById('logout-form').submit();" tabindex="-1" id="user-menu-item-1">
+                            {{ __('Logout') }}
+                        </button>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                        </form>
                     </x-slot:content>
                 </x-dropdown>
             </div>

@@ -15,7 +15,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="h-full font-sans antialiased" x-data="{ isSidebarOpen: false }">
+<style>
+    /* Needed to avoid flashy side nav */
+    [x-cloak] { display: none }
+</style>
+
+<body class="h-full font-sans antialiased" x-data="{ isSidebarOpen: false }" x-cloak>
 <div>
     <x-navigation.mobile-navigation/>
 

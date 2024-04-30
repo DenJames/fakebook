@@ -28,9 +28,11 @@
             </div>
             <div class="flex grow flex-col overflow-y-auto bg-blue-600 px-6 pb-4">
                 <div class="flex h-16 shrink-0 items-center">
-                    <p class="text-4xl font-bold text-center w-full text-blue-100 border-b">
-                        Fakebook
-                    </p>
+                    <a href="/" class="w-full">
+                        <p class="text-4xl font-bold text-center w-full text-blue-100 border-b">
+                            Fakebook
+                        </p>
+                    </a>
                 </div>
 
                 <nav class="flex flex-1 flex-col">

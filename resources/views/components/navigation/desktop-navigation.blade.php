@@ -1,9 +1,11 @@
 <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col bg-blue-600">
     <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 pb-4">
         <div class="flex h-16 shrink-0 items-center">
-            <p class="text-4xl font-bold text-center w-full text-blue-100 border-b">
-                Fakebook
-            </p>
+            <a href="/" class="w-full">
+                <p class="text-4xl font-bold text-center w-full text-blue-100 border-b">
+                    Fakebook
+                </p>
+            </a>
         </div>
 
         <nav class="flex flex-1 flex-col px-6">

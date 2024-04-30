@@ -41,7 +41,7 @@
 
         <main class="py-10 lg:pl-64 min-h-screen flex justify-center items-center w-full">
             <div class="w-full px-4 sm:px-6 lg:px-8">
-                <div class="mx-auto max-w-lg">
+                <div>
                     {{ $slot }}
                 </div>
             </div>

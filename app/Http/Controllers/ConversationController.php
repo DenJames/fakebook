@@ -6,6 +6,7 @@ use App\Models\Conversation;
 use App\Models\User;
 use App\Services\MessageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ConversationController extends Controller
 {
@@ -45,6 +46,11 @@ class ConversationController extends Controller
      */
     public function show(Conversation $conversation)
     {
+        // TODO: Refactor into policy?
+        if (! $conversation->users->contains(Auth::id())) {
+            abort(403);
+        }
+
         return view('chat', [
             'conversation' => $conversation,
             'messages' => $this->messageService->fetchMessages($conversation),

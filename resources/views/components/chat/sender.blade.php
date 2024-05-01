@@ -5,9 +5,9 @@
 
     <div class="flex flex-col h-full justify-content-start pl-4 mt-10 text-white">
         <div class="font-bold text-lg">
-            Dennis
+            {{ $username }}
         </div>
 
-        <p>Some chat message</p>
+        <p>{{ $slot }}</p>
     </div>
 </x-chat.chat-wrapper>

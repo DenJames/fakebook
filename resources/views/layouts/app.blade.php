@@ -16,11 +16,12 @@
 </head>
 
 <style>
-    /* Needed to avoid flashy side nav */
-    [x-cloak] { display: none }
+    [x-cloak] {
+        display: none !important;
+    }
 </style>
 
-<body class="h-full font-sans antialiased" x-data="{ isSidebarOpen: false }" x-cloak>
+<body class="h-full font-sans antialiased" x-data="{ isSidebarOpen: false }">
 <div>
     <x-navigation.mobile-navigation/>
 

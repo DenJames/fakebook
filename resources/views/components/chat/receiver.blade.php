@@ -1,5 +1,5 @@
 <x-chat.chat-wrapper :is-sender="false">
-    <div class="flex flex-col h-full justify-content-start pl-4 mt-10 w-full">
+    <div class="flex flex-col h-full justify-content-start pl-4 w-full">
         <div class="font-bold text-lg">
             {{ $username }}
         </div>

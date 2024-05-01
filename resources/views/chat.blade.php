@@ -2,7 +2,7 @@
     <div class="relative rounded bg-gray-100 p-4 w-full h-[calc(100vh-150px)] space-y-6">
         <div class="space-y-6 overflow-y-auto p-4 max-h-[calc(100vh-350px)]" id="messages">
             @foreach($conversation->messages()->orderByDesc('created_at')->limit(30)->get()->sortBy('created_at') as $message)
-                @if($message->user_id == auth()->id())
+                @if($message->userIsAuthor())
                     <div class="flex flex-col items-end gap-y-4 w-full">
                         <x-chat.sender :message="$message" />
 

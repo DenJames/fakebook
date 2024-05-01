@@ -6,19 +6,13 @@
                     <div class="flex flex-col items-end gap-y-4 w-full">
                         <x-chat.sender :message="$message" />
 
-
                         <small class="-mt-3 text-black/50">
                             Sent: {{ $message->created_at->diffForHumans() }}
                         </small>
                     </div>
                 @else
                     {{-- Person u chatting with --}}
-                    <x-chat.receiver>
-                        <x-slot:username>
-                            {{ $message->sender->name }}
-                        </x-slot:username>
-                        {{ $message->content }}
-                    </x-chat.receiver>
+                    <x-chat.receiver :message="$message" />
 
                     <small class="-mt-3 text-black/50">
                         Sent: {{ $message->created_at->diffForHumans() }}

@@ -1,10 +1,10 @@
 <x-app-layout>
     <div class="relative rounded bg-gray-100 p-4 w-full h-[calc(100vh-150px)] space-y-6">
         <div class="space-y-6 overflow-y-auto p-4 max-h-[calc(100vh-350px)]" id="messages">
-            @foreach($conversation->messages()->orderByDesc('created_at')->limit(30)->get()->sortBy('created_at') as $message)
+            @foreach($messages as $message)
                 @if($message->userIsAuthor())
                     <div class="flex flex-col items-end gap-y-4 w-full">
-                        <x-chat.sender :message="$message" />
+                        <x-chat.sender :message="$message"/>
 
                         <small class="-mt-3 text-black/50">
                             Sent: {{ $message->created_at->diffForHumans() }}
@@ -12,7 +12,7 @@
                     </div>
                 @else
                     {{-- Person u chatting with --}}
-                    <x-chat.receiver :message="$message" />
+                    <x-chat.receiver :message="$message"/>
 
                     <small class="-mt-3 text-black/50">
                         Sent: {{ $message->created_at->diffForHumans() }}
@@ -21,6 +21,7 @@
             @endforeach
         </div>
 
+        @if($conversation)
             <div class="w-full flex flex-col absolute bottom-0 left-0 bg-gray-200 p-4">
                 <input class="w-full p-2 rounded h-24 border-0" type="text" placeholder="Type a message..." id="message"
                        data-conversation_id="{{ $conversation->id }}">
@@ -29,7 +30,8 @@
                     id="send_message">
                     Send message
                 </button>
-        </div>
+            </div>
+        @endif
     </div>
 
     @push('scripts')

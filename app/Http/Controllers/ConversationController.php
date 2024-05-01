@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Conversation;
 use App\Models\User;
+use App\Services\MessageService;
 use Illuminate\Http\Request;
 
 class ConversationController extends Controller
 {
+    public function __construct(private readonly MessageService $messageService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -40,8 +45,10 @@ class ConversationController extends Controller
      */
     public function show(Conversation $conversation)
     {
-        //
-        return view('chat', compact('conversation'));
+        return view('chat', [
+            'conversation' => $conversation,
+            'messages' => $this->messageService->fetchMessages($conversation),
+        ]);
     }
 
     /**

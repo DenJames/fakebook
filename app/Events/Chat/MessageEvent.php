@@ -42,33 +42,18 @@ class MessageEvent implements ShouldBroadcastNow
 
     public function broadcastWith(): array
     {
-        if ($this->userId == $this->message->user_id) {
-            $html = <<<'blade'
-                        <div class="flex flex-col items-end gap-y-4 w-full">
-                            <x-chat.sender>
-                                <x-slot:username>
-                                    {{ $username }}
-                                </x-slot:username>
-                                {{ $message }}
-                            </x-chat.sender>
-                        </div>
-                    blade;
+        $message = $this->message;
+        if ($message->user_id === $this->userId) {
+            $html = Blade::render('<x-chat.sender :message="$message" />', ['message' => $message]);
         } else {
-            $html = <<<'blade'
-                        <x-chat.receiver>
-                            <x-slot:username>
-                                {{ $username }}
-                            </x-slot:username>
-                            {{ $message }}
-                        </x-chat.receiver>
-                    blade;
+            $html = Blade::render('<x-chat.receiver :message="$message" />', ['message' => $message]);
         }
 
         return [
-            'message' => $this->message->content,
-            'sender' => $this->message->sender->name,
-            'user_id' => $this->message->user_id,
-            'html' => Blade::render($html, ['message' => $this->message->content, 'username' => $this->message->sender->name]),
+            'message' => $message->content,
+            'sender' => $message->sender->name,
+            'user_id' => $message->user_id,
+            'html' => $html,
         ];
     }
 }

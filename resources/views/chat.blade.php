@@ -3,20 +3,10 @@
         <div class="space-y-6 overflow-y-auto p-4 max-h-[calc(100vh-350px)]" id="messages">
             @foreach($messages as $message)
                 @if($message->userIsAuthor())
-                    <div class="flex flex-col items-end gap-y-4 w-full">
-                        <x-chat.sender :message="$message"/>
-
-                        <small class="-mt-3 text-black/50">
-                            Sent: {{ $message->created_at->diffForHumans() }}
-                        </small>
-                    </div>
+                    <x-chat.sender :message="$message"/>
                 @else
                     {{-- Person u chatting with --}}
                     <x-chat.receiver :message="$message"/>
-
-                    <small class="-mt-3 text-black/50">
-                        Sent: {{ $message->created_at->diffForHumans() }}
-                    </small>
                 @endif
             @endforeach
         </div>

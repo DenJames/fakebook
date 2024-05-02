@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Repositories;
 
 use App\Models\Conversation;
 use Illuminate\Database\Eloquent\Collection;
 
-class MessageService
+class ConversationRepository
 {
     public function fetchMessages(Conversation $conversation, int $limit = 0, string $sortBy = 'asc'): Collection|array
     {
@@ -23,4 +23,5 @@ class MessageService
 
         return $query->get();
     }
+
 }

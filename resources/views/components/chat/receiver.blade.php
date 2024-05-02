@@ -69,3 +69,7 @@
         }
     </script>
 </x-chat.chat-wrapper>
+
+<small class="-mt-3 text-black/50">
+    Sent: {{ $message->created_at->diffForHumans() }}
+</small>

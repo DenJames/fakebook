@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Conversation;
 use App\Models\User;
+use App\Repositories\ConversationRepository;
 use App\Services\MessageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ConversationController extends Controller
 {
-    public function __construct(private readonly MessageService $messageService)
+    public function __construct(private readonly ConversationRepository $conversation)
     {
     }
 
@@ -53,7 +54,7 @@ class ConversationController extends Controller
 
         return view('chat', [
             'conversation' => $conversation,
-            'messages' => $this->messageService->fetchMessages($conversation),
+            'messages' => $this->conversation->fetchMessages($conversation),
         ]);
     }
 

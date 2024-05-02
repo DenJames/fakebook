@@ -38,7 +38,7 @@
                             </x-navigation.side-nav-link>
                         @endguest
 
-                        <x-navigation.side-nav-link :href="route('chat.index')">
+                        <x-navigation.side-nav-link :href="route('conversations.index')">
                             <x-slot:icon>
                                 <x-icons.chat />
                             </x-slot:icon>

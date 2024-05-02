@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Conversation;
 use App\Models\User;
 use App\Repositories\ConversationRepository;
-use App\Services\MessageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,28 +17,23 @@ class ConversationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $conversations = $request->user()->conversations;
-        dd($conversations);
-        // return view('conversations.index', compact('conversations'));
-    }
+        $conversations = Auth::user()?->conversations()->latest('updated_at')->get()->map(function ($conversation) {
+            $conversation->participant = $conversation->users()->where('user_id', '!=', Auth::id())->first();
+            $conversation->latest_message = $conversation->messages->last()?->content ?? 'No messages yet';
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+            return $conversation;
+        });
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request, User $user)
-    {
-        //
-        dd($user);
+        $users = User::whereDoesntHave('conversations', function ($query) {
+            $query->where('user_id', Auth::id());
+        })->get();
+
+        return view('conversations.index', [
+            'users' => $users,
+            'conversations' => $conversations,
+        ]);
     }
 
     /**
@@ -52,39 +46,12 @@ class ConversationController extends Controller
             abort(403);
         }
 
-        return view('chat', [
+        return view('conversations.show', [
             'conversation' => $conversation,
             'messages' => $this->conversation->fetchMessages($conversation),
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Conversation $conversation)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Conversation $conversation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Conversation $conversation)
-    {
-        //
-    }
-
-    /**
-     * Start or check if a conversation exists with the given user.
-     */
     public function start(Request $request, User $user)
     {
         $conversation = $request->user()->conversations()->whereHas('users', function ($query) use ($user) {
@@ -101,7 +68,6 @@ class ConversationController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-
         }
 
         $conversation->users()->updateExistingPivot($request->user()->id, [

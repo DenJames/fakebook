@@ -1,0 +1,31 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main  # Change this to your branch name
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install SSH client
+      run: sudo apt-get install openssh-client
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy to server
+      run: |
+        ssh root@85.203.138.42 -p 23 'cd /var/www/fakebook &&
+                             git pull origin main &&
+                             npm install &&
+                             composer install &&
+                             php artisan migrate &&
+                             npm run build'

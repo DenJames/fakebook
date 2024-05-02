@@ -63,16 +63,15 @@
 
                                         Dashboard
                                     </x-navigation.side-nav-link>
+
+                                    <x-navigation.side-nav-link :href="route('conversations.index')">
+                                        <x-slot:icon>
+                                            <x-icons.chat />
+                                        </x-slot:icon>
+
+                                        Chat
+                                    </x-navigation.side-nav-link>
                                 @endguest
-
-                                <x-navigation.side-nav-link :href="route('chat.index')">
-                                    <x-slot:icon>
-                                        <x-icons.chat />
-                                    </x-slot:icon>
-
-                                    Chat
-                                </x-navigation.side-nav-link>
-
                             </ul>
                         </li>
                     </ul>

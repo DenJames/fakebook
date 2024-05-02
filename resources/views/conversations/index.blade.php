@@ -13,11 +13,11 @@
 
                        <div class="flex gap-x-2 items-center">
                            <p class="truncate text-black/50 text-sm w-full">
-                               {{ $conversation->messages->last()->content }}
+                               {{ $conversation->messages->last()?->content }}
                            </p>
 
                            <p class="text-black text-xs text-black/50 mt-[2px] flex justify-end">
-                               {{ formatDiffForHumans( $conversation->messages->last()->created_at) }}
+                               {{ formatDiffForHumans( $conversation->messages->last()->created_at ?? now()) }}
                            </p>
                        </div>
                    </a>

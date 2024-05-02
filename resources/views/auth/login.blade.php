@@ -6,6 +6,15 @@
 
             <x-content.card>
                 <div class="w-full">
+                    @if(config('app.env') === 'local')
+                        <div class="w-full flex justify-end">
+                            <a href="{{ route('test-auth') }}">
+                                <x-secondary-button class="text-white">
+                                    Test login
+                                </x-secondary-button>
+                            </a>
+                        </div>
+                    @endif
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
@@ -43,9 +52,9 @@
                                 </a>
                             @endif
 
-                            <x-form.primary-button class="ms-3">
-                                {{ __('Log in') }}
-                            </x-form.primary-button>
+                                <x-form.primary-button class="ms-3">
+                                    {{ __('Log in') }}
+                                </x-form.primary-button>
                         </div>
                     </form>
                 </div>

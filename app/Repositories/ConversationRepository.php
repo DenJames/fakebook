@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Events\Chat\MessageReadEvent;
 use App\Models\Conversation;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -12,9 +13,10 @@ class ConversationRepository
         $query = $conversation->messages();
 
         // Update messages read status
-        $conversation->messages()->where('read_at', null)
-            ->where('user_id', '!=' , auth()->id())
-            ->update(['read_at' => now()]);
+        $conversation->messages()->where('read_at', null)->where('user_id', '!=' , auth()->id())->get()->each(function ($message) {
+            $message->update(['read_at' => now()]);
+            event(new MessageReadEvent($message->conversation->id, $message, $message->user_id));
+        });
 
         if ($limit > 0) {
             $query->limit($limit);

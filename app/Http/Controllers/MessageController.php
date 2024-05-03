@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\Chat\MessageDeleteEvent;
-use App\Events\Chat\MessageEvent;
+use App\Events\Chat\MessageReadEvent;
 use App\Events\Chat\MessageSendEvent;
 use App\Events\Chat\MessageUpdateEvent;
 use App\Models\Conversation;
@@ -66,6 +66,10 @@ class MessageController extends Controller
         $message->update([
             'read_at' => now(),
         ]);
+
+        foreach ($message->conversation->users as $user) {
+            event(new MessageReadEvent($message->conversation->id, $message, $user->id));
+        }
 
         return response()->json(['status' => 'success']);
     }

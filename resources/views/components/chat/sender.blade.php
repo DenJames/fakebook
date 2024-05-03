@@ -28,11 +28,15 @@
         </div>
     </x-chat.chat-wrapper>
 
-    <small class="-mt-3 text-black/50">
+    <small class="-mt-3 text-black/50 flex gap-x-1 items-center">
         Sent: {{ $message->created_at->diffForHumans() }}
 
         @if($message->hasBeenEdited())
             <span class="text-black/50 text-xs">(Edited)</span>
+        @endif
+
+        @if($message->hasBeenRead())
+            <x-icons.checkmark width="w-4" height="h-4" />
         @endif
     </small>
 </div>

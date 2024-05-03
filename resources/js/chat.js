@@ -4,6 +4,11 @@ $(document).ready(function() {
     var user_id = $('meta[name="user-id"]').attr('content')
     var message = $('#message');
     var conversation = message.attr('data-conversation_id');
+    (function() {
+        var messages = $('#messages');
+        messages.scrollTop(messages.prop('scrollHeight'));
+    })();
+
     $('#send_message').click(function() {
         if (message.val()) {
             var msg = message.val();
@@ -55,11 +60,39 @@ $(document).ready(function() {
     conversation_socket.subscribed(() => {
         console.log("Subscribed to event channel conversation." + conversation + '.' + user_id);
     }).listen('.MessageCreated', (e) => {
+        var messages = $('#messages');
+        var scrollPosition = messages.scrollTop();
+        var scrollHeight = messages[0].scrollHeight;
         $('#messages').append(e.html);
+        console.log(e.user_id, user_id)
+        if (e.user_id != user_id) {
+            $.ajax({
+                url: '/messages/' + e.message_id + '/read',
+                type: 'PATCH',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                }
+            });
+
+            if (scrollPosition+messages.outerHeight()+20 >= scrollHeight) {
+                setTimeout(function() {
+                    messages.scrollTop(messages[0].scrollHeight);
+                }, 0);
+            }
+        } else {
+            (function() {
+                var messages = $('#messages');
+                messages.scrollTop(messages.prop('scrollHeight'));
+            })();
+        }
     }).listen('.MessageEdited', (e) => {
         $(document).find(`#message-${e.message_id}`).replaceWith(e.html);
     }).listen('.MessageDeleted', (e) => {
         $(document).find(`#message-${e.message_id}`).remove();
+    }).listen('.MessageRead', (e) => {
+        $(document).find(`#message-${e.message_id}`).find('small').get(0).append($(e.html).get(0));
     })
 });
 

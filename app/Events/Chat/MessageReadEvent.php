@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Blade;
 
-class MessageSendEvent implements ShouldBroadcastNow
+class MessageReadEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -37,22 +37,18 @@ class MessageSendEvent implements ShouldBroadcastNow
 
     public function broadcastAs(): string
     {
-        return "MessageCreated";
+        return "MessageRead";
     }
 
     public function broadcastWith(): array
     {
         $message = $this->message;
-        if ($message->user_id === $this->userId) {
-            $html = Blade::render('<x-chat.sender :message="$message" />', ['message' => $message]);
-        } else {
-            $html = Blade::render('<x-chat.receiver :message="$message" />', ['message' => $message]);
-        }
+        dump($message);
+        $html = Blade::render('<x-icons.checkmark width="w-4" height="h-4" />');
 
         return [
-            'html' => $html,
             'message_id' => $message->id,
-            'user_id' => $this->message->user_id,
+            'html' => $html,
         ];
     }
 }

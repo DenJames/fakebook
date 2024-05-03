@@ -27,6 +27,12 @@
 
             <x-content.card>
                 <div class="max-w-xl">
+                    @include('profile.partials.sessions-form')
+                </div>
+            </x-content.card>
+
+            <x-content.card>
+                <div class="max-w-xl">
                     @include('profile.partials.delete-user-form')
                 </div>
             </x-content.card>

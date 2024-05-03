@@ -43,9 +43,15 @@ class MessageDeleteEvent implements ShouldBroadcastNow
     public function broadcastWith(): array
     {
         $message = $this->message;
+        if ($message->user_id === $this->userId) {
+            $html = Blade::render('<x-chat.sender :message="$message" />', ['message' => $message]);
+        } else {
+            $html = Blade::render('<x-chat.receiver :message="$message" />', ['message' => $message]);
+        }
 
         return [
             'message_id' => $message->id,
+            'html' => $html,
         ];
     }
 }

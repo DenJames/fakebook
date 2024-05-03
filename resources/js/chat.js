@@ -57,7 +57,7 @@ $(document).ready(function() {
     }).listen('.MessageCreated', (e) => {
         $('#messages').append(e.html);
     }).listen('.MessageEdited', (e) => {
-        $(document).find(`#message-content-${e.message_id}`).text(e.message);
+        $(document).find(`#message-${e.message_id}`).replaceWith(e.html);
     }).listen('.MessageDeleted', (e) => {
         $(document).find(`#message-${e.message_id}`).remove();
     })

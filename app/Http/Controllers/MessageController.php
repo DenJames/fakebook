@@ -37,6 +37,7 @@ class MessageController extends Controller
     {
         $message->update([
             'content' => $request->get('message'),
+            'edited_at' => now(),
         ]);
 
         foreach ($message->conversation->users as $user) {

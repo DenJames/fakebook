@@ -50,10 +50,6 @@ class MessageSendEvent implements ShouldBroadcastNow
         }
 
         return [
-            /*'message' => $message->content,
-            'sender' => $message->sender->name,
-            'user_id' => $message->user_id,
-            'message_id' => $message->id,*/
             'html' => $html,
         ];
     }

@@ -12,7 +12,7 @@
     <form method="post" action="{{ route('profile-picture.store') }}" class="mt-6 space-y-6" enctype="multipart/form-data">
         @csrf
 
-        <img class="rounded-full w-32 h-32" src="{{ asset(Auth::user()->profilePhotoPath()) }}" alt="">
+        <img class="rounded-full w-32 h-32" src="{{ asset(Auth::user()->profile_photo) }}" alt="">
 
         <div>
             <x-input-label for="profile_picture" :value="__('Select a new profile picture')" />

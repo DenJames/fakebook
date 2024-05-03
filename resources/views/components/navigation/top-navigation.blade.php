@@ -41,7 +41,7 @@
                         >
                             <span class="sr-only">Open user menu</span>
                             <img class="h-8 w-8 rounded-full bg-gray-50"
-                                 src="{{ asset(Auth::user()->profilePhotoPath()) }}"
+                                 src="{{ asset(Auth::user()->profile_photo) }}"
                                  alt="">
                             <span class="hidden lg:flex lg:items-center">
                                 <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">

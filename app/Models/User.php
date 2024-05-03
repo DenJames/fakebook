@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
@@ -63,11 +64,16 @@ class User extends Authenticatable
         return $this->profilePhotos()->where('is_current', true)->first();
     }
 
-    public function profilePhotoPath(): string
+    protected function profilePhoto(): Attribute
     {
         // TODO: Replace this with a default profile photo
         $fallback = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-        return 'storage/' . $this->currentProfilePhoto()?->path ?? $fallback;
-    }
-}
+        $path =  $this->currentProfilePhoto()
+            ? 'storage/' . $this->currentProfilePhoto()->path
+            : $fallback;
+
+        return Attribute::make(
+            get: static fn () => $path,
+        );
+    }}

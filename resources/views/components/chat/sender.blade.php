@@ -1,13 +1,12 @@
 @props(['message'])
-<div class="flex flex-col items-end gap-y-4 w-full" message-id="message-{{ $message->id }}">
+<div class="flex flex-col items-end gap-y-4 w-full" id="message-{{ $message->id }}">
     <x-chat.chat-wrapper>
         <div class="absolute top-2 right-2 flex gap-x-1">
-            <button class="transform hover:scale-105 transition-all" onclick="toggleEdit({{ $message->id }}, true)">
+            <button class="transform hover:scale-105 transition-all edit-message-button" data-message-id="{{ $message->id }}">
                 <x-icons.pencil width="w-5" height="w-5"/>
             </button>
 
-            <button class="transform hover:scale-105 hover:text-red-600 transition-all"
-                    onclick="return deleteMessage({{ $message->id }})">
+            <button class="transform hover:scale-105 hover:text-red-600 transition-all delete-message-button" data-message-id="{{ $message->id }}">
                 <x-icons.trash width="w-5" height="w-5"/>
             </button>
         </div>
@@ -25,45 +24,8 @@
                 {{ $message->content }}
             </p>
             <input type="text" id="edit-message-input-{{ $message->id }}" class="edit-message-input hidden"
-                   value="{{ $message->content }}" onblur="toggleEdit({{ $message->id }}, false)"/>
+                   value="{{ $message->content }}" data-message-id="{{ $message->id }}"/>
         </div>
-
-        <script>
-            function toggleEdit(messageId, editMode) {
-                const contentP = document.getElementById(`message-content-${messageId}`);
-                const inputField = document.getElementById(`edit-message-input-${messageId}`);
-                if (editMode) {
-                    contentP.style.display = 'none';
-                    inputField.style.display = 'block';
-                    inputField.style.color = 'black';
-                    inputField.style.borderRadius = '5px';
-                    inputField.focus();
-
-                    inputField.onkeydown = function (event) {
-                        if (event.key === 'Enter') {
-                            // TODO: Add save logic (backend)
-                            alert('Message updated ID: ' + messageId);
-                            toggleEdit(messageId, false);
-                        } else if (event.key === 'Escape') {
-                            // Restore original content and close edit mode
-                            inputField.value = contentP.textContent;
-                            toggleEdit(messageId, false);
-                        }
-                    };
-                } else {
-                    contentP.style.display = 'block';
-                    inputField.style.display = 'none';
-                    contentP.textContent = inputField.value;
-                }
-            }
-
-            function deleteMessage(messageId) {
-                if (confirm('Are you sure you want to delete this message?')) {
-                    alert('Message deleted for ID ' + messageId);
-                    // TODO: Handle message deletion
-                }
-            }
-        </script>
     </x-chat.chat-wrapper>
 
     <small class="-mt-3 text-black/50">

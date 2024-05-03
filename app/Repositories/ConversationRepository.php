@@ -11,6 +11,11 @@ class ConversationRepository
     {
         $query = $conversation->messages();
 
+        // Update messages read status
+        $conversation->messages()->where('read_at', null)
+            ->where('user_id', '!=' , auth()->id())
+            ->update(['read_at' => now()]);
+
         if ($limit > 0) {
             $query->limit($limit);
         }

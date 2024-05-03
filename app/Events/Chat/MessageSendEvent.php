@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Blade;
 
-class MessageEvent implements ShouldBroadcastNow
+class MessageSendEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -37,7 +37,7 @@ class MessageEvent implements ShouldBroadcastNow
 
     public function broadcastAs(): string
     {
-        return 'MessageCreated';
+        return "MessageCreated";
     }
 
     public function broadcastWith(): array
@@ -50,9 +50,10 @@ class MessageEvent implements ShouldBroadcastNow
         }
 
         return [
-            'message' => $message->content,
+            /*'message' => $message->content,
             'sender' => $message->sender->name,
             'user_id' => $message->user_id,
+            'message_id' => $message->id,*/
             'html' => $html,
         ];
     }

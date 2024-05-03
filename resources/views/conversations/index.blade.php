@@ -12,11 +12,14 @@
                        </p>
 
                        <div class="flex gap-x-2 items-center">
-                           <p class="truncate text-black/50 text-sm w-full">
+                           <p class="truncate text-sm w-full {{ $conversation->hasUnreadMessages() ? 'text-black text-bold' : 'text-black/50' }}">
                                {{ $conversation->messages->last()?->content }}
                            </p>
 
                            <p class="text-black text-xs text-black/50 mt-[2px] flex justify-end">
+                               @if($conversation->hasUnreadMessages())
+                                    <span class="w-[7px] h-[7px] bg-blue-500 rounded-3xl mt-1 mr-1"></span>
+                               @endif
                                {{ formatDiffForHumans( $conversation->messages->last()->created_at ?? now()) }}
                            </p>
                        </div>

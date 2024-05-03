@@ -21,7 +21,7 @@ readonly class ProfilePictureRepository
         }
 
         // If the profile picture upload fails, return an error message
-        if (! $path = $this->profilePictureUpload->execute($user, $request->file('profile_picture'))) {
+        if (! $image = $this->profilePictureUpload->execute($user, $request->file('profile_picture'))) {
             return redirect()->back()->withErrors('Failed to upload profile picture');
         }
 
@@ -30,9 +30,20 @@ readonly class ProfilePictureRepository
             'is_current' => false,
         ]);
 
+        if (! empty($image) && $image['image_id'] !== null) {
+            $image = $user->profilePhotos()->where('id', $image['image_id'])->first();
+
+            $image?->update([
+                'is_current' => true,
+            ]);
+
+            return redirect()->back()->with('success', 'Profile picture uploaded successfully');
+        }
+
         $user->profilePhotos()->create([
-            'path' => $path,
-            'is_current' => true,
+            'path' => $image['file_path'],
+            'file_hash' => $image['file_hash'],
+            'is_current' => true
         ]);
 
         return redirect()->back()->with('success', 'Profile picture uploaded successfully');

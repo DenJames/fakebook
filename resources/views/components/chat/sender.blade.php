@@ -30,5 +30,9 @@
 
     <small class="-mt-3 text-black/50">
         Sent: {{ $message->created_at->diffForHumans() }}
+
+        @if($message->hasBeenEdited())
+            <span class="text-black/50 text-xs">(Edited)</span>
+        @endif
     </small>
 </div>

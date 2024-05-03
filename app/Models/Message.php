@@ -29,4 +29,14 @@ class Message extends Model
     {
         return $this->user_id === Auth::id();
     }
+
+    public function scopeHasBeenRead(): bool
+    {
+        return $this->read_at !== null;
+    }
+
+    public function scopeHasBeenEdited(): bool
+    {
+        return $this->edited_at !== null;
+    }
 }

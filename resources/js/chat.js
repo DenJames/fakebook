@@ -32,6 +32,10 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.delete-message-button', function () {
+        if (!confirm('Are you sure you want to delete this message?')) {
+            return;
+        }
+
         $.ajax({
             url: '/messages/' + $(this).attr('data-message-id'),
             type: 'DELETE',

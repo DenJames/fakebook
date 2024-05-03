@@ -15,7 +15,7 @@
             <div class="flex justify-end w-24">
                 <div>
                     <img class="h-14 w-14 rounded-full"
-                         src="{{ asset($message->sender->profile_photo ) }}"
+                         src="{{ asset($message->sender->profile_photo) }}"
                          alt="{{ $message->sender->username ?? 'Unknown' }}">
                 </div>
             </div>

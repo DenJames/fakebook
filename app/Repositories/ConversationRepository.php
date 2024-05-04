@@ -10,7 +10,7 @@ class ConversationRepository
 {
     public function fetchMessages(Conversation $conversation, int $limit = 0, string $sortBy = 'asc'): Collection|array
     {
-        $query = $conversation->messages();
+        $query = $conversation->messages()->withTrashed();
 
         // Update messages read status
         $conversation->messages()->where('read_at', null)->where('user_id', '!=' , auth()->id())->get()->each(function ($message) {

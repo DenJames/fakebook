@@ -15,6 +15,11 @@ class Message extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'read_at' => 'datetime',
+        'edited_at' => 'datetime',
+    ];
+
     public function conversation(): BelongsTo
     {
         return $this->belongsTo(Conversation::class);

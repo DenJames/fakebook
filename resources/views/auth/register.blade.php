@@ -1,3 +1,13 @@
+<script>
+    window.document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            title: "Disclaimer",
+            text: "Fakebook is a school project and is not affiliated with Facebook. It is solely intended for educational purposes.",
+            icon: "warning"
+        });
+    });
+</script>
+
 <x-guest-layout>
     <div class="w-full flex justify-center">
         <div class="w-full lg:w-1/2">

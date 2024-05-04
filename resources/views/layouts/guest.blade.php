@@ -16,10 +16,12 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="h-full font-sans antialiased">
-<div class="flex h-full" id="login">
+<div class="flex h-full">
     <div class="md:w-1/2 sm:text-center h-full relative bg-blue-600 text-blue-100"
          style="background-image: url('https://i.imgur.com/ZiIXdW3.png'); background-size: cover; background-repeat: no-repeat">
         <div class="absolute w-full h-full bg-black/50 z-0"></div>

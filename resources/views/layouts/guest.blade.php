@@ -22,7 +22,7 @@
 
 <body class="h-full font-sans antialiased">
 <div class="flex h-full">
-    <div class="md:w-1/2 sm:text-center h-full relative bg-blue-600 text-blue-100"
+    <div class="hidden lg:block lg:w-1/2 sm:text-center h-full relative bg-blue-600 text-blue-100"
          style="background-image: url('https://i.imgur.com/ZiIXdW3.png'); background-size: cover; background-repeat: no-repeat">
         <div class="absolute w-full h-full bg-black/50 z-0"></div>
 
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <main class="w-full md:w-1/0 sm:text-center bg-gray-50 h-12 h-full flex justify-center items-center relative">
+    <main class="w-full md:w-1/0 sm:text-center bg-gray-50 h-12 h-full flex justify-center items-center relative px-4">
         {{ $slot }}
     </main>
 </div>

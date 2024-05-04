@@ -39,10 +39,18 @@
                     <div class="mt-4">
                         <x-input-label for="password" :value="__('Password')"/>
 
-                        <x-text-input id="password" class="block mt-1 w-full"
-                                      type="password"
-                                      name="password"
-                                      required autocomplete="current-password"/>
+                        <div class="w-full">
+                            <x-text-input id="password" class="block mt-1 w-full"
+                                          type="password"
+                                          name="password"
+                                          required autocomplete="current-password"/>
+
+                            <div class="flex lg:hidden justify-end mt-1">
+                                <a href="{{ route('register') }}" class="text-xs text-gray-500 hover:text-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all">
+                                    No account yet? <span class="underline">Register here!</span>
+                                </a>
+                            </div>
+                        </div>
 
                         <x-input-error :messages="$errors->get('password')" class="mt-2"/>
                     </div>

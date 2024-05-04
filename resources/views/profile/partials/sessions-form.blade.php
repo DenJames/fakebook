@@ -31,7 +31,7 @@
 
 <div class="flex items-center mt-5">
     <button type="submit"
-            class="inline-flex items-center px-4 py-2 border border-black rounded-md font-semibold text-xs text-black uppercase tracking-widest hover:bg-highlightPurple active:bg-gray-900 focus:outline-none focus:border-highlightPurple focus:ring focus:ring-highlightPurple disabled:opacity-25 transition"
+            class="inline-flex items-center px-4 py-2 border border-black rounded font-semibold text-xs text-black uppercase tracking-widest hover:bg-highlightPurple active:bg-gray-900 focus:outline-none focus:border-highlightPurple focus:ring focus:ring-highlightPurple disabled:opacity-25 transition"
             x-data=""
             x-on:click.prevent="$dispatch('open-modal', 'confirm-logout-devices')"
     >

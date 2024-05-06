@@ -21,7 +21,7 @@ class PostImage extends Model
 
     protected function url(): Attribute
     {
-        $path =  $this->path;
+        $path = 'storage/' . $this->path;
 
         return Attribute::make(
             get: static fn () => $path,

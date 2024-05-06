@@ -1,4 +1,5 @@
-import { initFlowbite } from 'flowbite'
+import {initFlowbite, initDropdowns} from 'flowbite'
+import $ from "jquery";
 import axios from 'axios';
 window.axios = axios;
 
@@ -6,6 +7,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 
 initFlowbite();
+initDropdowns();
 
 
 /**
@@ -15,3 +17,7 @@ initFlowbite();
  */
 
 import './echo';
+
+$(document).ready(function() {
+
+});

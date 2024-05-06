@@ -5,6 +5,8 @@ namespace App\Repositories\Post;
 use App\Http\Requests\PostStoreRequest;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 readonly class PostRepository
 {
@@ -23,5 +25,16 @@ readonly class PostRepository
         }
 
         return response()->json(['message' => 'Post created successfully'], 201);
+    }
+
+    public function destroy(Post $post): JsonResponse
+    {
+        if ($post->user_id !== Auth::user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $post->delete();
+
+        return response()->json(['message' => 'Post deleted successfully'], 200);
     }
 }

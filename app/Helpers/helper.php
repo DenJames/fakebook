@@ -5,29 +5,29 @@ function formatDiffForHumans(\Carbon\Carbon $date) {
     $diff = $date->diff($now);
 
     if ($diff->y >= 1) {
-        return "{$diff->y}y";
+        return "{$diff->y} y";
     }
 
     if ($diff->m >= 1) {
-        return "{$diff->m}mo";
+        return "{$diff->m} mo";
     }
 
     if ($diff->days >= 7) {
         $weeks = floor($diff->days / 7);
-        return "{$weeks}w";
+        return "{$weeks} w";
     }
 
     if ($diff->days >= 1) {
-        return "{$diff->days}d";
+        return "{$diff->days} d";
     }
 
     if ($diff->h >= 1) {
-        return "{$diff->h}h";
+        return "{$diff->h} h";
     }
 
     if ($diff->i >= 1) {
-        return "{$diff->i}m";
+        return "{$diff->i} m";
     }
 
-    return "{$diff->s}s";
+    return "{$diff->s} s";
 }

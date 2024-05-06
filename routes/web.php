@@ -67,10 +67,10 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('posts')->group(function () {
         Route::post('/', [PostController::class, 'store'])->name('posts.store');
+        Route::delete('/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 //        Route::get('/{post}', [PostController::class, 'show'])->name('posts.show');
 //        Route::get('/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
 //        Route::patch('/{post}', [PostController::class, 'update'])->name('posts.update');
-//        Route::delete('/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
     });
 
 

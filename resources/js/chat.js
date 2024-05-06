@@ -90,7 +90,7 @@ $(document).ready(function() {
     }).listen('.MessageEdited', (e) => {
         $(document).find(`#message-${e.message_id}`).replaceWith(e.html);
     }).listen('.MessageDeleted', (e) => {
-        $(document).find(`#message-${e.message_id}`).remove();
+        $(document).find(`#message-${e.message_id}`).replaceWith(e.html);
     }).listen('.MessageRead', (e) => {
         $(document).find(`#message-${e.message_id}`).find('small').get(0).append($(e.html).get(0));
     })

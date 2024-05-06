@@ -11,8 +11,6 @@
         <input id="search-field"
                class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
                placeholder="Search..." type="search" name="query">
-
-        <button type="submit">test</button>
     </form>
 
     @auth

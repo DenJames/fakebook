@@ -18,7 +18,7 @@
                 @if(config('app.env') === 'local')
                     <div class="w-full flex justify-end">
                         <a href="{{ route('test-auth') }}">
-                            <x-secondary-button class="text-white">
+                            <x-secondary-button class="text-white !bg-gray-900">
                                 Test login
                             </x-secondary-button>
                         </a>

@@ -27,11 +27,11 @@
         </div>
 
         <div class="relative w-full flex gap-10">
-            <div class="relative -mt-14">
-                <img class="h-48 w-48 rounded-full ml-8 z-0" src="{{ asset($user->profile_photo) }}" alt="">
+            <div class="relative lg:-mt-14 flex items-center lg:items-start">
+                <img class="w-32 h-32 lg:h-48 lg:w-48 rounded-full mx-2 lg:mx-8 z-0" src="{{ asset($user->profile_photo) }}" alt="">
 
                 @if($user->isUserProfile())
-                    <div class="absolute right-4 bottom-0 z-10">
+                    <div class="absolute right-12 bottom-0 z-10">
                         <button
                             class="rounded-full w-10 h-10 bg-gray-700 text-gray-100 flex items-center justify-center">
                             <label for="profile" class="flex gap-2 items-center hover:cursor-pointer">

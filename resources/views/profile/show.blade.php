@@ -129,7 +129,7 @@
                 </div>
             </x-content.card>
 
-            <div class="h-96 overflow-y-auto space-y-4">
+            <div class="max-h-96 lg:max-h-[calc(100vh-610px)] overflow-y-auto space-y-4">
                 @for($i = 0; $i < 50; $i++)
                     <x-content.card content-classes="border">
                         <div class="w-full flex gap-4">

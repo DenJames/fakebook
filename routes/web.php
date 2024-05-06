@@ -45,7 +45,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
     });
 
-
     // Profile routes
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -60,7 +59,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/upload-profile-photo', [ProfilePictureController::class, 'store'])->name('profile-picture.store');
         Route::post('/upload-cover-photo', [ProfilePictureController::class, 'coverStore'])->name('cover-picture.store');
 
-
         // Search
         Route::get('/search', ProfileSearchController::class)->name('profile.search');
     });
@@ -72,8 +70,6 @@ Route::middleware('auth')->group(function () {
 //        Route::get('/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
 //        Route::patch('/{post}', [PostController::class, 'update'])->name('posts.update');
     });
-
-
 });
 
 // TODO: Important! Remove this before production

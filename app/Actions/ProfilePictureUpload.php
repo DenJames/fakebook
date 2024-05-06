@@ -10,22 +10,21 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfilePictureUpload
 {
-    public function execute(User $user, UploadedFile $file): bool|array
+    public function execute(User $user, UploadedFile $file, string $storagePath = 'profile-photos'): bool|array
     {
-        $fileHash = md5($file->getContent());
+        $fileHash = md5($file->getContent() . $storagePath . Auth::id());
 
         // If the user has previously uploaded the same file, simply use the existing path
-        if ($user->profilePhotos()->where('file_hash', $fileHash)->exists()) {
-            $image = $user->profilePhotos()->where('file_hash', $fileHash)->first();
-
+        $image = $user->profilePhotos()->where('file_hash', $fileHash)->first();
+        if ($image) {
             return [
-                'image_id' => $image?->id,
-                'file_path' => $image?->path,
-                'file_hash' => $image?->file_hash,
+                'image_id' => $image->id,
+                'file_path' => $image->path,
+                'file_hash' => $image->file_hash,
             ];
         }
 
-        $path = 'profile-photos/' . $user->email . '/' . $fileHash . '.' . $file->extension();
+        $path = $storagePath . '/' . $user->email . '/' . $fileHash . '.' . $file->extension();
 
         if (! Storage::disk('public')->put($path, $file->getContent())) {
             Log::error('Failed to upload profile photo for user: ' . $user->email);

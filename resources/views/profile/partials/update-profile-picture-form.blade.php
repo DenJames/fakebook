@@ -15,9 +15,9 @@
         <img class="rounded-full w-32 h-32" src="{{ asset(Auth::user()->profile_photo) }}" alt="">
 
         <div>
-            <x-input-label for="profile_picture" :value="__('Select a new profile picture')" />
-            <x-text-input id="profile_picture" name="profile_picture" type="file" class="mt-1 block w-full" accept=".jpg,.jpeg,.gif,.png" required />
-            <x-input-error class="mt-2" :messages="$errors->get('profile_picture')" />
+            <x-input-label for="photo" :value="__('Select a new profile picture')" />
+            <x-text-input id="photo" name="photo" type="file" class="mt-1 block w-full" accept=".jpg,.jpeg,.gif,.png" required />
+            <x-input-error class="mt-2" :messages="$errors->get('photo')" />
         </div>
 
 

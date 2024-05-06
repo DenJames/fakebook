@@ -30,7 +30,7 @@
             <!-- Profile dropdown -->
 
             <div class="relative">
-                <x-dropdown align="left" content-classes="bg-white shadow w-32">
+                <x-dropdown align="left" content-classes="bg-white shadow">
                     <x-slot:trigger>
                         <button type="button"
                                 class="-m-1.5 flex items-center p-1.5"
@@ -58,8 +58,11 @@
                     </x-slot:trigger>
 
                     <x-slot:content>
-                        <a href="{{ route('profile.edit') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem"
+                        <a href="{{ route('profile.show', Auth::user()) }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem"
                            tabindex="-1" id="user-menu-item-0">Your profile</a>
+
+                        <a href="{{ route('profile.edit') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem"
+                           tabindex="-1" id="user-menu-item-0">Account settings</a>
 
                         <button class="block px-3 py-1 text-sm leading-6 text-gray-900" @click.prevent="document.getElementById('logout-form').submit();" tabindex="-1" id="user-menu-item-1">
                             {{ __('Logout') }}

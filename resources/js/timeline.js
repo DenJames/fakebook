@@ -108,37 +108,6 @@ $(document).ready(function() {
         });
 
     });
-
-
-    document.getElementById("image-form").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        // Serialize form data
-        var formData = new FormData(this);
-
-        // Append each uploaded file to the form data
-        myDropzone.files.forEach(function(file) {
-            formData.append("images[]", file);
-        });
-
-        // Send POST request with form data
-        fetch("/your-upload-endpoint", {
-            method: "POST",
-            body: formData
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log("Upload successful");
-                    // You can handle success here
-                } else {
-                    console.error("Upload failed");
-                    // You can handle failure here
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
-    });
 });
 
 

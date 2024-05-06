@@ -4,6 +4,7 @@ use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictureController;
+use App\Http\Controllers\ProfileSearchController;
 use App\Http\Controllers\UserSessionsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +52,12 @@ Route::middleware('auth')->group(function () {
         Route::delete('/', [ProfileController::class, 'destroy'])->name('profile.destroy');
         Route::delete('/delete/sessions', UserSessionsController::class)->name('profile.sessions.destroy');
 
+        Route::get('/{user}/show', [ProfileController::class, 'show'])->name('profile.show');
+
         Route::post('/profile-picture', [ProfilePictureController::class, 'store'])->name('profile-picture.store');
+
+        // Search
+        Route::get('/search', ProfileSearchController::class)->name('profile.search');
     });
 
 

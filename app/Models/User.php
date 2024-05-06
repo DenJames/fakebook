@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Conversation::class);
     }
 
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
     public function profilePhotos(): HasMany
     {
         return $this->hasMany(UserProfilePhoto::class);

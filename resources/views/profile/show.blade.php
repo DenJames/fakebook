@@ -123,9 +123,10 @@
         <div class="col-span-12 lg:col-span-8 space-y-6">
             <x-content.card content-classes="border">
                 <div class="w-full space-y-2">
-                    <h2 class="text-2xl font-bold">What's on your heart?</h2>
+{{--                    <h2 class="text-2xl font-bold">What's on your heart?</h2>--}}
 
-                    <x-text-input class="w-full" placeholder="Start writing something"/>
+{{--                    <x-text-input class="w-full" placeholder="Start writing something"/>--}}
+                    <x-timeline.status/>
                 </div>
             </x-content.card>
 

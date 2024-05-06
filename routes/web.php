@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\ProfileSearchController;
@@ -62,6 +63,14 @@ Route::middleware('auth')->group(function () {
 
         // Search
         Route::get('/search', ProfileSearchController::class)->name('profile.search');
+    });
+
+    Route::prefix('posts')->group(function () {
+        Route::post('/', [PostController::class, 'store'])->name('posts.store');
+//        Route::get('/{post}', [PostController::class, 'show'])->name('posts.show');
+//        Route::get('/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+//        Route::patch('/{post}', [PostController::class, 'update'])->name('posts.update');
+//        Route::delete('/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
     });
 
 

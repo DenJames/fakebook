@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/{user}/show', [ProfileController::class, 'show'])->name('profile.show');
 
         Route::put('/update-biography', [ProfilePictureController::class, 'updateBiography'])->name('profile.biography.update');
+        Route::put('/privacy-settings', [ProfileController::class, 'updatePrivacySettings'])->name('profile.private-settings.update');
 
         Route::post('/upload-profile-photo', [ProfilePictureController::class, 'store'])->name('profile-picture.store');
         Route::post('/upload-cover-photo', [ProfilePictureController::class, 'coverStore'])->name('cover-picture.store');

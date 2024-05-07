@@ -11,7 +11,10 @@ import { Modal } from 'flowbite';
 
 // prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none prose-h1:h1 prose-h1:text-2xl
 
-let placeholder = document.getElementById('timeline_status_input').getAttribute('placeholder');
+let placeholder = document.getElementById('timeline_status_input')?.getAttribute('placeholder');
+
+
+
 document.addEventListener('alpine:init', () => {
     Alpine.data('editor', (content) => {
         let editor // Alpine's reactive engine automatically wraps component properties in proxy objects. Attempting to use a proxied editor instance to apply a transaction will cause a "Range Error: Applying a mismatched transaction", so be sure to unwrap it using Alpine.raw(), or simply avoid storing your editor as a component property, as shown in this example.

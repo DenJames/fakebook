@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PrivacySettings;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
+use App\Repositories\Profile\ProfileRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +15,10 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function __construct(private readonly ProfileRepository $profileRepository)
+    {
+    }
+
     /**
      * Display the user's profile form.
      */
@@ -23,6 +29,7 @@ class ProfileController extends Controller
         return view('profile.edit', [
             'user' => $user,
             'sessions' => DB::table('sessions')->where('user_id', $user->id)->get(),
+            'privacySettings' => $user->privacySettings,
         ]);
     }
 
@@ -68,5 +75,10 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function updatePrivacySettings(Request $request): RedirectResponse
+    {
+        return $this->profileRepository->updatePrivacySettings($request->user(), $request);
     }
 }

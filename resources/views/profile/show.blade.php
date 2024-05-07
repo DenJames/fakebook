@@ -58,82 +58,92 @@
         </div>
     </div>
 
-    <div class="mt-6 grid grid-cols-12 gap-6">
-        <div class="col-span-12 lg:col-span-4 space-y-6">
-            <x-content.card content-classes="border">
-                <div class="w-full space-y-2">
-                    <h2 class="text-2xl font-bold">Introduction</h2>
+    @if($user->privacySettings->visibility_type === \App\Enums\ProfileVisibilityTypes::PUBLIC)
+        <div class="mt-6 grid grid-cols-12 gap-6">
+            <div class="col-span-12 lg:col-span-4 space-y-6">
+                <x-content.card content-classes="border">
+                    <div class="w-full space-y-2">
+                        <h2 class="text-2xl font-bold">Introduction</h2>
 
-                    <p>
-                        {{ $user->biography }}
-                    </p>
+                        @if($user->privacySettings->show_biography || $user->isUserProfile())
+                            <p>
+                                {{ $user->biography }}
+                            </p>
+                        @endif
 
-                    @if($user->isUserProfile())
-                        <x-secondary-button class="!bg-gray-200 w-full flex justify-center"
-                                            x-data=""
-                                            x-on:click.prevent="$dispatch('open-modal', 'add-biography')">
-                            Add biography
-                        </x-secondary-button>
-                    @endif
+                        @if($user->isUserProfile())
+                            <x-secondary-button class="!bg-gray-200 w-full flex justify-center"
+                                                x-data=""
+                                                x-on:click.prevent="$dispatch('open-modal', 'add-biography')">
+                                Add biography
+                            </x-secondary-button>
+                        @endif
 
-                    <div class="flex gap-x-2">
-                        <x-icons.clock/>
+                        @if($user->privacySettings->show_join_date || $user->isUserProfile())
+                            <div class="flex gap-x-2">
+                                <x-icons.clock/>
 
-                        <span>Became a member: {{ $user->created_at->format('M Y') }}</span>
-                    </div>
-                </div>
-            </x-content.card>
-
-            <x-content.card content-classes="border">
-                <div class="w-full space-y-2">
-                    <h2 class="text-2xl font-bold">Pictures</h2>
-
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-52 overflow-y-auto">
-                        @foreach($user->profilePhotos()->where('type', \App\Enums\UserProfilePhotoTypes::PROFILE_PHOTO->value)->where('is_current', false)->get() as $photo)
-                            <img class="w-full h-24 object-cover rounded" src="{{ asset('storage/' . $photo->path) }}"
-                                 alt="">
-                        @endforeach
-                        @foreach($user->posts as $post)
-                            @foreach($post->images as $photo)
-                                <img class="w-full h-24 object-cover rounded" src="{{ asset('storage/' . $photo->path) }}"
-                                     alt="">
-                            @endforeach
-
-                        @endforeach
-                    </div>
-                </div>
-            </x-content.card>
-
-            <x-content.card content-classes="border">
-                <div class="w-full space-y-2">
-                    <h2 class="text-2xl font-bold">Friends</h2>
-
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-60 overflow-y-auto">
-                        @for($i = 0; $i < 18; $i++)
-                            <div class="flex flex-col">
-                                <img class="w-full h-24 object-cover rounded" src="{{ asset($user->profile_photo) }}"
-                                     alt="">
-
-                                <p class="text-sm">
-                                    {{ $user->name }}
-                                </p>
+                                <span>Became a member: {{ $user->created_at->format('M Y') }}</span>
                             </div>
-                        @endfor
+                        @endif
                     </div>
+                </x-content.card>
+
+                @if($user->privacySettings->show_photo_list || $user->isUserProfile())
+                    <x-content.card content-classes="border">
+                        <div class="w-full space-y-2">
+                            <h2 class="text-2xl font-bold">Pictures</h2>
+
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-52 overflow-y-auto">
+                                @foreach($user->profilePhotos()->where('type', \App\Enums\UserProfilePhotoTypes::PROFILE_PHOTO->value)->where('is_current', false)->get() as $photo)
+                                    <img class="w-full h-24 object-cover rounded" src="{{ asset('storage/' . $photo->path) }}"
+                                         alt="">
+                                @endforeach
+
+                                @foreach($user->posts as $post)
+                                    @foreach($post->images as $photo)
+                                        <img class="w-full h-24 object-cover rounded" src="{{ asset('storage/' . $photo->path) }}"
+                                             alt="">
+                                    @endforeach
+                                @endforeach
+                            </div>
+                        </div>
+                    </x-content.card>
+                @endif
+
+                @if($user->privacySettings->show_friend_list || $user->isUserProfile())
+                    <x-content.card content-classes="border">
+                        <div class="w-full space-y-2">
+                            <h2 class="text-2xl font-bold">Friends</h2>
+
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-60 overflow-y-auto">
+                                @for($i = 0; $i < 18; $i++)
+                                    <div class="flex flex-col">
+                                        <img class="w-full h-24 object-cover rounded" src="{{ asset($user->profile_photo) }}"
+                                             alt="">
+
+                                        <p class="text-sm">
+                                            {{ $user->name }}
+                                        </p>
+                                    </div>
+                                @endfor
+                            </div>
+                        </div>
+                    </x-content.card>
+                @endif
+            </div>
+
+            <div class="col-span-12 lg:col-span-8 space-y-6">
+                <x-timeline.status/>
+
+                <div class="max-h-96 lg:max-h-[calc(100vh-610px)] overflow-y-auto space-y-4">
+                    @foreach($user->posts()->orderByDesc('id')->get() as $post)
+                        <x-post.post :post="$post"/>
+                    @endforeach
                 </div>
-            </x-content.card>
-        </div>
-
-        <div class="col-span-12 lg:col-span-8 space-y-6">
-            <x-timeline.status/>
-
-            <div class="max-h-96 lg:max-h-[calc(100vh-610px)] overflow-y-auto space-y-4">
-                @foreach($user->posts()->orderByDesc('id')->get() as $post)
-                    <x-post.post :post="$post"/>
-                @endforeach
             </div>
         </div>
-    </div>
+    @endif
 
     <x-modal name="add-biography" :show="$errors->isNotEmpty()" focusable>
         <form method="post" action="{{ route('profile.biography.update') }}" class="p-6">

@@ -5,5 +5,6 @@
     </div>
 </div>
 <x-timeline.status-modal modal-id="default-modal"/>
+<div class="edit-post-modal"></div>
 
 @vite('resources/js/timeline.js')

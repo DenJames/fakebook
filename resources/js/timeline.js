@@ -1,8 +1,11 @@
 import $ from "jquery";
 import Dropzone from "dropzone";
+import {Modal} from "flowbite";
+import {initDropdowns} from 'flowbite'
 
 var image_select = false;
 var tag_select = false;
+var modal;
 
 $(document).ready(function() {
     var user_id = $('meta[name="user-id"]').attr('content')
@@ -37,6 +40,27 @@ $(document).ready(function() {
             // $('.timeline-image-container').removeClass('hidden');
             tag_select = true;
         }
+    });
+
+    $(document).on('click', '.edit-post', function () {
+        let post_id = $(this).attr('data-post-id');
+
+        $.ajax({
+            url: '/posts/' + post_id + '/edit',
+            type: 'GET',
+            success: function (response) {
+                $(document).find('.edit-post-modal').replaceWith(response);
+
+                const $targetEl = document.getElementById('post-edit-' + post_id);
+
+                modal = new Modal($targetEl);
+
+                modal.show();
+            },
+            error: function (response) {
+                alert(response);
+            }
+        });
     });
 
     $(document).on('click', '.delete-post', function () {
@@ -138,6 +162,36 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on('submit', '#post-update', function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+
+        formData.append('content', document.getElementById('timeline-textarea-status-edit').innerHTML.replace('contenteditable="true"', '').replace('tiptap', ''));
+        formData.append('_method', 'PATCH');
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                $('#post-' + response.id).replaceWith($(response.view));
+                // $('.edit-post-modal').replaceWith($('<div class="edit-post-modal"></div>'));
+                modal.hide();
+                $('#post-'+response.id).find('.post-image').each(function() {
+                    var rgb = getAverageRGB(this);
+                    // apply the style to the parrent
+                    $(this).parent().css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')' );
+                });
+                initDropdowns();
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    });
+
     /*$(document).on('click', '#dropdownMenuIconHorizontalButton', function () {
         $('#dropdownDotsHorizontal').toggleClass('hidden');
     });*/
@@ -147,6 +201,10 @@ $(document).ready(function() {
         var rgb = getAverageRGB(this);
         // apply the style to the parrent
         $(this).parent().css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')' );
+    });
+
+    $(document).on('click', '.modal-close', function () {
+        modal.hide();
     });
 });
 

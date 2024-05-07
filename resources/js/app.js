@@ -11,7 +11,7 @@ import { Modal } from 'flowbite';
 
 // prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none prose-h1:h1 prose-h1:text-2xl
 
-let placeholder = document.getElementById('timeline-textarea-status').getAttribute('x-data-placeholder');
+let placeholder = document.getElementById('timeline_status_input').getAttribute('placeholder');
 document.addEventListener('alpine:init', () => {
     Alpine.data('editor', (content) => {
         let editor // Alpine's reactive engine automatically wraps component properties in proxy objects. Attempting to use a proxied editor instance to apply a transaction will cause a "Range Error: Applying a mismatched transaction", so be sure to unwrap it using Alpine.raw(), or simply avoid storing your editor as a component property, as shown in this example.
@@ -19,6 +19,11 @@ document.addEventListener('alpine:init', () => {
             updatedAt: Date.now(), // force Alpine to rerender on selection change
             init() {
                 const _this = this
+                if (document.getElementById('editor-text')) {
+                    content = document.getElementById('editor-text').innerHTML
+                    document.getElementById('editor-text').remove()
+                }
+
 
                 editor = new Editor({
                     element: this.$refs.element,
@@ -38,7 +43,7 @@ document.addEventListener('alpine:init', () => {
                             class: 'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none prose-h1:text-2xl',
                         },
                     },
-                    content: content,
+                    content: document.getElementById('editor-text') ? document.getElementById('editor-text').innerHTML : content,
                     onCreate({ editor }) {
                         _this.updatedAt = Date.now()
                     },
@@ -97,26 +102,3 @@ document.addEventListener('alpine:init', () => {
 window.Alpine = Alpine;
 
 Alpine.start();
-
-// set the modal menu element
-const $targetEl = document.getElementById('default-modal');
-
-// options with default values
-const options = {
-    placement: 'bottom-right',
-    backdrop: 'dynamic',
-    backdropClasses:
-        'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
-    closable: true,
-    onHide: () => {
-        console.log('modal is hidden');
-    },
-    onShow: () => {
-        console.log('modal is shown');
-    },
-    onToggle: () => {
-        console.log('modal has been toggled');
-    },
-};
-
-const modal = new Modal($targetEl, options);

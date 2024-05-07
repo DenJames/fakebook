@@ -7,6 +7,7 @@ use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 
 readonly class PostRepository
 {
@@ -36,5 +37,21 @@ readonly class PostRepository
         $post->delete();
 
         return response()->json(['message' => 'Post deleted successfully'], 200);
+    }
+
+    public function edit(Post $post): string
+    {
+        return Blade::render('<x-timeline.edit :post="$post" modalId="post-edit-' . $post->id . '"/>', ['post' => $post]);
+    }
+
+    public function update(Request $request, Post $post): JsonResponse
+    {
+        if ($post->user_id !== Auth::user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $post->update($request->only(['content', 'visibility']));
+
+        return response()->json(['message' => 'Post updated successfully', 'id' => $post->id, 'view' => Blade::render('<x-post.post :post="$post"/>', ['post' => $post])]);
     }
 }

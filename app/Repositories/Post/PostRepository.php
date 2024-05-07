@@ -50,7 +50,7 @@ readonly class PostRepository
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $post->update($request->only(['content', 'visibility']));
+        $post->update(array_merge($request->only(['content', 'visibility']), ['edited_at' => now()]));
 
         return response()->json(['message' => 'Post updated successfully', 'id' => $post->id, 'view' => Blade::render('<x-post.post :post="$post"/>', ['post' => $post])]);
     }

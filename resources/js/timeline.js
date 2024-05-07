@@ -1,13 +1,12 @@
 import $ from "jquery";
 import Dropzone from "dropzone";
-import {Modal} from "flowbite";
-import {initDropdowns} from 'flowbite'
+import {initFlowbite, initDropdowns, Modal} from "flowbite";
 
 var image_select = false;
 var tag_select = false;
 var modal;
 
-$(document).ready(function() {
+$(document).ready(function () {
     var user_id = $('meta[name="user-id"]').attr('content')
 
     $(document).on('focus', '#timeline_status_input', function () {
@@ -66,7 +65,7 @@ $(document).ready(function() {
     $(document).on('click', '.delete-post', function () {
         let post_id = $(this).attr('data-post-id');
 
-        if(!confirm('Are you sure you want to delete this item?')){
+        if (!confirm('Are you sure you want to delete this item?')) {
             return false;
         }
 
@@ -85,11 +84,11 @@ $(document).ready(function() {
         });
     });
 
-    let deviceHeight = window.innerHeight/2.4;
+    let deviceHeight = window.innerHeight / 2.4;
     const divElement = document.getElementById('timeline-textarea-status');
     divElement.addEventListener('input', () => autoResize(divElement, deviceHeight));
     // auto rezise on enter press inside the div timeline-textarea-status
-    divElement.addEventListener('keydown', function(e) {
+    divElement.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             autoResize(divElement, deviceHeight);
@@ -116,12 +115,12 @@ $(document).ready(function() {
         dictDefaultMessage: '',
         previewsContainer: ".image-preview-div",
         previewTemplate: document.querySelector('.preview-template').innerHTML,
-        init: function() {
-            this.on("addedfile", function() {
+        init: function () {
+            this.on("addedfile", function () {
                 $(".no-images-uploaded").hide();
             });
 
-            this.on("removedfile", function() {
+            this.on("removedfile", function () {
                 if (this.files.length === 0) {
                     $(".no-images-uploaded").show();
                 }
@@ -129,7 +128,7 @@ $(document).ready(function() {
         }
     });
 
-    $(".no-images-uploaded").click(function() {
+    $(".no-images-uploaded").click(function () {
         myDropzone.hiddenFileInput.click();
     });
 
@@ -139,7 +138,7 @@ $(document).ready(function() {
         e.preventDefault();
         var formData = new FormData(this);
 
-        myDropzone.files.forEach(function(file) {
+        myDropzone.files.forEach(function (file) {
             formData.append("images[]", file);
         });
 
@@ -177,14 +176,15 @@ $(document).ready(function() {
             processData: false,
             success: function (response) {
                 $('#post-' + response.id).replaceWith($(response.view));
-                // $('.edit-post-modal').replaceWith($('<div class="edit-post-modal"></div>'));
                 modal.hide();
-                $('#post-'+response.id).find('.post-image').each(function() {
+                $('#post-' + response.id).find('.post-image').each(function () {
                     var rgb = getAverageRGB(this);
                     // apply the style to the parrent
-                    $(this).parent().css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')' );
+                    $(this).parent().css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')');
                 });
                 initDropdowns();
+                initFlowbite();
+                $('#timeline_status_input').val('');
             },
             error: function (response) {
                 console.log(response);
@@ -197,10 +197,10 @@ $(document).ready(function() {
     });*/
 
     // loop all elements with class post-image
-    $('.post-image').each(function() {
+    $('.post-image').each(function () {
         var rgb = getAverageRGB(this);
         // apply the style to the parrent
-        $(this).parent().css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')' );
+        $(this).parent().css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')');
     });
 
     $(document).on('click', '.modal-close', function () {

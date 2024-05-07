@@ -15,6 +15,10 @@ class Post extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'edited_at' => 'datetime',
+    ];
+
     protected static function booted()
     {
         static::observe(PostObserver::class);

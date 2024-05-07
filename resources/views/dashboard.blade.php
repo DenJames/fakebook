@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900 ">
                     <x-timeline.status/>
                     <div class="flex flex-col gap-4 ">
-                        @foreach(\App\Models\Post::all() as $post)
+                        @foreach(\App\Models\Post::all()->sortByDesc('id') as $post)
                             <x-post.post :post="$post"/>
                         @endforeach
                     </div>

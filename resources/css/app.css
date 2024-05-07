@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ProseMirror:focus {
+    outline: none;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+
+.prose h1 {
+    font-size: 2em; /* Example: Set font size to 2rem */
+    font-weight: bold; /* Example: Set font weight to bold */
+}
+
+.prose h2 {
+    font-size: 1.5em; /* Example: Set font size to 2rem */
+    font-weight: bold; /* Example: Set font weight to bold */
+}
+
+.prose h3 {
+    font-size: 1.17em; /* Example: Set font size to 2rem */
+    font-weight: bold; /* Example: Set font weight to bold */
+}
+
+.prose h4 {
+    font-size: 1em; /* Example: Set font size to 2rem */
+    font-weight: bold; /* Example: Set font weight to bold */
+}
+
+.prose h5 {
+    font-size: .83em; /* Example: Set font size to 2rem */
+    font-weight: bold; /* Example: Set font weight to bold */
+}
+
+.prose h6 {
+    font-size: .67em; /* Example: Set font size to 2rem */
+    font-weight: bold; /* Example: Set font weight to bold */
+}
+

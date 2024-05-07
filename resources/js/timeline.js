@@ -11,9 +11,9 @@ $(document).ready(function() {
         $('#timeline_status_input').blur()
     });
 
-    $(document).on('blur', '#timeline-textarea-status', function () {
-        $('#timeline_status_input').val ($('#timeline-textarea-status').val().replaceAll('\n', ' '));
-    });
+    /*$(document).on('blur', '#timeline-textarea-status', function () {
+        $('#timeline_status_input').val($('#timeline-textarea-status').val().replaceAll('\n', ' '));
+    });*/
 
     $(document).on('click', '.timeline-image-button', function () {
         if (image_select) {
@@ -62,8 +62,15 @@ $(document).ready(function() {
     });
 
     let deviceHeight = window.innerHeight/2.4;
-    const textarea = document.getElementById('timeline-textarea-status');
-    textarea.addEventListener('input', () => autoResize(textarea, deviceHeight)); // 200px max height
+    const divElement = document.getElementById('timeline-textarea-status');
+    divElement.addEventListener('input', () => autoResize(divElement, deviceHeight));
+    // auto rezise on enter press inside the div timeline-textarea-status
+    divElement.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            autoResize(divElement, deviceHeight);
+        }
+    });
 
     // Disable auto discover for all elements:
     Dropzone.autoDiscover = false;
@@ -112,6 +119,8 @@ $(document).ready(function() {
             formData.append("images[]", file);
         });
 
+        formData.append('content', document.getElementById('timeline-textarea-status').innerHTML.replace('contenteditable="true"', '').replace('tiptap', ''));
+
         $.ajax({
             url: $(this).attr('action'),
             type: 'POST',
@@ -142,11 +151,12 @@ $(document).ready(function() {
 });
 
 
-function autoResize(textarea, maxHeight) {
-    textarea.style.height = 'auto'; // Temporarily shrink textarea to get accurate scrollHeight
-    const shouldScroll = textarea.scrollHeight > maxHeight;
-    textarea.style.overflowY = shouldScroll ? 'scroll' : 'hidden';
-    textarea.style.height = shouldScroll ? `${maxHeight}px` : `${textarea.scrollHeight}px`;
+function autoResize(divElement, maxHeight) {
+    console.log("Update");
+    divElement.style.height = 'auto'; // Temporarily shrink div to get accurate scrollHeight
+    const shouldScroll = divElement.scrollHeight > maxHeight;
+    divElement.style.overflowY = shouldScroll ? 'scroll' : 'hidden';
+    divElement.style.height = shouldScroll ? `${maxHeight}px` : `${divElement.scrollHeight}px`;
 }
 
 function getAverageRGB(imgEl) {

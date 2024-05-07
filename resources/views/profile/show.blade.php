@@ -93,9 +93,13 @@
                             <img class="w-full h-24 object-cover rounded" src="{{ asset('storage/' . $photo->path) }}"
                                  alt="">
                         @endforeach
-                        @for($i = 0; $i < 18; $i++)
+                        @foreach($user->posts as $post)
+                            @foreach($post->images as $photo)
+                                <img class="w-full h-24 object-cover rounded" src="{{ asset('storage/' . $photo->path) }}"
+                                     alt="">
+                            @endforeach
 
-                        @endfor
+                        @endforeach
                     </div>
                 </div>
             </x-content.card>
@@ -121,26 +125,12 @@
         </div>
 
         <div class="col-span-12 lg:col-span-8 space-y-6">
-            <x-content.card content-classes="border">
-                <div class="w-full space-y-2">
-{{--                    <h2 class="text-2xl font-bold">What's on your heart?</h2>--}}
-
-{{--                    <x-text-input class="w-full" placeholder="Start writing something"/>--}}
-                    <x-timeline.status/>
-                </div>
-            </x-content.card>
+            <x-timeline.status/>
 
             <div class="max-h-96 lg:max-h-[calc(100vh-610px)] overflow-y-auto space-y-4">
-                @for($i = 0; $i < 50; $i++)
-                    <x-content.card content-classes="border">
-                        <div class="w-full flex gap-4">
-                            <img class="w-10 h-10 rounded-full" src="{{ asset($user->profile_photo) }}" alt="">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
-                            galley of type and scrambled it to make a type specimen book
-                        </div>
-                    </x-content.card>
-                @endfor
+                @foreach($user->posts()->orderByDesc('id')->get() as $post)
+                    <x-post.post :post="$post"/>
+                @endforeach
             </div>
         </div>
     </div>

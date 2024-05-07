@@ -29,6 +29,11 @@ class Post extends Model
         return $this->user_id === Auth::id();
     }
 
+    public function scopeAuthorisedToSee(): bool
+    {
+        return $this->visibility === 'public' || $this->user_id === Auth::id();
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -206,7 +206,66 @@ $(document).ready(function () {
     $(document).on('click', '.modal-close', function () {
         modal.hide();
     });
+
+    $(document).on('click', '.like-post', function () {
+        var post_id = $(this).attr('data-post-id');
+        var post_bottom_content = $("#post-"+post_id).find('.post-bottom-content');
+
+        sendAjax('/posts/' + post_id + '/like', 'POST', {}, post_bottom_content, false);
+    });
+
+    $(document).on('keydown', '.post-comment-input', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            var post_id = $(this).attr('data-post-id');
+            var post_bottom_content = $("#post-"+post_id).find('.post-bottom-content');
+            var comment = $(this).val();
+
+            sendAjax('/posts/' + post_id + '/comment', 'POST', {comment: comment}, post_bottom_content, false);
+        }
+    });
+
+    $(document).on('click', '.like-comment', function () {
+        var comment_id = $(this).attr('data-comment-id');
+        var comment_content = $("#comment-"+comment_id);
+
+        sendAjax('/comments/' + comment_id + '/like', 'POST', {}, comment_content, true);
+    });
+
+    $(document).on('click', '.comment-post', function () {
+        var post_id = $(this).attr('data-post-id');
+        $(".post-"+post_id+"-comment-section").toggleClass("hidden");
+        $(this).toggleClass("text-blue-500");
+    });
+
+    $(document).on('click', '.delete-comment', function () {
+        var post_id = $(this).attr('data-post-id');
+        var comment_id = $(this).attr('data-comment-id');
+        var post_bottom_content = $("#post-"+post_id).find('.post-bottom-content');
+
+        sendAjax('/comments/' + comment_id, 'DELETE', {}, post_bottom_content, false);
+    });
 });
+
+function sendAjax(url, method, data, element, replace) {
+    data._token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: url,
+        type: method,
+        data: data,
+        success: function (response) {
+            if (element || !replace) {
+                element.html(response.html);
+            }
+            if (element || replace) {
+                element.replaceWith(response.html);
+            }
+        },
+        error: function (response) {
+            console.log(response);
+        }
+    });
+}
 
 
 function autoResize(divElement, maxHeight) {

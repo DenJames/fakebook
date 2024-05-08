@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\FriendshipRequestController;
@@ -33,18 +34,18 @@ Route::middleware('auth')->group(function () {
         return to_route('conversations.index');
     })->name('chat.index');
 
-    Route::group(['prefix' => 'conversations'], function () {
-        Route::get('/', [ConversationController::class, 'index'])->name('conversations.index');
-        Route::get('/start/{user}', [ConversationController::class, 'start'])->name('conversations.start');
-        Route::get('/{conversation}', [ConversationController::class, 'show'])->name('conversations.show');
-        Route::delete('/{conversation}', [ConversationController::class, 'destroy'])->name('conversations.destroy');
+    Route::prefix('conversations')->name('conversations.')->group(function () {
+        Route::get('/', [ConversationController::class, 'index'])->name('index');
+        Route::get('/start/{user}', [ConversationController::class, 'start'])->name('start');
+        Route::get('/{conversation}', [ConversationController::class, 'show'])->name('show');
+        Route::delete('/{conversation}', [ConversationController::class, 'destroy'])->name('destroy');
     });
 
-    Route::group(['prefix' => 'messages'], function () {
-        Route::post('/{conversation}', [MessageController::class, 'store'])->name('messages.store');
-        Route::patch('/{message}', [MessageController::class, 'update'])->name('messages.update');
-        Route::patch('/{message}/read', [MessageController::class, 'read'])->name('messages.read');
-        Route::delete('/{message}', [MessageController::class, 'destroy'])->name('messages.destroy');
+    Route::prefix('messages')->name('messages.')->group(function () {
+        Route::post('/{conversation}', [MessageController::class, 'store'])->name('store');
+        Route::patch('/{message}', [MessageController::class, 'update'])->name('update');
+        Route::patch('/{message}/read', [MessageController::class, 'read'])->name('read');
+        Route::delete('/{message}', [MessageController::class, 'destroy'])->name('destroy');
     });
 
     // Profile routes
@@ -76,13 +77,19 @@ Route::middleware('auth')->group(function () {
 
         Route::delete('/{friendship}/request/delete', [FriendshipRequestController::class, 'destroy'])->name('friends-request.destroy');
     });
-
-    Route::prefix('posts')->group(function () {
-        Route::post('/', [PostController::class, 'store'])->name('posts.store');
-        Route::delete('/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::prefix('posts')->name('posts.')->group(function () {
+        Route::post('/', [PostController::class, 'store'])->name('store');
+        Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
 //        Route::get('/{post}', [PostController::class, 'show'])->name('posts.show');
-        Route::get('/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-        Route::patch('/{post}', [PostController::class, 'update'])->name('posts.update');
+        Route::get('/{post}/edit', [PostController::class, 'edit'])->name('edit');
+        Route::patch('/{post}', [PostController::class, 'update'])->name('update');
+        Route::post('/{post}/like', [PostController::class, 'like'])->name('like');
+        Route::post('/{post}/comment', [PostController::class, 'comment'])->name('comment.store');
+    });
+
+    Route::prefix('comments')->name('comments.')->group(function () {
+        Route::post('/{comment}/like', [CommentController::class, 'like'])->name('like');
+        Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
     });
 });
 

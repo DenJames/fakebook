@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Auth;
 
 class Post extends Model
@@ -34,6 +35,11 @@ class Post extends Model
         return $this->visibility === 'public' || $this->user_id === Auth::id();
     }
 
+    public function scopeHasLiked(): bool
+    {
+        return $this->likes->contains('user_id', Auth::id());
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -42,5 +48,15 @@ class Post extends Model
     public function images(): HasMany
     {
         return $this->hasMany(PostImage::class);
+    }
+
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeable');
+    }
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

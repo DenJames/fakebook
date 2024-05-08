@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Repositories\Post;
+namespace App\Repositories\Like;
 
 use App\Http\Requests\PostStoreRequest;
-use App\Models\Comment;
 use App\Models\Post;
+use App\Repositories\Post\PostPictureRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 
-readonly class PostRepository
+readonly class LikeRepository
 {
 
     public function __construct(private PostPictureRepository $postPictureUpload)
@@ -54,27 +54,5 @@ readonly class PostRepository
         $post->update(array_merge($request->only(['content', 'visibility']), ['edited_at' => now()]));
 
         return response()->json(['message' => 'Post updated successfully', 'id' => $post->id, 'view' => Blade::render('<x-post.post :post="$post"/>', ['post' => $post])]);
-    }
-
-    public function like(Post $post): JsonResponse
-    {
-        $like = $post->likes()->where('user_id', Auth::id())->first();
-
-        if ($like) {
-            $like->delete();
-            $html = Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post]);
-            return response()->json(['message' => 'Like removed successfully', 'html' => $html]);
-        }
-
-        $post->likes()->create(['user_id' => Auth::id()]);
-        $html = Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post]);
-        return response()->json(['message' => 'Post liked successfully', 'html' => $html], 201);
-    }
-
-    public function comment(Request $request, Post $post): JsonResponse
-    {
-        $post->comments()->create(['user_id' => Auth::id(), 'content' => $request->comment]);
-
-        return response()->json(['message' => 'Comment created successfully', 'html' => Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post])], 201);
     }
 }

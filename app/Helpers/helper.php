@@ -12,13 +12,13 @@ function formatDiffForHumans(\Carbon\Carbon $date) {
         return "{$diff->m} mo";
     }
 
-    if ($diff->days >= 7) {
-        $weeks = floor($diff->days / 7);
+    if ($diff->d >= 7) {
+        $weeks = floor($diff->d / 7);
         return "{$weeks} w";
     }
 
-    if ($diff->days >= 1) {
-        return "{$diff->days} d";
+    if ($diff->d >= 1) {
+        return "{$diff->d} d";
     }
 
     if ($diff->h >= 1) {

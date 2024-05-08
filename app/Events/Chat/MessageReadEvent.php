@@ -43,7 +43,6 @@ class MessageReadEvent implements ShouldBroadcastNow
     public function broadcastWith(): array
     {
         $message = $this->message;
-        dump($message);
         $html = Blade::render('<x-icons.checkmark width="w-4" height="h-4" />');
 
         return [

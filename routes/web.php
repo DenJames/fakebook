@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\FriendshipController;
+use App\Http\Controllers\FriendshipRequestController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -62,6 +64,17 @@ Route::middleware('auth')->group(function () {
 
         // Search
         Route::get('/search', ProfileSearchController::class)->name('profile.search');
+    });
+
+    Route::prefix('friends')->group(function () {
+        Route::get('/', [FriendshipController::class, 'index'])->name('friends.index');
+        Route::delete('/{user}', [FriendshipController::class, 'destroy'])->name('friends.destroy');
+
+
+        Route::post('/{user}/request', [FriendshipRequestController::class, 'store'])->name('friends-request.store');
+        Route::post('/{user}/accept', [FriendshipRequestController::class, 'accept'])->name('friends-request.accept');
+
+        Route::delete('/{friendship}/request/delete', [FriendshipRequestController::class, 'destroy'])->name('friends-request.destroy');
     });
 
     Route::prefix('posts')->group(function () {

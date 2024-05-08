@@ -73,9 +73,59 @@ class User extends Authenticatable
         return $this->hasOne(UserPrivacySetting::class);
     }
 
+    public function friendships(): HasMany
+    {
+        return $this->hasMany(Friendship::class)->orWhere('friend_id', $this->id);
+    }
+
+    public function scopePendingFriendshipRequests(): HasMany
+    {
+        return $this->friendships()->whereNull('accepted_at');
+    }
+
+    public function scopeReceivedFriendshipRequests(): HasMany
+    {
+        return $this->friendships()->whereNull('accepted_at')->where('friend_id', Auth::id());
+    }
+
     public function scopeIsUserProfile()
     {
         return $this->id === Auth::id();
+    }
+
+    public function pendingFriendship(self $user): Friendship|null
+    {
+        return Friendship::where(function ($query) use ($user) {
+            $query->where('user_id', $this->id)
+                ->where('friend_id', $user->id)
+                ->whereNull('accepted_at');
+        })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->where('friend_id', $this->id)
+                    ->whereNull('accepted_at');
+            })
+            ->first();
+    }
+    public function friendship(self $user): Friendship|null
+    {
+        return Friendship::whereNotNull('accepted_at')
+            ->where(function ($query) use ($user) {
+                $query->where('user_id', $this->id)
+                    ->where('friend_id', $user->id);
+            })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->where('friend_id', $this->id);
+            })
+            ->first();
+    }
+
+    public function activeChat(self $user): Conversation|null
+    {
+        return $this->conversations()->whereHas('users', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->first();
     }
 
     public function currentProfilePhoto(): UserProfilePhoto|null

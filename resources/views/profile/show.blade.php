@@ -14,13 +14,68 @@
                             </label>
                         </x-secondary-button>
                     @else
-                        <x-secondary-button>
-                            <x-icons.user-plus/>
+                        @if(Auth::user()->friendship($user))
+                            <x-secondary-button>
+                                <x-icons.trash/>
 
-                            <span class="ml-2">
-                            Add friend
-                        </span>
-                        </x-secondary-button>
+                                <span class="ml-2">
+                                    Remove friend
+                                </span>
+                            </x-secondary-button>
+
+                            @if(Auth::user()->activeChat($user))
+                                <a href="{{ route('conversations.show', Auth::user()->activeChat($user)) }}">
+                                    <x-secondary-button>
+                                        <x-icons.chat/>
+
+                                        <span class="ml-2">
+                                            Open chat
+                                        </span>
+                                    </x-secondary-button>
+                                </a>
+                            @else
+                                <a href="{{ route('conversations.start', $user) }}">
+                                    <x-secondary-button>
+                                        <x-icons.chat/>
+
+                                        <span class="ml-2">
+                                            Message
+                                        </span>
+                                    </x-secondary-button>
+                                </a>
+                            @endif
+                        @endif
+
+                        @if(Auth::user()->pendingFriendship($user)))
+                            @if(Auth::user()->pendingFriendship($user)->user_id === Auth::id()))
+                                <x-secondary-button>
+                                    <x-icons.clock/>
+
+                                    <span class="ml-2">
+                                        Revert friend request
+                                    </span>
+                                </x-secondary-button>
+                            @else
+                                <form action="{{ route('friends-request.destroy', $user) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" data-tooltip-target="add-friend">
+                                        <x-icons.cross />
+                                    </button>
+                                </form>
+                            @endif
+                        @endif
+
+                        @if(!Auth::user()->friendship($user) && !Auth::user()->pendingFriendship($user))
+                                <x-secondary-button>
+                                    <x-icons.user-plus/>
+
+                                    <span class="ml-2">
+                                        Add friend
+                                    </span>
+                                </x-secondary-button>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -47,12 +102,14 @@
             <div class="flex flex-col gap-y-2 mt-4">
                 <h2 class="font-bold text-5xl">{{ $user->name }}</h2>
 
-                <p class="text-black/70">123 friends</p>
+                <p class="text-black/70">{{ $user->friendships()->count() }} friends</p>
                 <div class="flex">
-                    @for($i = 0; $i < 5; $i++)
-                        <img class="h-10 w-10 rounded-full -ml-3 border-2 border-black/60" style="z-index: {{ 5 - $i }}"
-                             src=" {{ asset($user->profile_photo) }}" alt="">
-                    @endfor
+                    @foreach($user->friendships as $key => $friend)
+                        <a class="h-10 w-10  -ml-3" href="{{ route('profile.show', $friend->getProfile($user)) }}" style="z-index: {{ $user->friendships()->count() - $key }}">
+                            <img class="w-full h-full rounded-full border-2 border-black/60"
+                                 src=" {{ asset($friend->getProfile($user)->profile_photo) }}" alt="">
+                        </a>
+                    @endforeach
                 </div>
             </div>
         </div>

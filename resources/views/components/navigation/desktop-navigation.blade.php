@@ -44,6 +44,14 @@
 
                                 Chat
                             </x-navigation.side-nav-link>
+
+                            <x-navigation.side-nav-link :href="route('friends.index')">
+                                <x-slot:icon>
+                                    <x-icons.user-plus />
+                                </x-slot:icon>
+
+                                Friendships
+                            </x-navigation.side-nav-link>
                         @endguest
                     </ul>
                 </li>

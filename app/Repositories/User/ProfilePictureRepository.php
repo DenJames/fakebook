@@ -39,7 +39,6 @@ readonly class ProfilePictureRepository
                 ? response()->json(['error' => $message], 500)
                 : redirect()->back()->withErrors($message);
         }
-
         if ($storagePath === 'cover-photos') {
             $user->currentCoverPhoto()?->update([
                 'is_current' => false,
@@ -58,7 +57,11 @@ readonly class ProfilePictureRepository
                 'is_current' => true,
             ]);
 
-            return redirect()->back()->with('success', 'The image has been uploaded successfully');
+
+            $message = 'The image has been uploaded successfully';
+            return $request->wantsJson()
+                ? response()->json(['success' => $message])
+                : redirect()->back()->with('success', $message);
         }
 
         $user->profilePhotos()->create([
@@ -68,7 +71,7 @@ readonly class ProfilePictureRepository
             'is_current' => true
         ]);
 
-        $message = 'Profile picture uploaded successfully';
+        $message = 'The image has been uploaded successfully';
         return $request->wantsJson()
             ? response()->json(['success' => $message])
             : redirect()->back()->with('success', $message);

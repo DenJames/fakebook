@@ -265,7 +265,14 @@
                     })
                         .then(response => response.json())
                         .then(data => {
-                            window.location.reload();
+                            Toast.fire({
+                                icon: 'success',
+                                title: data.success
+                            })
+
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 2000);
                         })
                         .catch((error) => {
                             console.error('Error:', error);

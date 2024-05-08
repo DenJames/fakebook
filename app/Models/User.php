@@ -126,7 +126,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function IsFriendWith(User $user): bool
     {
-        return $this->friendships->contains('friend_id', $user->id) || $this->friendships->contains('user_id', $user->id);
+        return in_array($user->id, $this->friendsArray);
     }
 
     public function getFriendsArrayAttribute()
@@ -134,7 +134,7 @@ class User extends Authenticatable implements FilamentUser
         $friendships = $this->friendships()->where('accepted_at', '!=', null)->get();
 
         $friendshipData = $friendships->map(function ($friendship) {
-            return $friendship->user_id === Auth::id() ? $friendship->friend_id : $friendship->user_id;
+            return $friendship->user_id === $this->id ? $friendship->friend_id : $friendship->user_id;
         });
 
         // Remove duplicates

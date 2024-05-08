@@ -193,8 +193,9 @@
             </div>
 
             <div class="col-span-12 lg:col-span-8 space-y-6">
-                <x-timeline.status/>
-
+                @if($user->isUserProfile())
+                    <x-timeline.status/>
+                @endif
                 <div class="max-h-96 lg:max-h-[calc(100vh-610px)] overflow-y-auto space-y-4">
                     @foreach($user->posts()->orderByDesc('id')->get() as $post)
                         <x-post.post :post="$post"/>

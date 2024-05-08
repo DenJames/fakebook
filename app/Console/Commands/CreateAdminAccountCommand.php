@@ -43,6 +43,10 @@ class CreateAdminAccountCommand extends Command
 
         $user->assignRole($role);
 
+        if (!$user->privacySettings) {
+            $user->privacySettings()->create();
+        }
+
         $this->info('Admin account was created successfully');
     }
 }

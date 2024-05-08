@@ -52,6 +52,16 @@
 
                                 Friendships
                             </x-navigation.side-nav-link>
+
+                            @if(Auth::user()->hasRole('admin'))
+                                <x-navigation.side-nav-link href="/admin" target="_blank">
+                                    <x-slot:icon>
+                                        <x-icons.user />
+                                    </x-slot:icon>
+
+                                    Admin panel
+                                </x-navigation.side-nav-link>
+                            @endif
                         @endguest
                     </ul>
                 </li>

@@ -46,8 +46,8 @@
                             @endif
                         @endif
 
-                        @if(Auth::user()->pendingFriendship($user)))
-                            @if(Auth::user()->pendingFriendship($user)->user_id === Auth::id()))
+                        @if(Auth::user()->pendingFriendship($user))
+                            @if(Auth::user()->pendingFriendship($user)->user_id === Auth::id())
                                 <x-secondary-button>
                                     <x-icons.clock/>
 
@@ -68,13 +68,13 @@
                         @endif
 
                         @if(!Auth::user()->friendship($user) && !Auth::user()->pendingFriendship($user))
-                                <x-secondary-button>
-                                    <x-icons.user-plus/>
+                            <x-secondary-button>
+                                <x-icons.user-plus/>
 
-                                    <span class="ml-2">
-                                        Add friend
-                                    </span>
-                                </x-secondary-button>
+                                <span class="ml-2">
+                                    Add friend
+                                </span>
+                            </x-secondary-button>
                         @endif
                     @endif
                 </div>

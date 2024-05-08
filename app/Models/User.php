@@ -129,6 +129,20 @@ class User extends Authenticatable implements FilamentUser
         return $this->friendships->contains('friend_id', $user->id) || $this->friendships->contains('user_id', $user->id);
     }
 
+    public function getFriendsArrayAttribute()
+    {
+        $friendships = $this->friendships;
+
+        $friendshipData = $friendships->map(function ($friendship) {
+            return $friendship->user_id === Auth::id() ? $friendship->friend_id : $friendship->user_id;
+        });
+
+        // Remove duplicates
+        $uniqueFriendshipData = $friendshipData->unique();
+
+        return $uniqueFriendshipData->values()->toArray();
+    }
+
     public function activeChat(self $user): Conversation|null
     {
         return $this->conversations()->whereHas('users', function ($query) use ($user) {

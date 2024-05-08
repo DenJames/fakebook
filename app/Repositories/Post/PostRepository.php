@@ -7,7 +7,6 @@ use App\Events\Post\PostCreateEvent;
 use App\Events\Post\PostDeleteEvent;
 use App\Events\Post\PostUpdateEvent;
 use App\Http\Requests\PostStoreRequest;
-use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -90,7 +89,7 @@ readonly class PostRepository
 
         if ($like) {
             $like->delete();
-            
+
             event(new PostBottomUpdateEvent($post));
             event(new PostBottomUpdateEvent($post, true));
             return response()->json(['message' => 'Like removed successfully']);

@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900 ">
                     <x-timeline.status/>
                     <div class="flex flex-col gap-4 posts-container">
-                        @foreach(\App\Models\Post::all()->sortByDesc('id') as $post)
+                        @foreach(\App\Models\Post::whereIn('user_id', array_merge(Auth::user()->FriendsArray, [Auth::user()->id]))->orderByDesc('id')->get() as $post)
                             <x-post.post :post="$post"/>
                         @endforeach
                     </div>

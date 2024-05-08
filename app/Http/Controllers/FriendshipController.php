@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Friendship;
 use App\Models\User;
 use App\Repositories\User\FriendshipRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,5 +26,10 @@ class FriendshipController extends Controller
     public function destroy(User $user, Request $request)
     {
         return $this->friendshipRepository->remove($user, $request);
+    }
+
+    public function friends(): JsonResponse
+    {
+        return $this->friendshipRepository->friends();
     }
 }

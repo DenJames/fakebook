@@ -50,4 +50,14 @@ class PostController extends Controller
     {
         return $this->postRepository->comment_delete($post, $comment);
     }
+
+    public function show(Post $post): string
+    {
+        return $this->postRepository->show($post);
+    }
+
+    public function show_bottom(Post $post): string
+    {
+        return $this->postRepository->show_bottom($post);
+    }
 }

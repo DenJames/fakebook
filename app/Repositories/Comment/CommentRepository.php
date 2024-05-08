@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Comment;
 
+use App\Events\Post\PostBottomUpdateEvent;
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
@@ -15,13 +17,19 @@ readonly class CommentRepository
 
         if ($like) {
             $like->delete();
-            $html = Blade::render('<x-post.comment :comment="$comment"/>', ['comment' => $comment]);
-            return response()->json(['message' => 'Like removed successfully', 'html' => $html]);
+            if ($comment->commentable instanceof Post) {
+                event(new PostBottomUpdateEvent($comment->commentable));
+                event(new PostBottomUpdateEvent($comment->commentable, true));
+            }
+            return response()->json(['message' => 'Like removed successfully']);
         }
 
         $comment->likes()->create(['user_id' => Auth::id()]);
-        $html = Blade::render('<x-post.comment :comment="$comment"/>', ['comment' => $comment]);
-        return response()->json(['message' => 'Comment liked successfully', 'html' => $html], 201);
+        if ($comment->commentable instanceof Post) {
+            event(new PostBottomUpdateEvent($comment->commentable));
+            event(new PostBottomUpdateEvent($comment->commentable, true));
+        }
+        return response()->json(['message' => 'Comment liked successfully'], 201);
     }
 
     public function delete(Comment $comment): JsonResponse
@@ -32,6 +40,11 @@ readonly class CommentRepository
 
         $comment->delete();
 
-        return response()->json(['message' => 'Comment deleted successfully', 'html' => Blade::render('<x-post.bottom :post="$post"/>', ['post' => $comment->commentable])], 200);
+        if ($comment->commentable instanceof Post) {
+            event(new PostBottomUpdateEvent($comment->commentable));
+            event(new PostBottomUpdateEvent($comment->commentable, true));
+        }
+
+        return response()->json(['message' => 'Comment deleted successfully'], 200);
     }
 }

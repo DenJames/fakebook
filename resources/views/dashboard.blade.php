@@ -10,7 +10,7 @@
             <div class="overflow-hidden shadow-sm sm:rounded-lg ">
                 <div class="p-6 text-gray-900 ">
                     <x-timeline.status/>
-                    <div class="flex flex-col gap-4 ">
+                    <div class="flex flex-col gap-4 posts-container">
                         @foreach(\App\Models\Post::all()->sortByDesc('id') as $post)
                             <x-post.post :post="$post"/>
                         @endforeach

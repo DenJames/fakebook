@@ -76,7 +76,7 @@ $(document).ready(function () {
                 _token: $('meta[name="csrf-token"]').attr('content')
             },
             success: function (response) {
-                $('#post-' + post_id).remove();
+                // $('#post-' + post_id).remove();
             },
             error: function (response) {
                 alert(response);
@@ -175,15 +175,15 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                $('#post-' + response.id).replaceWith($(response.view));
+                // $('#post-' + response.id).replaceWith($(response.view));
                 modal.hide();
-                $('#post-' + response.id).find('.post-image').each(function () {
+                /*$('#post-' + response.id).find('.post-image').each(function () {
                     var rgb = getAverageRGB(this);
                     // apply the style to the parrent
                     $(this).parent().css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')');
                 });
                 initDropdowns();
-                initFlowbite();
+                initFlowbite();*/
                 $('#timeline_status_input').val('');
             },
             error: function (response) {
@@ -209,27 +209,24 @@ $(document).ready(function () {
 
     $(document).on('click', '.like-post', function () {
         var post_id = $(this).attr('data-post-id');
-        var post_bottom_content = $("#post-"+post_id).find('.post-bottom-content');
 
-        sendAjax('/posts/' + post_id + '/like', 'POST', {}, post_bottom_content, false);
+        sendAjax('/posts/' + post_id + '/like', 'POST', {});
     });
 
     $(document).on('keydown', '.post-comment-input', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             var post_id = $(this).attr('data-post-id');
-            var post_bottom_content = $("#post-"+post_id).find('.post-bottom-content');
             var comment = $(this).val();
 
-            sendAjax('/posts/' + post_id + '/comment', 'POST', {comment: comment}, post_bottom_content, false);
+            sendAjax('/posts/' + post_id + '/comment', 'POST', {comment: comment});
         }
     });
 
     $(document).on('click', '.like-comment', function () {
         var comment_id = $(this).attr('data-comment-id');
-        var comment_content = $("#comment-"+comment_id);
 
-        sendAjax('/comments/' + comment_id + '/like', 'POST', {}, comment_content, true);
+        sendAjax('/comments/' + comment_id + '/like', 'POST', {});
     });
 
     $(document).on('click', '.comment-post', function () {
@@ -239,27 +236,19 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.delete-comment', function () {
-        var post_id = $(this).attr('data-post-id');
         var comment_id = $(this).attr('data-comment-id');
-        var post_bottom_content = $("#post-"+post_id).find('.post-bottom-content');
 
-        sendAjax('/comments/' + comment_id, 'DELETE', {}, post_bottom_content, false);
+        sendAjax('/comments/' + comment_id, 'DELETE', {});
     });
 });
 
-function sendAjax(url, method, data, element, replace) {
+function sendAjax(url, method, data) {
     data._token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
         type: method,
         data: data,
         success: function (response) {
-            if (element || !replace) {
-                element.html(response.html);
-            }
-            if (element || replace) {
-                element.replaceWith(response.html);
-            }
         },
         error: function (response) {
             console.log(response);
@@ -309,7 +298,6 @@ function getAverageRGB(imgEl) {
         data = context.getImageData(0, 0, width, height);
     } catch (e) {
         /* security error, img on diff domain */
-        alert('x');
         return defaultRGB;
     }
 

@@ -80,7 +80,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('posts')->name('posts.')->group(function () {
         Route::post('/', [PostController::class, 'store'])->name('store');
         Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
-//        Route::get('/{post}', [PostController::class, 'show'])->name('posts.show');
+        Route::get('/{post}', [PostController::class, 'show'])->name('show');
+        Route::get('/{post}/bottom', [PostController::class, 'show_bottom'])->name('show_bottom');
         Route::get('/{post}/edit', [PostController::class, 'edit'])->name('edit');
         Route::patch('/{post}', [PostController::class, 'update'])->name('update');
         Route::post('/{post}/like', [PostController::class, 'like'])->name('like');
@@ -90,6 +91,14 @@ Route::middleware('auth')->group(function () {
     Route::prefix('comments')->name('comments.')->group(function () {
         Route::post('/{comment}/like', [CommentController::class, 'like'])->name('like');
         Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
+    });
+
+
+
+
+
+    Route::prefix('api')->name('api.')->group(function () {
+        Route::get('/friends', [FriendshipController::class, 'friends'])->name('friends');
     });
 });
 

@@ -2,6 +2,10 @@
 
 namespace App\Repositories\Post;
 
+use App\Events\Post\PostBottomUpdateEvent;
+use App\Events\Post\PostCreateEvent;
+use App\Events\Post\PostDeleteEvent;
+use App\Events\Post\PostUpdateEvent;
 use App\Http\Requests\PostStoreRequest;
 use App\Models\Comment;
 use App\Models\Post;
@@ -26,6 +30,12 @@ readonly class PostRepository
             }
         }
 
+        if ($post->visibility === 'public' || $post->visibility === 'friends')
+            event(new PostCreateEvent($post));
+
+        event(new PostCreateEvent($post, true));
+
+
         return response()->json(['message' => 'Post created successfully'], 201);
     }
 
@@ -35,6 +45,10 @@ readonly class PostRepository
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
+        if ($post->visibility === 'public' || $post->visibility === 'friends')
+            event(new PostDeleteEvent($post));
+
+        event(new PostDeleteEvent($post, true));
         $post->delete();
 
         return response()->json(['message' => 'Post deleted successfully'], 200);
@@ -51,9 +65,23 @@ readonly class PostRepository
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
+        $visibility = $post->visibility;
+
         $post->update(array_merge($request->only(['content', 'visibility']), ['edited_at' => now()]));
 
-        return response()->json(['message' => 'Post updated successfully', 'id' => $post->id, 'view' => Blade::render('<x-post.post :post="$post"/>', ['post' => $post])]);
+        //if it goes from private to public or friends send the create
+        if ($visibility === 'private' && ($post->visibility === 'public' || $post->visibility === 'friends')) {
+            event(new PostCreateEvent($post));
+        } else if ($visibility !== 'private' && $post->visibility === 'private') {
+            event(new PostDeleteEvent($post));
+        } else if ($visibility !== 'private' && ($post->visibility === 'public' || $post->visibility === 'friends')) {
+            event(new PostUpdateEvent($post));
+        }
+
+        event(new PostUpdateEvent($post, true));
+
+        // return response()->json(['message' => 'Post updated successfully', 'id' => $post->id, 'view' => Blade::render('<x-post.post :post="$post"/>', ['post' => $post])]);
+        return response()->json(['message' => 'Post updated successfully']);
     }
 
     public function like(Post $post): JsonResponse
@@ -62,19 +90,37 @@ readonly class PostRepository
 
         if ($like) {
             $like->delete();
-            $html = Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post]);
-            return response()->json(['message' => 'Like removed successfully', 'html' => $html]);
+            
+            event(new PostBottomUpdateEvent($post));
+            event(new PostBottomUpdateEvent($post, true));
+            return response()->json(['message' => 'Like removed successfully']);
         }
 
         $post->likes()->create(['user_id' => Auth::id()]);
-        $html = Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post]);
-        return response()->json(['message' => 'Post liked successfully', 'html' => $html], 201);
+
+        event(new PostBottomUpdateEvent($post));
+        event(new PostBottomUpdateEvent($post, true));
+
+        return response()->json(['message' => 'Post liked successfully'], 201);
     }
 
     public function comment(Request $request, Post $post): JsonResponse
     {
         $post->comments()->create(['user_id' => Auth::id(), 'content' => $request->comment]);
 
+        event(new PostBottomUpdateEvent($post));
+        event(new PostBottomUpdateEvent($post, true));
+
         return response()->json(['message' => 'Comment created successfully', 'html' => Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post])], 201);
+    }
+
+    public function show(Post $post): string
+    {
+        return Blade::render('<x-post.post :post="$post"/>', ['post' => $post]);
+    }
+
+    public function show_bottom(Post $post): string
+    {
+        return Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post]);
     }
 }

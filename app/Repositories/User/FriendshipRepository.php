@@ -66,4 +66,17 @@ class FriendshipRepository
             : redirect()->back()->with('success', $message);
 
     }
+
+    public function friends(): JsonResponse
+    {
+        $friends1 = Auth::user()?->friendships->pluck('friend_id');
+        $friends2 = Auth::user()?->friendships->pluck('user_id');
+
+        $friends = User::whereIn('id', $friends1)->orWhereIn('id', $friends2)->pluck('id');
+        $friends = $friends->filter(fn($id) => $id !== Auth::id());
+
+        $friendIds = $friends->toArray();
+
+        return response()->json(['friends' => $friends]);
+    }
 }

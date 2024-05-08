@@ -124,6 +124,11 @@ class User extends Authenticatable implements FilamentUser
             ->first();
     }
 
+    public function IsFriendWith(User $user): bool
+    {
+        return $this->friendships->contains('friend_id', $user->id) || $this->friendships->contains('user_id', $user->id);
+    }
+
     public function activeChat(self $user): Conversation|null
     {
         return $this->conversations()->whereHas('users', function ($query) use ($user) {

@@ -102,9 +102,9 @@
             <div class="flex flex-col gap-y-2 mt-4">
                 <h2 class="font-bold text-5xl">{{ $user->name }}</h2>
 
-                <p class="text-black/70">{{ $user->friendships()->count() }} friends</p>
+                <p class="text-black/70">{{ $user->friendships()->whereNotNull('accepted_at')->count() }} friends</p>
                 <div class="flex">
-                    @foreach($user->friendships as $key => $friend)
+                    @foreach($user->friendships()->whereNotNull('accepted_at')->get() as $key => $friend)
                         <a class="h-10 w-10  -ml-3" href="{{ route('profile.show', $friend->getProfile($user)) }}" style="z-index: {{ $user->friendships()->count() - $key }}">
                             <img class="w-full h-full rounded-full border-2 border-black/60"
                                  src=" {{ asset($friend->getProfile($user)->profile_photo) }}" alt="">
@@ -151,7 +151,7 @@
                         <div class="w-full space-y-2">
                             <h2 class="text-2xl font-bold">Pictures</h2>
 
-                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-52 overflow-y-auto">
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-52 overflow-y-auto">
                                 @foreach($user->profilePhotos()->where('type', \App\Enums\UserProfilePhotoTypes::PROFILE_PHOTO->value)->where('is_current', false)->get() as $photo)
                                     <img class="w-full h-24 object-cover rounded" src="{{ asset('storage/' . $photo->path) }}"
                                          alt="">
@@ -173,17 +173,19 @@
                         <div class="w-full space-y-2">
                             <h2 class="text-2xl font-bold">Friends</h2>
 
-                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 h-60 overflow-y-auto">
-                                @for($i = 0; $i < 18; $i++)
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-60 overflow-y-auto">
+                                @foreach($user->friendships()->whereNotNull('accepted_at')->get() as $friend)
                                     <div class="flex flex-col">
-                                        <img class="w-full h-24 object-cover rounded" src="{{ asset($user->profile_photo) }}"
-                                             alt="">
+                                        <a href="{{ route('profile.show', $friend->getProfile($user)) }}">
+                                            <img class="w-full h-24 object-cover rounded" src="{{ asset($friend->getProfile($user)->profile_photo) }}"
+                                                 alt="">
 
-                                        <p class="text-sm">
-                                            {{ $user->name }}
-                                        </p>
+                                            <p class="text-sm truncate">
+                                                {{ $friend->getProfile($user)->name }}
+                                            </p>
+                                        </a>
                                     </div>
-                                @endfor
+                                @endforeach
                             </div>
                         </div>
                     </x-content.card>

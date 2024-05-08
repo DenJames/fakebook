@@ -74,13 +74,4 @@
     <div class="w-full lg:w-1/2 mt-4">
         {{ $users->withQueryString()->links() }}
     </div>
-
-    <script>
-        document.getElementById('revertFriendRequestButton').addEventListener('click', function (event) {
-            if (confirm('Are you sure you want to revert this friend request?')) {
-                document.getElementById('revertFriendRequestForm').submit();
-            }
-        });
-
-    </script>
 </x-app-layout>

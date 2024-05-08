@@ -48,13 +48,20 @@
 
                         @if(Auth::user()->pendingFriendship($user))
                             @if(Auth::user()->pendingFriendship($user)->user_id === Auth::id())
-                                <x-secondary-button>
-                                    <x-icons.clock/>
+                                <form class="revertFriendRequestForm"
+                                      action="{{ route('friends-request.destroy', ['friendship' => Auth::user()->pendingFriendship($user)]) }}"
+                                      method="POST">
+                                    @csrf
+                                    @method('DELETE')
 
-                                    <span class="ml-2">
-                                        Revert friend request
-                                    </span>
-                                </x-secondary-button>
+                                    <x-secondary-button type="submit">
+                                        <x-icons.clock/>
+
+                                        <span class="ml-2">
+                                            Revert friend request
+                                        </span>
+                                    </x-secondary-button>
+                                </form>
                             @else
                                 <form action="{{ route('friends-request.destroy', $user) }}" method="POST">
                                     @csrf
@@ -68,13 +75,17 @@
                         @endif
 
                         @if(!Auth::user()->friendship($user) && !Auth::user()->pendingFriendship($user))
-                            <x-secondary-button>
-                                <x-icons.user-plus/>
+                            <form action="{{ route('friends-request.store', $user) }}" method="POST">
+                                @csrf
 
-                                <span class="ml-2">
-                                    Add friend
-                                </span>
-                            </x-secondary-button>
+                                <x-secondary-button type="submit">
+                                    <x-icons.user-plus/>
+
+                                    <span class="ml-2">
+                                        Add friend
+                                    </span>
+                                </x-secondary-button>
+                            </form>
                         @endif
                     @endif
                 </div>

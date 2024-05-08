@@ -1,5 +1,5 @@
 <script>
-    window.document.addEventListener('DOMContentLoaded', function () {
+    window.addEventListener('load', function() {
         Swal.fire({
             title: "Disclaimer",
             text: "Fakebook is a school project and is not affiliated with Facebook. It is solely intended for educational purposes.",

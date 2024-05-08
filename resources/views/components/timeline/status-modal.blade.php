@@ -79,7 +79,7 @@
                             </div>
                         </template>
 
-                        <div x-ref="element" x-data-placeholder="What's on your mind, {{ Auth::user()->name }}?" id="timeline-textarea-status" class="pt-1"></div>
+                        <div x-ref="element" x-data-placeholder="What's on your mind, {{ Auth::user()->name }}?" id="timeline-textarea-status" class="pt-1 text-white"></div>
                     </div>
 {{--                    <textarea name="content" id="timeline-textarea-status" class="w-full h-min p-2 border border-gray-200 rounded-lg focus:ring-0 focus:border-none block sm:text-sm bg-transparent border-none outline-none text-white placeholder-gray-200 resize-none" placeholder="What's on your mind, {{ Auth::user()->name }}?"></textarea>--}}
                     <div class="flex flex-col timeline-image-container hidden" id="timeline-image-container">

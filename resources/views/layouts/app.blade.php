@@ -55,6 +55,10 @@
         </div>
     </main>
 </div>
+
+<x-success-message />
+<x-status-message />
+
 @stack('scripts')
 </body>
 </html>

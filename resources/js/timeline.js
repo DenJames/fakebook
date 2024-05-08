@@ -77,6 +77,10 @@ $(document).ready(function () {
             },
             success: function (response) {
                 // $('#post-' + post_id).remove();
+                Toast.fire({
+                    icon: 'success',
+                    title: response.success
+                })
             },
             error: function (response) {
                 alert(response);
@@ -151,12 +155,19 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function (response) {
-                console.log(response);
                 myDropzone.removeAllFiles();
                 $(".no-images-uploaded").show();
+
+                Toast.fire({
+                    icon: 'success',
+                    title: response.success
+                })
             },
             error: function (response) {
-                console.log(response);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.error
+                })
             }
         });
     });
@@ -185,9 +196,18 @@ $(document).ready(function () {
                 initDropdowns();
                 initFlowbite();*/
                 $('#timeline_status_input').val('');
+
+                Toast.fire({
+                    icon: 'success',
+                    title: response.success
+                })
             },
             error: function (response) {
                 console.log(response);
+                Toast.fire({
+                    icon: 'error',
+                    title: response.error
+                })
             }
         });
     });
@@ -249,6 +269,7 @@ function sendAjax(url, method, data) {
         type: method,
         data: data,
         success: function (response) {
+
         },
         error: function (response) {
             console.log(response);

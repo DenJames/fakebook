@@ -8,12 +8,11 @@ import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import Heading from '@tiptap/extension-heading'
 import { Modal } from 'flowbite';
+import Swal from 'sweetalert2'
 
 // prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none prose-h1:h1 prose-h1:text-2xl
 
 let placeholder = document.getElementById('timeline_status_input')?.getAttribute('placeholder');
-
-
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('editor', (content) => {
@@ -101,7 +100,21 @@ document.addEventListener('alpine:init', () => {
     })
 });
 
+const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+    }
+});
 
+// Global variables
 window.Alpine = Alpine;
+window.Swal = Swal;
+window.Toast = Toast;
 
 Alpine.start();

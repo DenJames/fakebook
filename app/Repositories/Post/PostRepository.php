@@ -35,13 +35,13 @@ readonly class PostRepository
         event(new PostCreateEvent($post, true));
 
 
-        return response()->json(['message' => 'Post created successfully'], 201);
+        return response()->json(['success' => 'Post created successfully'], 201);
     }
 
     public function destroy(Post $post): JsonResponse
     {
         if ($post->user_id !== Auth::user()->id) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         if ($post->visibility === 'public' || $post->visibility === 'friends')
@@ -50,7 +50,7 @@ readonly class PostRepository
         event(new PostDeleteEvent($post, true));
         $post->delete();
 
-        return response()->json(['message' => 'Post deleted successfully'], 200);
+        return response()->json(['success' => 'Post deleted successfully'], 200);
     }
 
     public function edit(Post $post): string
@@ -61,7 +61,7 @@ readonly class PostRepository
     public function update(Request $request, Post $post): JsonResponse
     {
         if ($post->user_id !== Auth::user()->id) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $visibility = $post->visibility;
@@ -80,7 +80,7 @@ readonly class PostRepository
         event(new PostUpdateEvent($post, true));
 
         // return response()->json(['message' => 'Post updated successfully', 'id' => $post->id, 'view' => Blade::render('<x-post.post :post="$post"/>', ['post' => $post])]);
-        return response()->json(['message' => 'Post updated successfully']);
+        return response()->json(['success' => 'Post updated successfully']);
     }
 
     public function like(Post $post): JsonResponse
@@ -92,7 +92,7 @@ readonly class PostRepository
 
             event(new PostBottomUpdateEvent($post));
             event(new PostBottomUpdateEvent($post, true));
-            return response()->json(['message' => 'Like removed successfully']);
+            return response()->json(['success' => 'Like removed successfully']);
         }
 
         $post->likes()->create(['user_id' => Auth::id()]);
@@ -100,7 +100,7 @@ readonly class PostRepository
         event(new PostBottomUpdateEvent($post));
         event(new PostBottomUpdateEvent($post, true));
 
-        return response()->json(['message' => 'Post liked successfully'], 201);
+        return response()->json(['success' => 'Post liked successfully'], 201);
     }
 
     public function comment(Request $request, Post $post): JsonResponse
@@ -110,7 +110,7 @@ readonly class PostRepository
         event(new PostBottomUpdateEvent($post));
         event(new PostBottomUpdateEvent($post, true));
 
-        return response()->json(['message' => 'Comment created successfully', 'html' => Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post])], 201);
+        return response()->json(['success' => 'Comment created successfully', 'html' => Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post])], 201);
     }
 
     public function show(Post $post): string

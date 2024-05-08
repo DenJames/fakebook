@@ -131,7 +131,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function getFriendsArrayAttribute()
     {
-        $friendships = $this->friendships;
+        $friendships = $this->friendships()->where('accepted_at', '!=', null)->get();
 
         $friendshipData = $friendships->map(function ($friendship) {
             return $friendship->user_id === Auth::id() ? $friendship->friend_id : $friendship->user_id;

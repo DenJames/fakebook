@@ -68,7 +68,7 @@
                                     @method('DELETE')
 
                                     <button type="submit" data-tooltip-target="add-friend">
-                                        <x-icons.cross />
+                                        <x-icons.cross/>
                                     </button>
                                 </form>
                             @endif
@@ -94,7 +94,8 @@
 
         <div class="relative w-full flex gap-10">
             <div class="relative lg:-mt-14 flex items-center lg:items-start">
-                <img class="w-32 h-32 lg:h-48 lg:w-48 rounded-full mx-2 lg:mx-8 z-0" src="{{ asset($user->profile_photo) }}" alt="">
+                <img class="w-32 h-32 lg:h-48 lg:w-48 rounded-full mx-2 lg:mx-8 z-0"
+                     src="{{ asset($user->profile_photo) }}" alt="">
 
                 @if($user->isUserProfile())
                     <div class="absolute right-12 bottom-0 z-10">
@@ -116,7 +117,8 @@
                 <p class="text-black/70">{{ $user->friendships()->whereNotNull('accepted_at')->count() }} friends</p>
                 <div class="flex">
                     @foreach($user->friendships()->whereNotNull('accepted_at')->get() as $key => $friend)
-                        <a class="h-10 w-10  -ml-3" href="{{ route('profile.show', $friend->getProfile($user)) }}" style="z-index: {{ $user->friendships()->count() - $key }}">
+                        <a class="h-10 w-10  -ml-3" href="{{ route('profile.show', $friend->getProfile($user)) }}"
+                           style="z-index: {{ $user->friendships()->count() - $key }}">
                             <img class="w-full h-full rounded-full border-2 border-black/60"
                                  src=" {{ asset($friend->getProfile($user)->profile_photo) }}" alt="">
                         </a>
@@ -126,14 +128,14 @@
         </div>
     </div>
 
-    @if($user->privacySettings->visibility_type === \App\Enums\ProfileVisibilityTypes::PUBLIC)
+    @if($user->profileVisible())
         <div class="mt-6 grid grid-cols-12 gap-6">
             <div class="col-span-12 lg:col-span-4 space-y-6">
                 <x-content.card content-classes="border">
                     <div class="w-full space-y-2">
                         <h2 class="text-2xl font-bold">Introduction</h2>
 
-                        @if($user->privacySettings->show_biography || $user->isUserProfile())
+                        @if($user->widgetIsVisible('show_biography'))
                             <p>
                                 {{ $user->biography }}
                             </p>
@@ -147,7 +149,7 @@
                             </x-secondary-button>
                         @endif
 
-                        @if($user->privacySettings->show_join_date || $user->isUserProfile())
+                        @if($user->widgetIsVisible('show_join_date'))
                             <div class="flex gap-x-2">
                                 <x-icons.clock/>
 
@@ -157,20 +159,22 @@
                     </div>
                 </x-content.card>
 
-                @if($user->privacySettings->show_photo_list || $user->isUserProfile())
+                @if($user->widgetIsVisible('show_photo_list'))
                     <x-content.card content-classes="border">
                         <div class="w-full space-y-2">
                             <h2 class="text-2xl font-bold">Pictures</h2>
 
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-52 overflow-y-auto">
                                 @foreach($user->profilePhotos()->where('type', \App\Enums\UserProfilePhotoTypes::PROFILE_PHOTO->value)->where('is_current', false)->get() as $photo)
-                                    <img class="w-full h-24 object-cover rounded" src="{{ asset('storage/' . $photo->path) }}"
+                                    <img class="w-full h-24 object-cover rounded"
+                                         src="{{ asset('storage/' . $photo->path) }}"
                                          alt="">
                                 @endforeach
 
                                 @foreach($user->posts as $post)
                                     @foreach($post->images as $photo)
-                                        <img class="w-full h-24 object-cover rounded" src="{{ asset('storage/' . $photo->path) }}"
+                                        <img class="w-full h-24 object-cover rounded"
+                                             src="{{ asset('storage/' . $photo->path) }}"
                                              alt="">
                                     @endforeach
                                 @endforeach
@@ -179,7 +183,7 @@
                     </x-content.card>
                 @endif
 
-                @if($user->privacySettings->show_friend_list || $user->isUserProfile())
+                @if($user->widgetIsVisible('show_friend_list'))
                     <x-content.card content-classes="border">
                         <div class="w-full space-y-2">
                             <h2 class="text-2xl font-bold">Friends</h2>
@@ -188,7 +192,8 @@
                                 @foreach($user->friendships()->whereNotNull('accepted_at')->get() as $friend)
                                     <div class="flex flex-col">
                                         <a href="{{ route('profile.show', $friend->getProfile($user)) }}">
-                                            <img class="w-full h-24 object-cover rounded" src="{{ asset($friend->getProfile($user)->profile_photo) }}"
+                                            <img class="w-full h-24 object-cover rounded"
+                                                 src="{{ asset($friend->getProfile($user)->profile_photo) }}"
                                                  alt="">
 
                                             <p class="text-sm truncate">
@@ -207,11 +212,14 @@
                 @if($user->isUserProfile())
                     <x-timeline.status/>
                 @endif
-                <div class="max-h-96 lg:max-h-[calc(100vh-610px)] overflow-y-auto space-y-4">
-                    @foreach($user->posts()->orderByDesc('id')->get() as $post)
-                        <x-post.post :post="$post"/>
-                    @endforeach
-                </div>
+
+                @if($user->widgetIsVisible('timeline_visible'))
+                    <div class="max-h-96 lg:max-h-[calc(100vh-610px)] overflow-y-auto space-y-4">
+                        @foreach($user->posts()->orderByDesc('id')->get() as $post)
+                            <x-post.post :post="$post"/>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
     @endif

@@ -11,6 +11,7 @@ enum PrivacySettings: string
     case SHOW_JOIN_DATE = 'show_join_date';
     case SHOW_FRIEND_LIST = 'show_friend_list';
     case SHOW_PHOTO_LIST = 'show_photo_list';
+    case TIMELINE_VISIBLE = 'timeline_visible';
 
     public function toUpperSnakeCase(): string
     {

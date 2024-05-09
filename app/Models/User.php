@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\ProfileVisibilityTypes;
 use App\Enums\UserProfilePhotoTypes;
 use App\Observers\UserObserver;
 use Filament\Models\Contracts\FilamentUser;
@@ -114,14 +115,16 @@ class User extends Authenticatable implements FilamentUser
     }
     public function friendship(self $user): Friendship|null
     {
-        return Friendship::whereNotNull('accepted_at')
+        return Friendship::query()
             ->where(function ($query) use ($user) {
                 $query->where('user_id', $this->id)
-                    ->where('friend_id', $user->id);
+                    ->where('friend_id', $user->id)
+                    ->whereNotNull('accepted_at');
             })
             ->orWhere(function ($query) use ($user) {
                 $query->where('user_id', $user->id)
-                    ->where('friend_id', $this->id);
+                    ->where('friend_id', $this->id)
+                    ->whereNotNull('accepted_at');
             })
             ->first();
     }
@@ -188,6 +191,25 @@ class User extends Authenticatable implements FilamentUser
         return Attribute::make(
             get: static fn () => $path,
         );
+    }
+
+    public function profileVisible(): bool
+    {
+        $visibleToFriendsOnly = $this->privacySettings->visibility_type === ProfileVisibilityTypes::ONLY_FRIENDS;
+        if ($visibleToFriendsOnly) {
+            return $this->friendship(Auth::user()) !== null || $this->isUserProfile();
+        }
+
+        return $this->privacySettings->visibility_type === ProfileVisibilityTypes::PUBLIC || $this->isUserProfile();
+    }
+
+    public function widgetIsVisible(string $setting): bool
+    {
+        if (!isset($this->privacySettings->{$setting})) {
+            return false;
+        }
+
+        return $this->privacySettings->{$setting} || $this->isUserProfile();
     }
 
     public function canAccessPanel(Panel $panel): bool

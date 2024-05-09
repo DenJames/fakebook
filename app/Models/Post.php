@@ -30,17 +30,6 @@ class Post extends Model
         return $this->user_id === Auth::id();
     }
 
-    public function scopeAuthorisedToSee(): bool
-    {
-        if ($this->visibility === 'public' || $this->user_id === Auth::id()) {
-            return true;
-        }
-        if ($this->visibility === 'friends' && $this->user->isFriendWith(Auth::user())) {
-            return true;
-        }
-        return false;
-    }
-
     public function scopeHasLiked(): bool
     {
         return $this->likes->contains('user_id', Auth::id());

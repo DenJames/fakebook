@@ -25,16 +25,6 @@ class Post extends Model
         static::observe(PostObserver::class);
     }
 
-    public function scopeUserIsAuthor(): bool
-    {
-        return $this->user_id === Auth::id();
-    }
-
-    public function scopeHasLiked(): bool
-    {
-        return $this->likes->contains('user_id', Auth::id());
-    }
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -53,5 +43,29 @@ class Post extends Model
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function scopeUserIsAuthor(): bool
+    {
+        return $this->user_id === Auth::id();
+    }
+
+    public function scopeHasLiked(): bool
+    {
+        return $this->likes->contains('user_id', Auth::id());
+    }
+
+    public function scopeAuthorizedToSee(): bool
+    {
+        if ($this->visibility === 'private') {
+            return $this->user->isUserProfile();
+        }
+
+        if ($this->visibility === 'friends') {
+            return $this->user->friendship(Auth::user()) !== null || $this->user->isUserProfile();
+        }
+
+        // public
+        return true;
     }
 }

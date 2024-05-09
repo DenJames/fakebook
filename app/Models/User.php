@@ -94,7 +94,7 @@ class User extends Authenticatable implements FilamentUser
         return $this->friendships()->whereNull('accepted_at')->where('friend_id', Auth::id());
     }
 
-    public function scopeIsUserProfile()
+    public function scopeIsUserProfile(): bool
     {
         return $this->id === Auth::id();
     }

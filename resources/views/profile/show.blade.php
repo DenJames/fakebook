@@ -214,7 +214,7 @@
                 @endif
 
                 @if($user->widgetIsVisible('timeline_visible'))
-                    <div class="max-h-96 lg:max-h-[calc(100vh-610px)] overflow-y-auto space-y-4">
+                    <div class="max-h-96 lg:max-h-[calc(100vh-300px)] overflow-y-auto space-y-4">
                         @foreach($user->posts()->orderByDesc('id')->get() as $post)
                             <x-post.post :post="$post"/>
                         @endforeach

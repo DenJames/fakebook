@@ -93,10 +93,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
     });
 
-
-
-
-
     Route::prefix('api')->name('api.')->group(function () {
         Route::get('/friends', [FriendshipController::class, 'friends'])->name('friends');
     });

@@ -16,6 +16,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <style>
@@ -60,6 +61,7 @@
 <x-status-message />
 
 @stack('scripts')
+@livewireScripts
 </body>
 </html>
 

@@ -4,6 +4,7 @@ namespace App\Repositories\User;
 
 use App\Models\Friendship;
 use App\Models\User;
+use App\Notifications\FriendRequestReceivedNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,6 +27,8 @@ class FriendshipRepository
         Auth::user()?->friendships()->create([
             'friend_id' => $user->id,
         ]);
+
+        $user->notify(new FriendRequestReceivedNotification(Auth::user()));
 
         $message = 'Your friend request has been sent!';
         return $request->wantsJson()
@@ -55,6 +58,7 @@ class FriendshipRepository
 
     public function accept(User $user, Request $request)
     {
+        $request->user()->unreadNotifications()->where('data->sent_from', $user->name)?->delete();
 
         $user->friendships()->where('friend_id', $request->user()->id)->update([
             'accepted_at' => now(),

@@ -10,6 +10,7 @@
         "laravel/framework": "^11.0",
         "laravel/reverb": "@beta",
         "laravel/tinker": "^2.9",
+        "livewire/livewire": "^3.4",
         "spatie/laravel-permission": "^6.7"
     },
     "require-dev": {
@@ -43,7 +44,8 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
-            "@php artisan filament:upgrade"
+            "@php artisan filament:upgrade",
+            "@php artisan vendor:publish --force --tag=livewire:assets --ansi"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"

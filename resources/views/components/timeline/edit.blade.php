@@ -14,7 +14,7 @@
                 </h3>
             </div>
             <!-- Modal body -->
-            <form action="{{ route('posts.update', $post) }}" method="post" id="post-update">
+            <form action="{{ route('posts.update', $post) }}" method="post" class="dropzone" id="post-update">
                 @csrf
                 <div class="p-4 md:p-5 space-y-4">
                     <div class="flex flex-row gap-2">
@@ -84,6 +84,37 @@
                         </div>
 
                         <div class="innterHTML" id="editor-text">{!! str_replace('<br class="ProseMirror-trailingBreak">', '', $post->content) !!}</div>
+                    </div>
+                    <div class="flex flex-col timeline-image-container" id="timeline-image-container">
+{{--                        <div class="items-center justify-center w-full">--}}
+{{--                            <div class="flex flex-col items-center justify-center pt-5 pb-6 no-images-uploaded hover:bg-gray-800 rounded-xl">--}}
+{{--                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">--}}
+{{--                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>--}}
+{{--                                </svg>--}}
+{{--                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>--}}
+{{--                                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+
+                        <div class="image-preview-div-updated grid grid-cols-3 gap-2 max-h-64 overflow-y-auto"></div>
+
+                        <div class="hidden">
+                            <div class="preview-template">
+                                <div class="dz-preview dz-file-preview">
+                                    <div class="dz-details">
+                                        <img data-dz-thumbnail class="w-full h-[100px] bg-contain" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="items-center justify-center w-full">
+                            <div class="flex flex-col items-center justify-center pt-1 pb-1 hover:bg-gray-800 rounded-xl bg-gray-900 update-post-images">
+                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </form>

@@ -28,7 +28,7 @@ class PostImageObserver
      */
     public function deleted(PostImage $postImage): void
     {
-        Storage::delete($postImage->path);
+        Storage::delete('public/'.$postImage->path);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostStoreRequest;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\PostImage;
 use App\Repositories\Post\PostRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -59,5 +60,20 @@ class PostController extends Controller
     public function show_bottom(Post $post): string
     {
         return $this->postRepository->show_bottom($post);
+    }
+
+    public function images(Post $post): JsonResponse
+    {
+        return $this->postRepository->images($post);
+    }
+
+    public function image(Request $request, Post $post): JsonResponse
+    {
+        return $this->postRepository->image($request, $post);
+    }
+
+    public function delete_image(PostImage $postimage): JsonResponse
+    {
+        return $this->postRepository->delete_image($postimage);
     }
 }

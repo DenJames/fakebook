@@ -8,6 +8,7 @@ use App\Events\Post\PostDeleteEvent;
 use App\Events\Post\PostUpdateEvent;
 use App\Http\Requests\PostStoreRequest;
 use App\Models\Post;
+use App\Models\PostImage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -121,5 +122,37 @@ readonly class PostRepository
     public function show_bottom(Post $post): string
     {
         return Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post]);
+    }
+
+    public function images(Post $post): JsonResponse
+    {
+        $response = [];
+        foreach ($post->images as $image) {
+            $response[] = [
+                'url' => asset($image->url),
+                'size' => $image->size,
+                'name' => $image->name,
+                'id' => $image->id
+            ];
+        }
+        return response()->json($response);
+    }
+
+    public function image(Request $request, Post $post): JsonResponse
+    {
+        if ($request->hasFile('file')) {
+            $id = $this->postPictureUpload->upload($post, $request->file('file'));
+
+            return response()->json(['success' => 'Image uploaded successfully', 'id' => $id]);
+        }
+
+        return response()->json(['error' => 'No file uploaded']);
+    }
+
+    public function delete_image(PostImage $postImage): JsonResponse
+    {
+        $postImage->delete();
+
+        return response()->json(['success' => 'Image deleted successfully']);
     }
 }

@@ -86,6 +86,9 @@ Route::middleware('auth')->group(function () {
         Route::patch('/{post}', [PostController::class, 'update'])->name('update');
         Route::post('/{post}/like', [PostController::class, 'like'])->name('like');
         Route::post('/{post}/comment', [PostController::class, 'comment'])->name('comment.store');
+        Route::get('/{post}/images', [PostController::class, 'images'])->name('images');
+        Route::post('/{post}/image', [PostController::class, 'image'])->name('image');
+        Route::delete('/image/{postimage}', [PostController::class, 'delete_image'])->name('delete_image');
     });
 
     Route::prefix('comments')->name('comments.')->group(function () {

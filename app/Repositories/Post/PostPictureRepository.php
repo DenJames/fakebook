@@ -22,7 +22,7 @@ readonly class PostPictureRepository
             return 'Failed to upload post picture';
         }
 
-        $post->images()->create([
+        $image = $post->images()->create([
             'name' => $image->getClientOriginalName(),
             'path' => $_image['file_path'],
             'file_hash' => $_image['file_hash'],
@@ -32,6 +32,6 @@ readonly class PostPictureRepository
         ]);
         Log::debug('Post picture uploaded successfully');
 
-        return 'Profile picture uploaded successfully';
+        return $image->id;
     }
 }

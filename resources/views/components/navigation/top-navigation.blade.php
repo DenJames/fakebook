@@ -14,9 +14,11 @@
     </form>
 
     @auth
-        <div class="flex items-center gap-x-4 lg:gap-x-6" x-data="{notificationsOpen: false}">
-            <livewire:user-notifications />
-
+        <div class="flex items-center gap-x-4 lg:gap-x-6" x-data="{notificationsOpen: false, friendRequestsOpen: false}">
+            <div class="flex">
+                <livewire:friend-request-notifications />
+                <livewire:user-notifications />
+            </div>
             <!-- Separator -->
             <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true"></div>
 

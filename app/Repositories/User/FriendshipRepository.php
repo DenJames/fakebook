@@ -4,6 +4,7 @@ namespace App\Repositories\User;
 
 use App\Models\Friendship;
 use App\Models\User;
+use App\Notifications\FriendRequestAcceptedNotification;
 use App\Notifications\FriendRequestReceivedNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -48,6 +49,7 @@ class FriendshipRepository
 
     public function removeRequest(Friendship $friendship, Request $request): JsonResponse|RedirectResponse
     {
+        $request->user()->unreadNotifications()->where('data->sent_from', $friendship->user->name)?->delete();
         $friendship->delete();
 
         $message = 'Friend has been removed!';
@@ -59,6 +61,8 @@ class FriendshipRepository
     public function accept(User $user, Request $request)
     {
         $request->user()->unreadNotifications()->where('data->sent_from', $user->name)?->delete();
+        $user->notify(new FriendRequestAcceptedNotification($request->user()));
+
 
         $user->friendships()->where('friend_id', $request->user()->id)->update([
             'accepted_at' => now(),

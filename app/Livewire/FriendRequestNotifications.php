@@ -13,11 +13,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View as IlluminateView;
 use Livewire\Component;
 
-class UserNotifications extends Component
+class FriendRequestNotifications extends Component
 {
-    public DatabaseNotificationCollection $userNotifications;
+    public DatabaseNotificationCollection $notifications;
     public int $unreadNotificationsCount = 0;
     private User $user;
+
     private array $notificationTypes;
 
     public function __construct()
@@ -49,15 +50,15 @@ class UserNotifications extends Component
         $this->setNotifications();
     }
 
-    public function setNotifications()
+    public function setNotifications(): void
     {
-        $this->userNotifications = $this->user->unreadNotifications->whereNotIn('type', $this->notificationTypes);
-        $this->unreadNotificationsCount = $this->userNotifications->count();
+        $this->notifications = $this->user->unreadNotifications->whereIn('type', $this->notificationTypes);
+        $this->unreadNotificationsCount =  $this->notifications->count();
     }
 
     public function render(): Application|Factory|View|FoundationApplication|IlluminateView
     {
-        return view('livewire.user-notifications');
+        return view('livewire.friend-request-notifications');
     }
 }
 

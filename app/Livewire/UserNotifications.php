@@ -19,6 +19,7 @@ class UserNotifications extends Component
     public int $unreadNotificationsCount = 0;
     private User $user;
     private array $notificationTypes;
+    protected string $echoChannel;
 
     public function __construct()
     {
@@ -26,6 +27,14 @@ class UserNotifications extends Component
         $this->notificationTypes = array_map(static function ($case) {
             return $case->value;
         }, FriendshipNotificationTypes::cases());
+        $this->echoChannel = "echo-private:friend-request-accepted-{$this->user->id},.FriendRequestAccepted";
+    }
+
+    public function getListeners(): array
+    {
+        return [
+            $this->echoChannel => 'setNotifications',
+        ];
     }
 
     public function markAsRead(string $notificationId): void
@@ -49,7 +58,7 @@ class UserNotifications extends Component
         $this->setNotifications();
     }
 
-    public function setNotifications()
+    public function setNotifications(): void
     {
         $this->userNotifications = $this->user->unreadNotifications->whereNotIn('type', $this->notificationTypes);
         $this->unreadNotificationsCount = $this->userNotifications->count();

@@ -20,6 +20,7 @@ class FriendRequestNotifications extends Component
     private User $user;
 
     private array $notificationTypes;
+    protected string $echoChannel;
 
     public function __construct()
     {
@@ -27,7 +28,16 @@ class FriendRequestNotifications extends Component
         $this->notificationTypes = array_map(static function ($case) {
             return $case->value;
         }, FriendshipNotificationTypes::cases());
+        $this->echoChannel = "echo-private:friend-request-received-{$this->user->id},.FriendNotificationReceived";
     }
+
+    public function getListeners(): array
+    {
+        return [
+            $this->echoChannel => 'setNotifications',
+        ];
+    }
+
 
     public function markAsRead(string $notificationId): void
     {

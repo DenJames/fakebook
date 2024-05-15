@@ -146,6 +146,8 @@ function getAverageRGB(imgEl) {
     rgb.g = ~~(rgb.g / count);
     rgb.b = ~~(rgb.b / count);
 
-    return rgb;
 
+    return rgb;
 }
+
+

@@ -8,11 +8,11 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('conversation.{conversationId}.{userId}', function ($user, $conversationId, $userId) {
+Broadcast::channel('conversation.{conversationId}.{userId}', function (User $user, $conversationId, $userId) {
     return $user->conversations->contains('id', $conversationId) && $user->id == $userId;
 });
 
-Broadcast::channel('friend.{friend_id}.feeds', function ($user, $friend_id) {
+Broadcast::channel('friend.{friend_id}.feeds', function (User $user, $friend_id) {
     $friends1 = $user?->friendships->pluck('friend_id');
     $friends2 = $user?->friendships->pluck('user_id');
 
@@ -26,4 +26,12 @@ Broadcast::channel('friend.{friend_id}.feeds', function ($user, $friend_id) {
 
 Broadcast::channel('me.{user_id}.feeds', function ($user, $user_id) {
     return $user->id == $user_id;
+});
+
+Broadcast::channel('friend-request-received-{receiverId}', function (User $user, $receiverId) {
+    return $user->id == $receiverId;
+});
+
+Broadcast::channel('friend-request-accepted-{userId}', function (User $user, $userId) {
+    return $user->id == $userId;
 });

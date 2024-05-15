@@ -2,6 +2,8 @@
 
 namespace App\Repositories\User;
 
+use App\Events\FriendNotificationReceivedEvent;
+use App\Events\FriendRequestAcceptedEvent;
 use App\Models\Friendship;
 use App\Models\User;
 use App\Notifications\FriendRequestAcceptedNotification;
@@ -29,6 +31,7 @@ class FriendshipRepository
             'friend_id' => $user->id,
         ]);
 
+        event(new FriendNotificationReceivedEvent(Auth::user(), $user));
         $user->notify(new FriendRequestReceivedNotification(Auth::user()));
 
         $message = 'Your friend request has been sent!';
@@ -58,9 +61,11 @@ class FriendshipRepository
             : redirect()->back()->with('success', $message);
     }
 
-    public function accept(User $user, Request $request)
+    public function accept(User $user, Request $request): JsonResponse|RedirectResponse
     {
         $request->user()->unreadNotifications()->where('data->sent_from', $user->name)?->delete();
+
+        event(new FriendRequestAcceptedEvent($user));
         $user->notify(new FriendRequestAcceptedNotification($request->user()));
 
 

@@ -20,13 +20,12 @@ class MessageController extends Controller
     public function store(Conversation $conversation, MessageFormRequest $request): void
     {
         $user = $request->user();
-        $message = $conversation->messages()->create([
+        $conversation->messages()->create([
             'user_id' => $user->id,
             'content' => $request->get('message'),
         ]);
 
         event(new MessageSendEvent($conversation, $user));
-        $this->emitTo(Chat::class, 'messageSent', $message->id); // Assuming your Livewire component is named Chat
     }
 
     /**

@@ -92,8 +92,18 @@ $(document).ready(function() {
                 $('#post-' + e.id).find('.post-bottom-content').replaceWith(response);
             });
         });
-});
 
+    const chatContainer = document.querySelector('.chat-container');
+    const conversationId = chatContainer.dataset.conversationId;
+
+    window.Echo.private(`conversation.${conversationId}`)
+        .subscribed(() => {
+            console.log("Subscribed to event channel conversation." + conversationId);
+        })
+        .listen('.MessageCreated', (e) => {
+            console.log(e.message);
+        });
+});
 
 
 function getAverageRGB(imgEl) {

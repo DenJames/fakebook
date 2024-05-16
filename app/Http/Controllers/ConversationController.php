@@ -48,7 +48,6 @@ class ConversationController extends Controller
 
         return view('conversations.show', [
             'conversation' => $conversation,
-            'messages' => $this->conversation->fetchMessages($conversation),
         ]);
     }
 

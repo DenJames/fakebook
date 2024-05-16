@@ -6,28 +6,27 @@ use App\Events\Chat\MessageDeleteEvent;
 use App\Events\Chat\MessageReadEvent;
 use App\Events\Chat\MessageSendEvent;
 use App\Events\Chat\MessageUpdateEvent;
+use App\Http\Requests\MessageFormRequest;
 use App\Models\Conversation;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use App\Livewire\Chat;
 
 class MessageController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Conversation $conversation)
+    public function store(Conversation $conversation, MessageFormRequest $request): void
     {
+        $user = $request->user();
         $message = $conversation->messages()->create([
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'content' => $request->get('message'),
         ]);
 
-        foreach ($conversation->users as $user) {
-            event(new MessageSendEvent($conversation->id, $message, $user->id));
-        }
-
-
-        return response()->json($message);
+        event(new MessageSendEvent($conversation, $user));
+        $this->emitTo(Chat::class, 'messageSent', $message->id); // Assuming your Livewire component is named Chat
     }
 
     /**

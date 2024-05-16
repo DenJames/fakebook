@@ -2,7 +2,9 @@
 
 namespace App\Events\Chat;
 
+use App\Models\Conversation;
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -15,23 +17,12 @@ class MessageSendEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
-    public function __construct(public string $conversationId, public Message $message, public int $userId)
-    {
-        //
-    }
+    public function __construct(public Conversation $conversation, private readonly User $user) {}
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('conversation.'.$this->conversationId.'.'.$this->userId),
+            new PrivateChannel('conversation.'.$this->conversation->id),
         ];
     }
 
@@ -40,19 +31,26 @@ class MessageSendEvent implements ShouldBroadcastNow
         return "MessageCreated";
     }
 
-    public function broadcastWith(): array
+    public function broadcastWith()
     {
-        $message = $this->message;
-        if ($message->user_id === $this->userId) {
-            $html = Blade::render('<x-chat.sender :message="$message" />', ['message' => $message]);
-        } else {
-            $html = Blade::render('<x-chat.receiver :message="$message" />', ['message' => $message]);
-        }
-
         return [
-            'html' => $html,
-            'message_id' => $message->id,
-            'user_id' => $this->message->user_id,
+            'message' => $this->conversation->messages()->latest()->first(),
         ];
     }
+
+//    public function broadcastWith(): array
+//    {
+//        $message = $this->message;
+//        if ($message->user_id === $this->userId) {
+//            $html = Blade::render('<x-chat.sender :message="$message" />', ['message' => $message]);
+//        } else {
+//            $html = Blade::render('<x-chat.receiver :message="$message" />', ['message' => $message]);
+//        }
+//
+//        return [
+//            'html' => $html,
+//            'message_id' => $message->id,
+//            'user_id' => $this->message->user_id,
+//        ];
+//    }
 }

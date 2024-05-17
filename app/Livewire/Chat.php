@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Livewire\Component;
-use App\Livewire\Forms\ChatForm;
 
 class Chat extends Component
 {
@@ -23,12 +22,6 @@ class Chat extends Component
 
     private User $user;
     private ConversationRepository $conversationRepository;
-
-    public function __construct()
-    {
-        $this->user = Auth::user();
-        $this->conversationRepository = app(ConversationRepository::class);
-    }
 
     public function getListeners(): array
     {
@@ -63,7 +56,13 @@ class Chat extends Component
 
     public function mount(): void
     {
+        $this->conversationRepository = app(ConversationRepository::class);
         $this->messages = $this->conversationRepository->fetchMessages($this->conversation);
+    }
+
+    public function boot()
+    {
+        $this->user = Auth::user();
     }
 
     public function render(): View

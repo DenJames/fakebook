@@ -17,7 +17,7 @@ class MessageSendEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public Conversation $conversation, private readonly User $user) {}
+    public function __construct(public Conversation $conversation, private readonly User $user, private readonly Message $message) {}
 
     public function broadcastOn(): array
     {
@@ -34,23 +34,7 @@ class MessageSendEvent implements ShouldBroadcastNow
     public function broadcastWith()
     {
         return [
-            'message' => $this->conversation->messages()->latest()->first(),
+            'message' => $this->message,
         ];
     }
-
-//    public function broadcastWith(): array
-//    {
-//        $message = $this->message;
-//        if ($message->user_id === $this->userId) {
-//            $html = Blade::render('<x-chat.sender :message="$message" />', ['message' => $message]);
-//        } else {
-//            $html = Blade::render('<x-chat.receiver :message="$message" />', ['message' => $message]);
-//        }
-//
-//        return [
-//            'html' => $html,
-//            'message_id' => $message->id,
-//            'user_id' => $this->message->user_id,
-//        ];
-//    }
 }

@@ -42,7 +42,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::prefix('messages')->name('messages.')->group(function () {
-        Route::post('/{conversation}', [MessageController::class, 'store'])->name('store');
         Route::patch('/{message}', [MessageController::class, 'update'])->name('update');
         Route::patch('/{message}/read', [MessageController::class, 'read'])->name('read');
         Route::delete('/{message}', [MessageController::class, 'destroy'])->name('destroy');

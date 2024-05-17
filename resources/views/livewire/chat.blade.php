@@ -4,7 +4,6 @@
             @if($message->userIsAuthor())
                 <x-chat.sender :message="$message"/>
             @else
-                {{-- Person u chatting with --}}
                 <x-chat.receiver :message="$message"/>
             @endif
         @endforeach
@@ -17,6 +16,8 @@
                 type="text"
                 placeholder="Type a message..."
                 wire:model.debounce.500ms="messageText"
+                wire:keydown.enter="sendMessage"
+                id="message-input"
             >
             <button
                 class="rounded bg-blue-500 text-blue-100 py-2 px-4 w-full text-center mt-4 hover:bg-blue-600 transition-all duration-300"
@@ -27,3 +28,26 @@
         </form>
     @endif
 </div>
+
+@script
+<script>
+    $wire.on('message-sent', () => {
+        document.getElementById('message-input').value = '';
+    });
+</script>
+@endscript
+
+@push('scripts')
+    <script>
+        const messageContainer = document.getElementById('messages');
+
+        function scrollToBottom() {
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        window.addEventListener('load', scrollToBottom);
+
+        const observer = new MutationObserver(scrollToBottom);
+        observer.observe(messageContainer, { childList: true });
+    </script>
+@endpush

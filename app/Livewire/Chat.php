@@ -12,41 +12,36 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Livewire\Component;
+use App\Livewire\Forms\ChatForm;
 
 class Chat extends Component
 {
+    public string $messageText = '';
+
     public Collection $messages;
     public Conversation $conversation;
 
-    public string $messageText = '';
-
     private User $user;
-    protected string $echoChannel;
-
     private ConversationRepository $conversationRepository;
 
     public function __construct()
     {
         $this->user = Auth::user();
         $this->conversationRepository = app(ConversationRepository::class);
-        $this->echoChannel = '';
     }
 
     public function getListeners(): array
     {
         return [
-            "echo-private:conversation.{$this->conversation->id},.MessageCreated" => 'handleNewMessage',
+            "echo-private:conversation.{$this->conversation->id},.MessageCreated" => 'addMessage',
         ];
     }
 
-    public function addMessage(Message $message)
+    public function addMessage(array $payload)
     {
+        // TODO: Refactor to avoid the extra DB query
+        $message = Message::find($payload['message']['id']);
         $this->messages->push($message);
-    }
-
-    public function handleNewMessage()
-    {
-        $this->messages = $this->conversationRepository->fetchMessages($this->conversation);
     }
 
     public function sendMessage()
@@ -61,15 +56,14 @@ class Chat extends Component
             'content' => $this->messageText,
         ]);
 
-        $this->reset('messageText');
-        $this->addMessage($message);
-        event(new MessageSendEvent($this->conversation, $this->user));
+        event(new MessageSendEvent($this->conversation, $this->user, $message));
+        $this->messageText = '';
+        $this->dispatch('message-sent');
     }
 
     public function mount(): void
     {
         $this->messages = $this->conversationRepository->fetchMessages($this->conversation);
-        $this->echoChannel = "echo-private:conversation." . $this->conversation->id . "." . $this->user->id . ",.MessageCreated";
     }
 
     public function render(): View

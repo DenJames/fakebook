@@ -20,12 +20,12 @@ class MessageController extends Controller
     public function store(Conversation $conversation, MessageFormRequest $request): void
     {
         $user = $request->user();
-        $conversation->messages()->create([
+        $message = $conversation->messages()->create([
             'user_id' => $user->id,
             'content' => $request->get('message'),
         ]);
 
-        event(new MessageSendEvent($conversation, $user));
+        event(new MessageSendEvent($conversation, $user, $message));
     }
 
     /**

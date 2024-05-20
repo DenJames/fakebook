@@ -1,9 +1,9 @@
 <div>
     @foreach($messages as $message)
         @if($message->userIsAuthor())
-            <x-chat.sender :message="$message"/>
+            <livewire:message-sender :message="$message"/>
         @else
-            <x-chat.receiver :message="$message"/>
+            <livewire:message-receiver :message="$message"/>
         @endif
     @endforeach
 </div>

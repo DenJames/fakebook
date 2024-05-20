@@ -12,6 +12,7 @@ Broadcast::channel('conversation.{conversationId}', function ($user, $conversati
     return $user->conversations->contains($conversationId);
 });
 
+
 Broadcast::channel('friend.{friend_id}.feeds', function (User $user, $friend_id) {
     $friends1 = $user?->friendships->pluck('friend_id');
     $friends2 = $user?->friendships->pluck('user_id');

@@ -22,6 +22,6 @@ class ConversationRepository
 
     public function fetchMessages(array $ids): Collection|array
     {
-        return Message::whereIn('id', $ids)->orderBy('created_at', 'desc')->get()->reverse();
+        return Message::withTrashed()->whereIn('id', $ids)->orderBy('created_at', 'desc')->get()->reverse();
     }
 }

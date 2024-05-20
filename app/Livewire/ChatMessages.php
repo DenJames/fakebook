@@ -19,6 +19,7 @@ class ChatMessages extends Component
     {
         return [
             "echo-private:conversation.{$this->conversation->id},.MessageCreated" => 'addMessage',
+            "echo-private:conversation.{$this->conversation->id},.MessageDeleted" => 'deleteMessage',
         ];
     }
 
@@ -29,6 +30,14 @@ class ChatMessages extends Component
         // TODO: Refactor to avoid the extra DB query
         $message = Message::find($payload['message']['id']);
         $this->messages->push($message);
+    }
+
+    public function deleteMessage(array $payload)
+    {
+        $this->dispatch('message-deleted');
+
+        $message = $this->messages->firstWhere('id', $payload['message']['id']);
+        $this->messages->forget($message->id);
     }
 
 

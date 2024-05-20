@@ -9,6 +9,7 @@ import Text from '@tiptap/extension-text'
 import Heading from '@tiptap/extension-heading'
 import { Modal } from 'flowbite';
 import Swal from 'sweetalert2'
+import intersect from '@alpinejs/intersect'
 
 // prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none prose-h1:h1 prose-h1:text-2xl
 
@@ -117,4 +118,5 @@ window.Alpine = Alpine;
 window.Swal = Swal;
 window.Toast = Toast;
 
+Alpine.plugin(intersect);
 Alpine.start();

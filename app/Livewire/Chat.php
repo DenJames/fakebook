@@ -7,7 +7,6 @@ use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
 use App\Repositories\ConversationRepository;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
@@ -16,26 +15,12 @@ use Livewire\Component;
 class Chat extends Component
 {
     public string $messageText = '';
+    public int $page = 1;
 
-    public Collection $messages;
     public Conversation $conversation;
+    public array $chunks = [];
 
     private User $user;
-    private ConversationRepository $conversationRepository;
-
-    public function getListeners(): array
-    {
-        return [
-            "echo-private:conversation.{$this->conversation->id},.MessageCreated" => 'addMessage',
-        ];
-    }
-
-    public function addMessage(array $payload)
-    {
-        // TODO: Refactor to avoid the extra DB query
-        $message = Message::find($payload['message']['id']);
-        $this->messages->push($message);
-    }
 
     public function sendMessage()
     {
@@ -54,21 +39,32 @@ class Chat extends Component
         $this->dispatch('message-sent');
     }
 
-    public function mount(): void
+    public function hasMorePages(): bool
     {
-        $this->conversationRepository = app(ConversationRepository::class);
-        $this->messages = $this->conversationRepository->fetchMessages($this->conversation);
+        return $this->page < count($this->chunks);
+    }
+
+    public function incrementPage()
+    {
+        if (!$this->hasMorePages()) {
+            return;
+        }
+
+        $this->page++;
     }
 
     public function boot()
     {
         $this->user = Auth::user();
+        $conversationRepository = app(ConversationRepository::class);
+        $this->chunks = $conversationRepository->chunkMessages($this->conversation);
     }
 
     public function render(): View
     {
         return view('livewire.chat', [
             'conversationId' => $this->conversation->id,
+            'chunks' => $this->chunks,
         ]);
     }
 }

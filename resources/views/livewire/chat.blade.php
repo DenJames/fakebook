@@ -1,13 +1,21 @@
-<div class="relative rounded bg-gray-100 p-4 w-full h-[calc(100vh-150px)] space-y-6 chat-container" data-conversation-id="{{ $conversationId }}">
+<div class="relative rounded bg-gray-100 p-4 w-full h-[calc(100vh-150px)] space-y-6 chat-container"
+     data-conversation-id="{{ $conversationId }}">
     <div class="space-y-6 overflow-y-auto p-4 max-h-[calc(100vh-350px)]" id="messages">
-        @foreach($messages as $message)
-            @if($message->userIsAuthor())
-                <x-chat.sender :message="$message"/>
-            @else
-                <x-chat.receiver :message="$message"/>
-            @endif
-        @endforeach
+        @if($this->hasMorePages())
+            <div class="w-full flex justify-center">
+                <button class="bg-blue-600 py-2 px-4 rounded-full text-white"
+                        wire:click="incrementPage"
+                        wire:loading.attr="disabled">
+                    Load older messages
+                </button>
+            </div>
+        @endif
+
+        @for ($chunk = $page - 1; $chunk >= 0; $chunk--)
+            <livewire:chat-messages :ids="$this->chunks[$chunk]" :key="$page - 1" :conversation="$conversation"/>
+        @endfor
     </div>
+
 
     @if($conversation)
         <form wire:submit.prevent="sendMessage">
@@ -39,15 +47,39 @@
 
 @push('scripts')
     <script>
-        const messageContainer = document.getElementById('messages');
+        window.addEventListener('DOMContentLoaded', function () {
+            const messageContainer = document.getElementById('messages');
+            let hasOlderMessagesBeenLoaded = false;
+            let ignoreNextScroll = false; // Flag to ignore scroll after loading older messages
 
-        function scrollToBottom() {
-            messageContainer.scrollTop = messageContainer.scrollHeight;
-        }
+            function scrollToBottom() {
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }
 
-        window.addEventListener('load', scrollToBottom);
+            window.addEventListener('load', scrollToBottom); // Initial scroll on load
 
-        const observer = new MutationObserver(scrollToBottom);
-        observer.observe(messageContainer, { childList: true });
+            // Scroll event handler
+            messageContainer.addEventListener('scroll', () => {
+                if (ignoreNextScroll) {
+                    ignoreNextScroll = false;
+                    return;
+                }
+
+                if (messageContainer.scrollTop + messageContainer.clientHeight >= messageContainer.scrollHeight) {
+                    scrollToBottom();
+                }
+            });
+
+            Livewire.hook('message.processed', (message, component) => {
+                if (message.updateQueue[0].method === 'incrementPage') {
+                    hasOlderMessagesBeenLoaded = true;
+                    ignoreNextScroll = true;
+                } else if (!hasOlderMessagesBeenLoaded) {
+                    scrollToBottom();
+                }
+            })
+        });
     </script>
 @endpush
+
+

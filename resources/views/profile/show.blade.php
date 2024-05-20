@@ -166,18 +166,23 @@
 
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-52 overflow-y-auto">
                                 @foreach($user->profilePhotos()->where('type', \App\Enums\UserProfilePhotoTypes::PROFILE_PHOTO->value)->where('is_current', false)->get() as $photo)
-                                    <img class="w-full h-24 object-cover rounded"
-                                         src="{{ asset('storage/' . $photo->path) }}"
-                                         alt="">
+                                    <a data-fslightbox href="{{ asset('storage/' . $photo->path) }}">
+                                        <img class="w-full h-24 object-cover rounded"
+                                             src="{{ asset('storage/' . $photo->path) }}"
+                                             alt="">
+                                    </a>
                                 @endforeach
 
                                 @foreach($user->posts as $post)
                                     @foreach($post->images as $photo)
-                                        <img class="w-full h-24 object-cover rounded"
-                                             src="{{ asset('storage/' . $photo->path) }}"
-                                             alt="">
+                                        <a data-fslightbox href="{{ asset('storage/' . $photo->path) }}">
+                                            <img class="w-full h-24 object-cover rounded"
+                                                 src="{{ asset('storage/' . $photo->path) }}"
+                                                 alt="">
+                                        </a>
                                     @endforeach
                                 @endforeach
+
                             </div>
                         </div>
                     </x-content.card>

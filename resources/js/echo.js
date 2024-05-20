@@ -36,8 +36,7 @@ $(document).ready(function() {
                     $('.posts-container').prepend(response);
                     $('#post-' + e.id).find('.post-image').each(function () {
                         var rgb = getAverageRGB(this);
-                        // apply the style to the parrent
-                        $(this).parent().css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')');
+                        $(this).closest('.h-auto').css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')');
                     });
                 });
             }).listen('.PostUpdated', (e) => {
@@ -149,5 +148,6 @@ function getAverageRGB(imgEl) {
 
     return rgb;
 }
+
 
 

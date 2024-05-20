@@ -29,7 +29,6 @@
             >
             <button
                 class="rounded bg-blue-500 text-blue-100 py-2 px-4 w-full text-center mt-4 hover:bg-blue-600 transition-all duration-300"
-                type="submit"
             >
                 Send message
             </button>
@@ -39,47 +38,47 @@
 
 @script
 <script>
-    $wire.on('message-sent', () => {
-        document.getElementById('message-input').value = '';
+    let pageHasIncremented = false;
+    window.addEventListener('DOMContentLoaded', function () {
+        const messageContainer = document.getElementById('messages');
+
+        function scrollToBottom() {
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        window.addEventListener('load', () => {
+            if (pageHasIncremented) {
+                return;
+            }
+
+            requestAnimationFrame(() => {
+                scrollToBottom();
+            });
+        });
+
+
+        //Livewire events
+        $wire.on('page-incremented', () => {
+            pageHasIncremented = true;
+        });
+
+        $wire.on('message-posted', () => {
+            if (pageHasIncremented) {
+                return;
+            }
+
+            requestAnimationFrame(() => {
+                scrollToBottom();
+            });
+        });
+
+        $wire.on('message-sent', () => {
+            document.getElementById('message-input').value = '';
+        });
     });
 </script>
 @endscript
 
-@push('scripts')
-    <script>
-        window.addEventListener('DOMContentLoaded', function () {
-            const messageContainer = document.getElementById('messages');
-            let hasOlderMessagesBeenLoaded = false;
-            let ignoreNextScroll = false; // Flag to ignore scroll after loading older messages
 
-            function scrollToBottom() {
-                messageContainer.scrollTop = messageContainer.scrollHeight;
-            }
-
-            window.addEventListener('load', scrollToBottom); // Initial scroll on load
-
-            // Scroll event handler
-            messageContainer.addEventListener('scroll', () => {
-                if (ignoreNextScroll) {
-                    ignoreNextScroll = false;
-                    return;
-                }
-
-                if (messageContainer.scrollTop + messageContainer.clientHeight >= messageContainer.scrollHeight) {
-                    scrollToBottom();
-                }
-            });
-
-            Livewire.hook('message.processed', (message, component) => {
-                if (message.updateQueue[0].method === 'incrementPage') {
-                    hasOlderMessagesBeenLoaded = true;
-                    ignoreNextScroll = true;
-                } else if (!hasOlderMessagesBeenLoaded) {
-                    scrollToBottom();
-                }
-            })
-        });
-    </script>
-@endpush
 
 

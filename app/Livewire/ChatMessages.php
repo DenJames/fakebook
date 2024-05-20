@@ -24,6 +24,8 @@ class ChatMessages extends Component
 
     public function addMessage(array $payload)
     {
+        $this->dispatch('message-posted');
+
         // TODO: Refactor to avoid the extra DB query
         $message = Message::find($payload['message']['id']);
         $this->messages->push($message);

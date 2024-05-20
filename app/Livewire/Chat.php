@@ -35,8 +35,8 @@ class Chat extends Component
         ]);
 
         event(new MessageSendEvent($this->conversation, $this->user, $message));
-        $this->messageText = '';
-        $this->dispatch('message-sent');
+
+        $this->dispatch('message-sent'); // Used in order to reset the input field.
     }
 
     public function hasMorePages(): bool
@@ -49,6 +49,8 @@ class Chat extends Component
         if (!$this->hasMorePages()) {
             return;
         }
+
+        $this->dispatch('page-incremented');
 
         $this->page++;
     }

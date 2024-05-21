@@ -21,7 +21,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
-    Route::get('/dashboard', DashboardController::class)->name('dashboard')
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
     // Chat related routes
     Route::get('/chat', function () {
         $latestChat = Auth::user()?->conversations()->latest('updated_at')->first();

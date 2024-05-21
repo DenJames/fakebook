@@ -19,7 +19,7 @@
 
 </head>
 
-<body class="h-full font-sans antialiased">
+<body class="h-full font-sans antialiased relative">
 <div class="flex h-full">
     <div class="hidden lg:block lg:w-1/2 sm:text-center h-full relative bg-blue-600 text-blue-100"
          style="background-image: url('https://i.imgur.com/ZiIXdW3.png'); background-size: cover; background-repeat: no-repeat">
@@ -73,6 +73,8 @@
     <main class="w-full md:w-1/0 sm:text-center bg-gray-50 h-12 h-full flex justify-center items-center relative px-4">
         {{ $slot }}
     </main>
+
+    <x-pwa-banner />
 </div>
 
 @stack('scripts')

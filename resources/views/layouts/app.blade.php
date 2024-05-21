@@ -55,6 +55,8 @@
             </div>
         </div>
     </main>
+
+    <x-pwa-banner />
 </div>
 
 <x-success-message />

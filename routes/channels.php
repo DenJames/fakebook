@@ -8,9 +8,10 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('conversation.{conversationId}.{userId}', function (User $user, $conversationId, $userId) {
-    return $user->conversations->contains('id', $conversationId) && $user->id == $userId;
+Broadcast::channel('conversation.{conversationId}', function ($user, $conversationId) {
+    return $user->conversations->contains($conversationId);
 });
+
 
 Broadcast::channel('friend.{friend_id}.feeds', function (User $user, $friend_id) {
     $friends1 = $user?->friendships->pluck('friend_id');

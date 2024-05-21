@@ -4,31 +4,24 @@ namespace App\Repositories;
 
 use App\Events\Chat\MessageReadEvent;
 use App\Models\Conversation;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Message;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class ConversationRepository
 {
-    public function fetchMessages(Conversation $conversation, int $limit = 0, string $sortBy = 'asc'): Collection|array
+    public function chunkMessages(Conversation $conversation, int $perPage = 8, string $sortBy = 'desc'): Collection|array
     {
-        $query = $conversation->messages()->withTrashed();
-
-        // Update messages read status
-        $conversation->messages()->where('read_at', null)->where('user_id', '!=' , auth()->id())->get()->each(function ($message) {
+        $conversation->messages()->whereNull('read_at')->whereNot('user_id', Auth::id())->each(function ($message) {
             $message->update(['read_at' => now()]);
             event(new MessageReadEvent($message->conversation->id, $message, $message->user_id));
         });
 
-        if ($limit > 0) {
-            $query->limit($limit);
-        }
-
-        if ($sortBy === 'desc') {
-            $query->orderByDesc('created_at');
-        } else {
-            $query->orderBy('created_at');
-        }
-
-        return $query->get();
+        return $conversation->messages()->withTrashed()->orderBy('created_at', $sortBy)->pluck('id')->chunk($perPage)->toArray();
     }
 
+    public function fetchMessages(array $ids): Collection|array
+    {
+        return Message::withTrashed()->whereIn('id', $ids)->orderBy('created_at', 'desc')->get()->reverse();
+    }
 }

@@ -51,49 +51,6 @@ $(document).ready(function() {
             }
         });
     });
-
-
-    // join the echo channel conversation.{conversation_id}
-    // listen for the event message.created
-    const conversation_socket = Echo.private('conversation.' + conversation + '.' + user_id);
-
-    conversation_socket.subscribed(() => {
-        console.log("Subscribed to event channel conversation." + conversation + '.' + user_id);
-    }).listen('.MessageCreated', (e) => {
-        var messages = $('#messages');
-        var scrollPosition = messages.scrollTop();
-        var scrollHeight = messages[0].scrollHeight;
-        $('#messages').append(e.html);
-        console.log(e.user_id, user_id)
-        if (e.user_id != user_id) {
-            $.ajax({
-                url: '/messages/' + e.message_id + '/read',
-                type: 'PATCH',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (response) {
-                }
-            });
-
-            if (scrollPosition+messages.outerHeight()+20 >= scrollHeight) {
-                setTimeout(function() {
-                    messages.scrollTop(messages[0].scrollHeight);
-                }, 0);
-            }
-        } else {
-            (function() {
-                var messages = $('#messages');
-                messages.scrollTop(messages.prop('scrollHeight'));
-            })();
-        }
-    }).listen('.MessageEdited', (e) => {
-        $(document).find(`#message-${e.message_id}`).replaceWith(e.html);
-    }).listen('.MessageDeleted', (e) => {
-        $(document).find(`#message-${e.message_id}`).replaceWith(e.html);
-    }).listen('.MessageRead', (e) => {
-        $(document).find(`#message-${e.message_id}`).find('small').get(0).append($(e.html).get(0));
-    })
 });
 
 function toggleEdit(messageId, editMode) {
@@ -109,7 +66,6 @@ function toggleEdit(messageId, editMode) {
         inputField.onkeydown = function (event) {
             if (event.key === 'Enter') {
                 if (contentP.textContent.trim() !== inputField.value) {
-                    // TODO: Add save logic (backend)
                     $.ajax({
                         url: '/messages/' + messageId,
                         type: 'PATCH',
@@ -133,12 +89,5 @@ function toggleEdit(messageId, editMode) {
         contentP.style.display = 'block';
         inputField.style.display = 'none';
         // contentP.textContent = inputField.value;
-    }
-}
-
-function deleteMessage(messageId) {
-    if (confirm('Are you sure you want to delete this message?')) {
-        alert('Message deleted for ID ' + messageId);
-        // TODO: Handle message deletion
     }
 }

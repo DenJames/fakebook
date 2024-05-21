@@ -20,7 +20,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     // Chat related routes

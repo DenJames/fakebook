@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Illuminate\Database\Eloquent\Collection;
-use Livewire\Attributes\On;
 use Livewire\Component;
 use App\Models\Post;
 
@@ -15,15 +14,20 @@ class Comments extends Component
     public function getListeners()
     {
         return [
-            "comAdded" => "mount",
-            "echo:comment-posted,.CommentAdded" => "mount",
-            "echo:post-comment-deleted,PostCommentDeletedEvent" => 'mount',
+            "comAdded" => "loadComments",
+            "echo:comment-posted,.CommentAdded" => "loadComments",
+            "echo:post-comment-deleted,PostCommentDeletedEvent" => 'loadComments',
         ];
     }
 
     public function mount()
     {
-        $this->comments =  $this->post->comments()->latest()->limit(2)->get();
+        $this->loadComments();
+    }
+
+    public function loadComments()
+    {
+        $this->comments = $this->post->comments()->latest()->limit(2)->get();
     }
 
     public function render()

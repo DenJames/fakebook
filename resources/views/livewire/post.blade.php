@@ -9,7 +9,7 @@
             <x-post.image :post="$post"/>
 
             <div class="divide-y px-3 pb-1">
-                <x-post.bottom :post="$post"/>
+                <livewire:post-actions :post="$post"/>
             </div>
         </div>
     @endif

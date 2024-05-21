@@ -84,36 +84,6 @@ readonly class PostRepository
         return response()->json(['success' => 'Post updated successfully']);
     }
 
-    public function like(Post $post): JsonResponse
-    {
-        $like = $post->likes()->where('user_id', Auth::id())->first();
-
-        if ($like) {
-            $like->delete();
-
-            event(new PostBottomUpdateEvent($post));
-            event(new PostBottomUpdateEvent($post, true));
-            return response()->json(['success' => 'Like removed successfully']);
-        }
-
-        $post->likes()->create(['user_id' => Auth::id()]);
-
-        event(new PostBottomUpdateEvent($post));
-        event(new PostBottomUpdateEvent($post, true));
-
-        return response()->json(['success' => 'Post liked successfully'], 201);
-    }
-
-    public function comment(Request $request, Post $post): JsonResponse
-    {
-        $post->comments()->create(['user_id' => Auth::id(), 'content' => $request->comment]);
-
-        event(new PostBottomUpdateEvent($post));
-        event(new PostBottomUpdateEvent($post, true));
-
-        return response()->json(['success' => 'Comment created successfully', 'html' => Blade::render('<x-post.bottom :post="$post"/>', ['post' => $post])], 201);
-    }
-
     public function show(Post $post): string
     {
         return Blade::render('<x-post.post :post="$post"/>', ['post' => $post]);

@@ -10,6 +10,7 @@
             </div>
         @endfor
     </div>
+
     <div class="flex flex-row gap-0.5">
         @for($i = 2; $i < 5; $i++)
             <div class="h-auto flex overflow-hidden justify-center items-center max-h-[380px] w-1/3 {{ $i == 5 - 1 ? 'relative' : '' }}">

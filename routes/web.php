@@ -1,7 +1,9 @@
 <?php
 
+use App\Events\Post\CommentAdded;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Controllers\FriendshipRequestController;
 use App\Http\Controllers\MessageController;
@@ -18,11 +20,9 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
     // Chat related routes
     Route::get('/chat', function () {
         $latestChat = Auth::user()?->conversations()->latest('updated_at')->first();

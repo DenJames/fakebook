@@ -21,7 +21,6 @@ const freind_sockets = {};
 $(document).ready(function() {
     var user_id = $('meta[name="user-id"]').attr('content')
 
-
     $.get('/api/friends', function(response) {
         console.log(response.friends);
         // friends is an object

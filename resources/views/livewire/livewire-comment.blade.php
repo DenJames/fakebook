@@ -1,6 +1,4 @@
-@props(['comment'])
-
-<div class="flex flex-row gap-2 pt-1 pb-1" id="comment-{{ $comment->id }}">
+<div class="flex flex-row gap-2 pt-1 pb-1 mt-2" id="comment-{{ $comment->id }}">
     <div class="flex flex-row gap-2 w-[25px]">
         <img src="{{ asset($comment->user->profile_photo) }}" alt="profile picture" class="rounded-full w-[25px] h-[25px]">
     </div>
@@ -15,12 +13,12 @@
             <div class="flex flex-row gap-3 text-xs pl-2">
                 {{ formatDiffForHumans($comment->created_at) }}
 
-                <button class="hover:underline like-comment {{ $comment->hasLiked() ? 'text-blue-500' : '' }}" data-comment-id="{{ $comment->id }}">Like comment</button>
+                <button class="hover:underline like-comment {{ $comment->hasLiked() ? 'text-blue-500' : '' }}" wire:click="likeComment">Like comment</button>
                 <button class="hover:underline replay-comment" data-post-id="{{ $comment->commentable->id }}" data-comment-id="{{ $comment->id }}">Reply</button>
 
                 @if($comment->userIsAuthor())
                     <button class="hover:underline edit-comment" data-post-id="{{ $comment->commentable->id }}" data-comment-id="{{ $comment->id }}">Edit</button>
-                    <button class="hover:underline delete-comment" data-post-id="{{ $comment->commentable->id }}" data-comment-id="{{ $comment->id }}">Delete</button>
+                    <button class="hover:underline delete-comment" wire:click="deleteComment" wire:confirm="Are you sure that you want to delete this comment?">Delete</button>
                 @endif
 
                 @if($comment->likes->count())

@@ -37,22 +37,35 @@ let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     deferredPrompt = event;
-    showAddToHomeScreenButton();
+
+    // Check if the app has already been installed
+    if (!localStorage.getItem('pwaInstalled')) {
+        showAddToHomeScreenButton();
+    }
 });
 
 function showAddToHomeScreenButton() {
     const addToHomeScreenButton = document.getElementById('pwa-banner');
     addToHomeScreenButton.style.display = 'block';
 
-    addToHomeScreenButton.addEventListener('click', () => {
+    document.getElementById('close-pwa-button').addEventListener('click', () => {
+        addToHomeScreenButton.style.display = 'none';
+    });
+
+    document.getElementById('pwa-install-button').addEventListener('click', () => {
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('User accepted the A2HS prompt');
-            } else {
-                console.log('User dismissed the A2HS prompt');
-            }
             deferredPrompt = null;
         });
     });
 }
+
+window.addEventListener('appinstalled', () => {
+    localStorage.setItem('pwaInstalled', 'true');
+
+    // Hide the A2HS button if it's being displayed
+    const addToHomeScreenButton = document.getElementById('pwa-banner');
+    if (addToHomeScreenButton) {
+        addToHomeScreenButton.style.display = 'none';
+    }
+});

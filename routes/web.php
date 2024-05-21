@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\Post\CommentAdded;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\DashboardController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\ProfileSearchController;
 use App\Http\Controllers\UserSessionsController;
+use App\Http\Middleware\EnsureUserIsNotBanned;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -20,9 +20,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
+    Route::get('/dashboard', DashboardController::class)->name('dashboard')
     // Chat related routes
     Route::get('/chat', function () {
         $latestChat = Auth::user()?->conversations()->latest('updated_at')->first();
@@ -99,6 +98,15 @@ Route::middleware('auth')->group(function () {
     Route::prefix('api')->name('api.')->group(function () {
         Route::get('/friends', [FriendshipController::class, 'friends'])->name('friends');
     });
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/banned', function () {
+        if (!Auth::user()?->isBanned()) {
+            return redirect()->route('dashboard');
+        }
+        return view('banned');
+    })->name('banned');
 });
 
 // TODO: Important! Remove this before production

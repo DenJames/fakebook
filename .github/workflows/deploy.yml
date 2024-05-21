@@ -23,7 +23,7 @@ jobs:
 
     - name: Deploy to server
       run: |
-        ssh -o StrictHostKeyChecking=no root@85.203.138.42 -p 23 'cd /var/www/fakebook &&
+        ssh -o StrictHostKeyChecking=no root@86.52.116.158 -p 23 'cd /var/www/fakebook &&
                              git pull origin main &&
                              npm install &&
                              composer install &&

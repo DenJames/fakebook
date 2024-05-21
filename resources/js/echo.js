@@ -35,7 +35,7 @@ $(document).ready(function() {
                     $('.posts-container').prepend(response);
                     $('#post-' + e.id).find('.post-image').each(function () {
                         var rgb = getAverageRGB(this);
-                        $(this).closest('.h-auto').css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')');
+                        $(this).closest('.h-full').css('background-color', 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')');
                     });
                 });
             }).listen('.PostUpdated', (e) => {

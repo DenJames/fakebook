@@ -1,24 +1,22 @@
 <?php
 
-namespace App\Events\Post;
+namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CommentAdded implements ShouldBroadcastNow
+class CommentReply implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function broadcastOn(): Channel
+    public function broadcastOn(): array
     {
-        return new Channel('comment-posted');
-    }
-
-    public function broadcastAs(): string
-    {
-        return 'CommentAdded';
+        return [
+            new Channel('comment-reply')
+        ];
     }
 }

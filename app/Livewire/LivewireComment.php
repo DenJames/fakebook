@@ -3,9 +3,12 @@
 namespace App\Livewire;
 
 use App\Events\CommentLiked;
+use App\Events\CommentReply;
+use App\Events\Post\CommentAdded;
 use App\Events\PostCommentDeletedEvent;
 use App\Models\Comment;
 use App\Models\Post as PostModel;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -14,6 +17,28 @@ class LivewireComment extends Component
 {
     public Comment $comment;
     public PostModel $post;
+    public string $content = '';
+    public Collection $comments;
+
+    public function replyComment()
+    {
+        $this->validate([
+            'content' => ['required', 'string']
+        ]);
+
+        if ($this->comment->commentable->commentable_type === 'App\Models\Comment') {
+            $this->comment = $this->comment->commentable;
+        }
+
+        $this->comment->comments()->create([
+            'user_id' => Auth::id(),
+            'content' => $this->content,
+        ]);
+
+        event(new CommentReply()); // Broadcast event
+        $this->reset('content'); // resets the comment property
+        $this->dispatch('replyAdded'); // Dispatch event to clear the comment input
+    }
 
     public function likeComment(): void
     {
@@ -35,10 +60,22 @@ class LivewireComment extends Component
         PostCommentDeletedEvent::dispatch();
     }
 
+
+    #[On('echo:comment-reply,CommentReply')]
+    public function loadComments()
+    {
+        $this->comments = $this->comment->comments()->latest()->limit(2)->get();
+    }
+
     #[On('echo:comment-liked,CommentLiked')]
     public function refreshComment(): void
     {
         $this->comment = $this->comment->fresh();
+    }
+
+    public function mount()
+    {
+        $this->loadComments();
     }
 
     public function render()

@@ -4,7 +4,7 @@
     <div class="flex flex-row gap-0.5">
         @for($i = 0; $i < 2; $i++)
             <div class="h-auto overflow-hidden max-h-[380px]">
-                <a data-fslightbox href="{{  asset($images[$i]->url) }}" class="w-full h-full">
+                <a data-fslightbox="post-{{$images[$i]->post_id}}" href="{{  asset($images[$i]->url) }}" class="w-full h-full">
                     <div class="flex items-center justify-center h-full w-full">
                         <img src="{{  asset($images[$i]->url) }}" alt="{{ $images[$i]->name }}" class="post-image">
                     </div>
@@ -16,7 +16,7 @@
     <div class="flex flex-row gap-0.5">
         @for($i = 2; $i < 5; $i++)
             <div class="h-auto overflow-hidden max-h-[380px] w-1/3 {{ $i == 5 - 1 ? 'relative' : '' }}">
-                <a data-fslightbox href="{{  asset($images[$i]->url) }}" class="w-full h-full">
+                <a data-fslightbox="post-{{$images[$i]->post_id}}" href="{{  asset($images[$i]->url) }}" class="w-full h-full">
                     <div class="flex items-center justify-center h-full w-full">
                         <img src="{{  asset($images[$i]->url) }}" alt="{{ $images[$i]->name }}" class="post-image">
                     </div>
@@ -29,5 +29,13 @@
                 @endif
             </div>
         @endfor
+    </div>
+    <div class="hidden">
+        @foreach($images as $image)
+            @if($loop->index < 5)
+                @continue
+            @endif
+            <a data-fslightbox="post-{{$image->post_id}}" href="{{  asset($image->url) }}"></a>
+        @endforeach
     </div>
 </div>

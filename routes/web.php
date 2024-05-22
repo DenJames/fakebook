@@ -23,6 +23,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
     // Chat related routes
     Route::get('/chat', function () {
         $latestChat = Auth::user()?->conversations()->latest('updated_at')->first();
@@ -62,11 +63,12 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
 
         Route::post('/upload-profile-photo', [ProfilePictureController::class, 'store'])->name('profile-picture.store');
         Route::post('/upload-cover-photo', [ProfilePictureController::class, 'coverStore'])->name('cover-picture.store');
-
-        // Search
-        Route::get('/search', ProfileSearchController::class)->name('profile.search');
     });
 
+    // Search
+    Route::get('/search', ProfileSearchController::class)->name('profile.search');
+
+    // Friends
     Route::prefix('friends')->group(function () {
         Route::get('/', [FriendshipController::class, 'index'])->name('friends.index');
         Route::delete('/{user}', [FriendshipController::class, 'destroy'])->name('friends.destroy');
@@ -77,6 +79,8 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
 
         Route::delete('/{friendship}/request/delete', [FriendshipRequestController::class, 'destroy'])->name('friends-request.destroy');
     });
+
+    // Feed/Posts
     Route::prefix('posts')->name('posts.')->group(function () {
         Route::post('/', [PostController::class, 'store'])->name('store');
         Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
@@ -99,15 +103,8 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
     Route::prefix('api')->name('api.')->group(function () {
         Route::get('/friends', [FriendshipController::class, 'friends'])->name('friends');
     });
-});
 
-Route::middleware('auth')->group(function () {
-    Route::get('/banned', function () {
-        if (!Auth::user()?->isBanned()) {
-            return redirect()->route('dashboard');
-        }
-        return view('banned');
-    })->name('banned');
+    Route::view('/banned', 'banned')->name('banned');
 });
 
 // TODO: Important! Remove this before production

@@ -8,16 +8,22 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EnsureUserIsNotBanned
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()?->isBanned()) {
+        $user = $request->user();
+
+        if (!$user) {
+            return to_route('/');
+        }
+
+        if ($user->isNotBanned() && request()?->is('banned')) {
+            return to_route('dashboard');
+        }
+
+        if ($user->isBanned() && !request()?->is('banned')) {
             return redirect()->route('banned')->with('error', 'Your account has been banned.');
         }
+
         return $next($request);
     }
 }

@@ -30,4 +30,12 @@
             </div>
         @endfor
     </div>
+    <div class="hidden">
+        @foreach($images as $image)
+            @if($loop->index < 5)
+                @continue
+            @endif
+            <a data-fslightbox="post-{{$image->post_id}}" href="{{  asset($image->url) }}"></a>
+        @endforeach
+    </div>
 </div>

@@ -15,7 +15,7 @@ class PostPictureUpload
     {
         $fileHash = md5($file->getContent() . $post->id . Auth::id() . Str::random(6));
 
-        $path =  'posts/' . $post->user->email . '/' . $post->id . '/' . $fileHash . '.' . $file->extension();
+        $path =  'posts/' . $post->user->id . '/' . $post->id . '/' . $fileHash . '.' . $file->extension();
 
         if (! Storage::disk('public')->put($path, $file->getContent())) {
             Log::error('Failed to upload post photo for post: ' . $post->id);

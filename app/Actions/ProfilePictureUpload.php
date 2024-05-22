@@ -24,7 +24,7 @@ class ProfilePictureUpload
             ];
         }
 
-        $path = $storagePath . '/' . $user->email . '/' . $fileHash . '.' . $file->extension();
+        $path = $storagePath . '/' . $user->id . '/' . $fileHash . '.' . $file->extension();
 
         if (! Storage::disk('public')->put($path, $file->getContent())) {
             Log::error('Failed to upload profile photo for user: ' . $user->email);

@@ -9,7 +9,9 @@ use App\Events\Post\PostUpdateEvent;
 use App\Http\Requests\PostStoreRequest;
 use App\Models\Post;
 use App\Models\PostImage;
+use App\Repositories\WordFilter\WordFilterRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
@@ -17,13 +19,17 @@ use Illuminate\Support\Facades\Blade;
 readonly class PostRepository
 {
 
-    public function __construct(private PostPictureRepository $postPictureUpload)
+    public function __construct(private PostPictureRepository $postPictureUpload, private WordFilterRepository $wordFilterRepository)
     {
     }
 
     public function store(PostStoreRequest $request): JsonResponse
     {
-        $post = $request->user()->posts()->create($request->only(['content', 'visibility']));
+        $content = $this->wordFilterRepository->replaceWordsInString($request->input('content'));
+        if ($content instanceof RedirectResponse) {
+            return response()->json(['error' => 'You used a banned word', 'type' => 'banned_word'], 400);
+        }
+        $post = $request->user()->posts()->create(array_merge($request->only(['visibility']), ['content' => $content]));
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $this->postPictureUpload->upload($post, $image);
@@ -65,9 +71,14 @@ readonly class PostRepository
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
+        $content = $this->wordFilterRepository->replaceWordsInString($request->input('content'));
+        if ($content instanceof RedirectResponse) {
+            return response()->json(['error' => 'You used a banned word', 'type' => 'banned_word'], 400);
+        }
+
         $visibility = $post->visibility;
 
-        $post->update(array_merge($request->only(['content', 'visibility']), ['edited_at' => now()]));
+        $post->update(array_merge($request->only(['visibility']), ['edited_at' => now(), 'content' => $content]));
 
         //if it goes from private to public or friends send the create
         if ($visibility === 'private' && ($post->visibility === 'public' || $post->visibility === 'friends')) {

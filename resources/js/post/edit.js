@@ -153,11 +153,23 @@ $(document).ready(function () {
                 })
             },
             error: function (response) {
-                console.log(response);
                 Toast.fire({
                     icon: 'error',
-                    title: response.error
+                    title: response.responseJSON.error
                 })
+
+                if (response.responseJSON.type === 'banned_word') {
+                    $.get('/banned', function(response_banned) {
+                        modal.hide();
+                        $('#timeline_status_input').val('');
+                        $('#post-status-top-timeline').remove();
+                        $('form').remove();
+                        $('input').remove();
+                        $('textarea').remove();
+                        $('button').remove();
+                        $('.posts-container').prepend(response_banned);
+                    });
+                }
             }
         });
     });

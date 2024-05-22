@@ -48,3 +48,6 @@
     font-weight: bold; /* Example: Set font weight to bold */
 }
 
+.prose {
+    max-width: 100%;
+}

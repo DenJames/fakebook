@@ -29,6 +29,7 @@ jobs:
                              composer install &&
                              php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" &&
                              php artisan migrate &&
+                             php artisan db:seed &&
                              php artisan create:admin-account &&
                              php artisan icons:cache &&
                              php artisan filament:clear-cached-components &&

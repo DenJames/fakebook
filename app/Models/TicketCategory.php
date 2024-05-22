@@ -8,6 +8,10 @@ class TicketCategory extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'enabled' => 'boolean',
+    ];
+
     public function tickets()
     {
 

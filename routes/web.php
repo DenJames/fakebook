@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\ProfileSearchController;
 use App\Http\Controllers\TicketReplyController;
+use App\Http\Controllers\TicketsController;
 use App\Http\Controllers\UserSessionsController;
 use App\Http\Middleware\EnsureUserIsNotBanned;
 use App\Models\User;
@@ -102,8 +103,14 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
     });
 
     // Tickets
-    Route::prefix('tickets')->withoutMiddleware(EnsureUserIsNotBanned::class)->group(function () {
-        Route::get('/', [TicketReplyController::class, 'index'])->name('tickets.index');
+    Route::prefix('support')->as('support.')->withoutMiddleware(EnsureUserIsNotBanned::class)->group(function () {
+        Route::get('/tickets', [TicketsController::class, 'index'])->name('tickets.index');
+        Route::get('/tickets/create', [TicketsController::class, 'create'])->name('tickets.create');
+        Route::post('/tickets/create', [TicketsController::class, 'store'])->name('tickets.store');
+        Route::get('/tickets/{ticket}/show', [TicketsController::class, 'show'])->name('tickets.show');
+
+        // Replies
+        Route::post('/tickets/{ticket}/reply', [TicketReplyController::class, 'store'])->name('tickets.replies.store');
     });
 
 

@@ -53,6 +53,14 @@
                                 Friendships
                             </x-navigation.side-nav-link>
 
+                            <x-navigation.side-nav-link :href="route('support.tickets.index')">
+                                <x-slot:icon>
+                                    <x-icons.lifebuoy />
+                                </x-slot:icon>
+
+                                Support
+                            </x-navigation.side-nav-link>
+
                             @if(Auth::user()->hasRole('admin'))
                                 <x-navigation.side-nav-link href="/admin" target="_blank">
                                     <x-slot:icon>

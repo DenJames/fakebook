@@ -16,5 +16,9 @@ class DatabaseSeeder extends Seeder
         if (User::count() < 10) {
             User::factory(500)->create();
         }
+
+        $this->call([
+            TicketCategorySeeder::class,
+        ]);
     }
 }

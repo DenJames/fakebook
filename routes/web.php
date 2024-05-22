@@ -10,6 +10,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfilePictureController;
 use App\Http\Controllers\ProfileSearchController;
+use App\Http\Controllers\TicketReplyController;
 use App\Http\Controllers\UserSessionsController;
 use App\Http\Middleware\EnsureUserIsNotBanned;
 use App\Models\User;
@@ -99,6 +100,12 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
         Route::post('/{comment}/like', [CommentController::class, 'like'])->name('like');
         Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
     });
+
+    // Tickets
+    Route::prefix('tickets')->withoutMiddleware(EnsureUserIsNotBanned::class)->group(function () {
+        Route::get('/', [TicketReplyController::class, 'index'])->name('tickets.index');
+    });
+
 
     Route::prefix('api')->name('api.')->group(function () {
         Route::get('/friends', [FriendshipController::class, 'friends'])->name('friends');

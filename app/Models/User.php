@@ -89,6 +89,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Ban::class);
     }
 
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function ticketReplies(): HasMany
+    {
+        return $this->hasMany(TicketReply::class);
+    }
+
     public function scopePendingFriendshipRequests(): HasMany
     {
         return $this->friendships()->whereNull('accepted_at');

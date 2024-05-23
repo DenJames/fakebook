@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Repositories\Support\TicketCategoryRepository;
 use App\Repositories\Support\TicketRepository;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class TicketsController extends Controller
 {
@@ -40,13 +41,17 @@ class TicketsController extends Controller
     {
         $ticket = $this->ticketRepository->store($request);
 
-        return to_route('support.tickets.show', $ticket);
+        return dynamicResponse('support.tickets.show', $ticket, 'Ticket created successfully.');
     }
 
     public function destroy(Ticket $ticket)
     {
+        if (! $ticket->isAuthor() && ! Auth::user()?->isAdmin()) {
+            abort(403);
+        }
+
         $this->ticketRepository->destroy($ticket);
 
-        return back()->with('success', 'Ticket deleted successfully.');
+        return dynamicResponse('support.tickets.index', $ticket, 'The ticket has been deleted.');
     }
 }

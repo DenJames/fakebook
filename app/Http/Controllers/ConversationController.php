@@ -19,16 +19,26 @@ class ConversationController extends Controller
      */
     public function index()
     {
-        $conversations = Auth::user()?->conversations()->latest('updated_at')->get()->map(function ($conversation) {
-            $conversation->participant = $conversation->users()->where('user_id', '!=', Auth::id())->first();
+        // Fetch Conversations and Participants
+        $conversations = Auth::user()?->conversations()->with('users')->latest('updated_at')->get();
+
+        // Extract User IDs with Existing Conversations
+        $existingConversationUserIds = $conversations->flatMap(function ($conversation) {
+            return $conversation->users->where('id', '!=', Auth::id())->pluck('id');
+        });
+
+        $friendIds = Auth::user()?->friendships->where('accepted_at', '!=', null)->map(function ($friendship) {
+            return $friendship->user_id === Auth::id() ? $friendship->friend_id : $friendship->user_id;
+        });
+
+        $users = User::whereNotIn('id', $existingConversationUserIds)->whereIn('id', $friendIds)->get();
+
+        $conversations = $conversations->map(function ($conversation) {
+            $conversation->participant = $conversation->users->where('id', '!=', Auth::id())->first();
             $conversation->latest_message = $conversation->messages->last()?->content ?? 'No messages yet';
 
             return $conversation;
         });
-
-        $users = User::whereDoesntHave('conversations', function ($query) {
-            $query->where('user_id', Auth::id());
-        })->get();
 
         return view('conversations.index', [
             'users' => $users,
@@ -36,9 +46,6 @@ class ConversationController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Conversation $conversation)
     {
         // TODO: Refactor into policy?

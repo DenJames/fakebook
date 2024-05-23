@@ -25,7 +25,7 @@ class Ticket extends Component
 
     public function toggleTicketStatus()
     {
-        if (! Auth::user()?->hasRole('admin') && ! $this->ticket->isAuthor()) {
+        if (! Auth::user()?->isAdmin() && ! $this->ticket->isAuthor()) {
             abort(403);
         }
 
@@ -38,7 +38,7 @@ class Ticket extends Component
 
     public function updateTicket()
     {
-        if (! Auth::user()?->hasRole('admin') && ! $this->ticket->isAuthor()) {
+        if (! Auth::user()?->isAdmin() && ! $this->ticket->isAuthor()) {
             abort(403);
         }
 
@@ -51,7 +51,7 @@ class Ticket extends Component
 
     public function postReply()
     {
-        if ((! $this->ticket->isAuthor() && ! Auth::user()?->hasRole('admin')) || $this->ticket->closed_at) {
+        if ((! $this->ticket->isAuthor() && ! Auth::user()?->isAdmin()) || $this->ticket->closed_at) {
             abort(403);
         }
 

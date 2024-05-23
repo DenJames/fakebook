@@ -79,10 +79,14 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasOne(UserPrivacySetting::class);
     }
 
-    public function friendships(): HasMany
+    public function friendships()
     {
-        return $this->hasMany(Friendship::class)->orWhere('friend_id', $this->id);
+        return $this->hasMany(Friendship::class, 'user_id')
+            ->orWhere(function ($query) {
+                $query->where('friend_id', $this->id);
+            });
     }
+
 
     public function bans(): HasMany
     {
@@ -229,7 +233,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasRole('admin') || $this->hasPermissionTo('access admin panel');
+        return $this->isAdmin() || $this->hasPermissionTo('access admin panel');
     }
 
     public function isBanned(): bool
@@ -245,5 +249,10 @@ class User extends Authenticatable implements FilamentUser
     public function getBan()
     {
         return $this->bans()->where('expires_at', '>', now())->first();
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
     }
 }

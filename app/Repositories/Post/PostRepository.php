@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Post;
 
-use App\Events\Post\PostBottomUpdateEvent;
 use App\Events\Post\PostCreateEvent;
 use App\Events\Post\PostDeleteEvent;
 use App\Events\Post\PostUpdateEvent;
@@ -18,9 +17,16 @@ use Illuminate\Support\Facades\Blade;
 
 readonly class PostRepository
 {
-
     public function __construct(private PostPictureRepository $postPictureUpload, private WordFilterRepository $wordFilterRepository)
     {
+    }
+
+    public function fetchPosts()
+    {
+        return Post::query()
+            ->whereIn('user_id', array_merge(Auth::user()->friendsArray, [Auth::user()->id]))
+            ->orderByDesc('id')
+            ->get();
     }
 
     public function store(PostStoreRequest $request): JsonResponse

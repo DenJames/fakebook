@@ -11,7 +11,7 @@ class TicketReplyRepository
 {
     public function store(Ticket $ticket, TicketReplyFormRequest $request, )
     {
-        if (! $ticket->isAuthor() && ! Auth::user()?->hasRole('admin')) {
+        if (! $ticket->isAuthor() && ! Auth::user()?->isAdmin()) {
             abort(403);
         }
 

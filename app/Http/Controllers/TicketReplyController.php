@@ -4,31 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TicketReplyFormRequest;
 use App\Models\Ticket;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\Support\TicketReplyRepository;
 
 class TicketReplyController extends Controller
 {
+    public function __construct(private readonly TicketReplyRepository $ticketReplyRepository)
+    {
+    }
+
     public function store(Ticket $ticket, TicketReplyFormRequest $request)
     {
-        if (! $ticket->isAuthor() && ! Auth::user()?->hasRole('admin')) {
-            abort(403);
-        }
-
-        $ticket->replies()->create([
-            'user_id' => auth()->id(),
-            'content' => $request->get('content'),
-        ]);
+        $this->ticketReplyRepository->store($ticket, $request);
 
         return back()->with('success', 'Reply posted successfully.');
-    }
-
-    public function update()
-    {
-
-    }
-
-    public function destroy()
-    {
-
     }
 }

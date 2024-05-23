@@ -4,59 +4,48 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TicketFormRequest;
 use App\Models\Ticket;
-use App\Models\TicketCategory;
+use App\Repositories\Support\TicketCategoryRepository;
+use App\Repositories\Support\TicketRepository;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 
 class TicketsController extends Controller
 {
+    public function __construct(private readonly TicketRepository $ticketRepository, private readonly TicketCategoryRepository $ticketCategoryRepository)
+    {
+    }
+
     public function index()
     {
-        $tickets = Auth::user()?->tickets()->whereNull('closed_at')->latest('updated_at')->paginate(10);
-
-        if (Auth::user()?->hasRole('admin')) {
-            $tickets = Ticket::whereNull('closed_at')->latest('updated_at')->paginate(10);
-        }
-
         return view('tickets.index', [
-            'tickets' => $tickets,
-            'solvedTickets' => Auth::user()?->tickets()->whereNotNull('closed_at')->latest('updated_at')->paginate(10),
+            'tickets' => $this->ticketRepository->fetchTickets(),
         ]);
     }
 
     public function show(Ticket $ticket)
     {
-        if (! $ticket->isAuthor() && ! Auth::user()?->hasRole('admin')) {
-            abort(403);
-        }
-
         return view('tickets.show', [
-            'ticket' => $ticket,
-            'categories' => TicketCategory::where('enabled', true)->get(),
+            'ticket' => $this->ticketRepository->show($ticket),
+            'categories' => $this->ticketCategoryRepository->fetchAll(),
         ]);
     }
 
     public function create()
     {
         return view('tickets.create', [
-            'categories' => TicketCategory::where('enabled', true)->get(),
+            'categories' => $this->ticketCategoryRepository->fetchAll(),
         ]);
     }
 
     public function store(TicketFormRequest $request): RedirectResponse
     {
-        $ticket = Auth::user()?->tickets()->create($request->validated());
+        $ticket = $this->ticketRepository->store($request);
 
         return to_route('support.tickets.show', $ticket);
     }
 
     public function destroy(Ticket $ticket)
     {
-        if (! $ticket->isAuthor() && ! Auth::user()?->hasRole('admin')) {
-            abort(403);
-        }
-
-        $ticket->delete();
+        $this->ticketRepository->destroy($ticket);
 
         return back()->with('success', 'Ticket deleted successfully.');
     }

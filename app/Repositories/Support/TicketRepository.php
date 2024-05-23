@@ -14,14 +14,14 @@ class TicketRepository
             return $query->whereNull('closed_at');
         }, function ($query) {
             return $query->whereNotNull('closed_at');
-        })->latest('updated_at')->paginate(10);
+        })->latest('updated_at')->get();
 
         if (Auth::user()?->hasRole('admin')) {
             $tickets = Ticket::query()->when($ticketStatus === 'open', function ($query) {
                 return $query->whereNull('closed_at');
             }, function ($query) {
                 return $query->whereNotNull('closed_at');
-            })->latest('updated_at')->paginate(10);
+            })->latest('updated_at')->get();
         }
 
         return $tickets;

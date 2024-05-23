@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
             User::factory(500)->create();
         }
 
+        $this->call([
+            TicketCategorySeeder::class,
+        ]);
         if (WordFilter::count() <= 0) {
             $this->call(WordFilterSeeder::class);
         }

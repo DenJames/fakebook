@@ -12,8 +12,14 @@ class TicketsController extends Controller
 {
     public function index()
     {
+        $tickets = Auth::user()?->tickets()->whereNull('closed_at')->latest('updated_at')->paginate(10);
+
+        if (Auth::user()?->hasRole('admin')) {
+            $tickets = Ticket::whereNull('closed_at')->latest('updated_at')->paginate(10);
+        }
+
         return view('tickets.index', [
-            'tickets' => Auth::user()?->tickets()->whereNull('closed_at')->latest('updated_at')->paginate(10),
+            'tickets' => $tickets,
             'solvedTickets' => Auth::user()?->tickets()->whereNotNull('closed_at')->latest('updated_at')->paginate(10),
         ]);
     }
@@ -42,5 +48,16 @@ class TicketsController extends Controller
         $ticket = Auth::user()?->tickets()->create($request->validated());
 
         return to_route('support.tickets.show', $ticket);
+    }
+
+    public function destroy(Ticket $ticket)
+    {
+        if (! $ticket->isAuthor() && ! Auth::user()?->hasRole('admin')) {
+            abort(403);
+        }
+
+        $ticket->delete();
+
+        return back()->with('success', 'Ticket deleted successfully.');
     }
 }

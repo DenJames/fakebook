@@ -28,6 +28,7 @@ Broadcast::channel('me.{user_id}.feeds', function ($user, $user_id) {
     return $user->id == $user_id;
 });
 
+// Friends
 Broadcast::channel('friend-request-received-{receiverId}', function (User $user, $receiverId) {
     return $user->id == $receiverId;
 });
@@ -35,3 +36,18 @@ Broadcast::channel('friend-request-received-{receiverId}', function (User $user,
 Broadcast::channel('friend-request-accepted-{userId}', function (User $user, $userId) {
     return $user->id == $userId;
 });
+
+// Tickets
+Broadcast::channel('ticket-replied-{userId}', function (User $user, $userId) {
+    return $user->id == $userId || $user->hasRole('admin');
+});
+
+Broadcast::channel('ticket-status-updated-{userId}', function (User $user, $userId) {
+    return $user->id == $userId || $user->hasRole('admin');
+});
+
+Broadcast::channel('ticket-updated-{userId}', function (User $user, $userId) {
+    return $user->id == $userId || $user->hasRole('admin');
+});
+
+

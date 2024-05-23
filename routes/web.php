@@ -108,6 +108,7 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
         Route::get('/tickets/create', [TicketsController::class, 'create'])->name('tickets.create');
         Route::post('/tickets/create', [TicketsController::class, 'store'])->name('tickets.store');
         Route::get('/tickets/{ticket}/show', [TicketsController::class, 'show'])->name('tickets.show');
+        Route::get('/tickets/{ticket}/delete', [TicketsController::class, 'destroy'])->name('tickets.destroy');
 
         // Replies
         Route::post('/tickets/{ticket}/reply', [TicketReplyController::class, 'store'])->name('tickets.replies.store');

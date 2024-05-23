@@ -61,6 +61,10 @@ class ConversationController extends Controller
 
     public function start(Request $request, User $user)
     {
+        if ($user->friendship(Auth::user()) === null) {
+            abort(403);
+        }
+
         $conversation = $request->user()->conversations()->whereHas('users', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })->first();

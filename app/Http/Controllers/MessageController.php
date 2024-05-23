@@ -26,7 +26,6 @@ class MessageController extends Controller
             event(new MessageSendEvent($conversation->id, $message, $user->id));
         }
 
-
         return response()->json($message);
     }
 

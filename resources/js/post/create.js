@@ -112,8 +112,18 @@ $(document).ready(function () {
             error: function (response) {
                 Toast.fire({
                     icon: 'error',
-                    title: response.error
+                    title: response.responseJSON.error
                 })
+                if (response.responseJSON.type === 'banned_word') {
+                    $.get('/banned', function(response_banned) {
+                        $('.posts-container').prepend(response_banned);
+                        $('#post-status-top-timeline').remove();
+                        $('input').remove();
+                        $('textarea').remove();
+                        $('button').remove();
+                        $('form').remove();
+                    });
+                }
             }
         });
     });

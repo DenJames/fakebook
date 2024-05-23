@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
 
 class PostObserver
 {
@@ -29,6 +30,8 @@ class PostObserver
     {
         // Remove the post images from the storage
         $post->images->each->delete();
+        // Delete the post content path
+        Storage::disk('public')->delete('posts/' . $post->user->id . '/' . $post->id);
     }
 
     /**

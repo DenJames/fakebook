@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\WordFilter;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,5 +21,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             TicketCategorySeeder::class,
         ]);
+        if (WordFilter::count() <= 0) {
+            $this->call(WordFilterSeeder::class);
+        }
     }
 }

@@ -13,14 +13,18 @@
             </div>
         @endif
 
-        <img class="h-14 w-14 rounded-full"
-             src="{{ asset($message->sender->profile_photo) }}"
-             alt="{{ $message->sender->username ?? 'Unknown' }}">
+        <a href="{{ route('profile.show', $message->sender) }}">
+            <img class="h-14 w-14 rounded-full transition-all duration-300 hover:scale-105"
+                 src="{{ asset($message->sender->profile_photo) }}"
+                 alt="{{ $message->sender->username ?? 'Unknown' }}">
+        </a>
 
         <div class="relative flex flex-col h-full justify-content-start pl-4 text-white">
-            <div class="font-bold text-lg {{ $message->trashed() ? 'text-gray-700' : '' }}">
-                {{ $message->sender->name }}
-            </div>
+            <a href="{{ route('profile.show', $message->sender) }}">
+                <div class="font-bold text-lg hover:underline {{ $message->trashed() ? 'text-gray-700' : '' }}">
+                    {{ $message->sender->name }}
+                </div>
+            </a>
 
             <p id="message-content-{{ $message->id }}" class="message-content" style="display:block;">
                 @if($message->trashed())
@@ -39,7 +43,7 @@
 
         @if($message->hasBeenEdited())
             <span class="text-black/50 text-xs" data-tooltip-target="message-{{ $message->id }}-edited">(Edited)</span>
-            <div id="message-{{ $message->id }}-edited" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            <div id="message-{{ $message->id }}-edited" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
                 Edited: {{ $message->edited_at->diffForHumans() }}
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
@@ -47,7 +51,7 @@
 
         @if($message->trashed())
             <span class="text-black/50 text-xs" data-tooltip-target="message-{{ $message->id }}-deleted">(Deleted)</span>
-            <div id="message-{{ $message->id }}-deleted" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            <div id="message-{{ $message->id }}-deleted" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
                 Deleted: {{ $message->deleted_at->diffForHumans() }}
                 <div class="tooltip-arrow" data-popper-arrow></div>
             </div>

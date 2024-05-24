@@ -2,9 +2,11 @@
 <div id="message-{{ $message->id }}">
     <x-chat.chat-wrapper :is-sender="false" :is-trashed="$message->trashed()">
         <div class="flex flex-col h-full justify-content-start pl-4 w-full">
-            <div class="font-bold text-lg">
-                {{ $message->sender->name }}
-            </div>
+            <a href="{{ route('profile.show', $message->sender) }}">
+                <div class="font-bold text-lg hover:underline {{ $message->trashed() ? 'text-gray-700' : '' }}">
+                    {{ $message->sender->name }}
+                </div>
+            </a>
 
             <p id="message-content-{{ $message->id }}" class="message-content" style="display:block;">
                 @if($message->trashed())
@@ -18,9 +20,11 @@
         <div>
             <div class="flex justify-end w-24">
                 <div>
-                    <img class="h-14 w-14 rounded-full"
-                         src="{{ asset($message->sender->profile_photo) }}"
-                         alt="{{ $message->sender->username ?? 'Unknown' }}">
+                    <a href="{{ route('profile.show', $message->sender) }}">
+                        <img class="h-14 w-14 rounded-full transition-all duration-300 hover:scale-105"
+                             src="{{ asset($message->sender->profile_photo) }}"
+                             alt="{{ $message->sender->username ?? 'Unknown' }}">
+                    </a>
                 </div>
             </div>
         </div>

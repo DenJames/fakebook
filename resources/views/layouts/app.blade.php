@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-white">
 <head>
     <meta charset="utf-8">
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="manifest.json"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @if(!is_null(auth()->user()))
@@ -49,21 +49,19 @@
         <x-navigation.top-navigation/>
     </div>
 
-    <main class="py-10 lg:pl-64 min-h-screen flex justify-center w-full">
-        <div class="w-full px-4 sm:px-6 lg:px-8">
-            <div>
-                {{ $slot }}
-            </div>
-        </div>
+    <main class="lg:pl-96 min-h-screen flex justify-center w-full p-4 lg:py-10 lg:px-32">
+        {{ $slot }}
     </main>
 
-    <x-pwa-banner />
+    <x-pwa-banner/>
 </div>
 
-<x-success-message />
-<x-status-message />
+<x-success-message/>
+<x-status-message/>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.0.9/index.min.js" integrity="sha512-03Ucfdj4I8Afv+9P/c9zkF4sBBGlf68zzr/MV+ClrqVCBXWAsTEjIoGCMqxhUxv1DGivK7Bm1IQd8iC4v7X2bw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.0.9/index.min.js"
+        integrity="sha512-03Ucfdj4I8Afv+9P/c9zkF4sBBGlf68zzr/MV+ClrqVCBXWAsTEjIoGCMqxhUxv1DGivK7Bm1IQd8iC4v7X2bw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 @stack('scripts')
 @livewireScripts

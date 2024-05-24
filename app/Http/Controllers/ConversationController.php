@@ -51,6 +51,7 @@ class ConversationController extends Controller
         // TODO: Refactor into policy?
         if (! $conversation->users->contains(Auth::id())) {
             abort(403);
+
         }
 
         return view('conversations.show', [

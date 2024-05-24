@@ -25,13 +25,13 @@
                                              alt="{{ $conversation->participant->name }}"
                                              class="h-10 w-10 rounded-full">
 
-                                        <div class="flex flex-col gap-2">
+                                        <div class="flex flex-col w-full">
                                             <p class="font-bold truncate">
                                                 {{ $conversation->participant->name }}
                                             </p>
 
                                             @if($conversation->messages->last())
-                                                <small class="text-black/60">
+                                                <small class="text-black/70 w-[85%] truncate">
                                                     {{ $conversation->messages->last()->content }}
                                                 </small>
                                             @endif
@@ -39,8 +39,8 @@
                                     </div>
 
                                     @if($conversation->messages->last())
-                                        <small class="text-end">
-                                            {{ formatDiffForHumans($conversation->messages->last()->created_at) }}
+                                        <small class="text-end absolute bottom-2 right-4 text-black/70">
+                                            Last message: {{ formatDiffForHumans($conversation->messages->last()->created_at) }} ago
                                         </small>
                                     @endif
                                 </div>

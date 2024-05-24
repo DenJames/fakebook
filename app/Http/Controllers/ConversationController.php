@@ -14,7 +14,7 @@ class ConversationController extends Controller
     public function __construct(private readonly ConversationRepository $conversation)
     {
     }
-    
+
     public function index()
     {
         // Fetch Conversations and Participants

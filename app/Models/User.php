@@ -87,6 +87,15 @@ class User extends Authenticatable implements FilamentUser
             });
     }
 
+    public function activeFriendships(): HasMany
+    {
+        return $this->hasMany(Friendship::class, 'user_id')
+            ->whereNotNull('accepted_at')
+            ->orWhere(function ($query) {
+                $query->where('friend_id', $this->id)->whereNotNull('accepted_at');
+            });
+    }
+
 
     public function bans(): HasMany
     {

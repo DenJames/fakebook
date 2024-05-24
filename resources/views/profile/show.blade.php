@@ -114,9 +114,9 @@
             <div class="flex flex-col gap-y-2 mt-4">
                 <h2 class="font-bold text-5xl">{{ $user->name }}</h2>
 
-                <p class="text-black/70">{{ $user->friendships()->whereNotNull('accepted_at')->count() }} friends</p>
+                <p class="text-black/70">{{ $user->activeFriendships->count() }} friends</p>
                 <div class="flex">
-                    @foreach($user->friendships()->whereNotNull('accepted_at')->get() as $key => $friend)
+                    @foreach($user->activeFriendships as $key => $friend)
                         <a class="h-10 w-10  -ml-3" href="{{ route('profile.show', $friend->getProfile($user)) }}"
                            style="z-index: {{ $user->friendships()->count() - $key }}">
                             <img class="w-full h-full rounded-full border-2 border-black/60"

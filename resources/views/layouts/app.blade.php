@@ -50,7 +50,9 @@
     </div>
 
     <main class="lg:pl-96 min-h-screen flex justify-center w-full p-4 lg:py-10 lg:px-32">
-        {{ $slot }}
+        <div class="w-full">
+            {{ $slot }}
+        </div>
     </main>
 
     <x-pwa-banner/>

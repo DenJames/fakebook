@@ -32,7 +32,7 @@
 
                                             @if($conversation->messages->last())
                                                 <small class="text-black/70 w-[85%] truncate">
-                                                    {{ $conversation->messages->last()->content }}
+                                                    {{ $conversation->messages()->latest()->first()->content }}
                                                 </small>
                                             @endif
                                         </div>
@@ -40,7 +40,7 @@
 
                                     @if($conversation->messages->last())
                                         <small class="text-end absolute bottom-2 right-4 text-black/70">
-                                            Last message: {{ formatDiffForHumans($conversation->messages->last()->created_at) }} ago
+                                            Last message: {{ formatDiffForHumans($conversation->messages()->latest()->first()->created_at) }} ago
                                         </small>
                                     @endif
                                 </div>

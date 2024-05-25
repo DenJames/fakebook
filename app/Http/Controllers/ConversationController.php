@@ -20,13 +20,13 @@ class ConversationController extends Controller
         // Fetch Conversations and Participants
         $conversations = Auth::user()
             ?->conversations()
-            ->with(['users', 'messages' => function ($query) {
+            ->with(['users', 'messages' => function ($query): void {
                 $query->latest();
             }])
             ->addSelect(['latest_message' => Message::select('created_at')
                 ->whereColumn('conversation_id', 'conversations.id')
                 ->latest()
-                ->take(1)
+                ->take(1),
             ]) // Virtual column in order to sort chats by latest message
             ->orderByDesc('latest_message')
             ->get();
@@ -76,7 +76,7 @@ class ConversationController extends Controller
             abort(403);
         }
 
-        $conversation = $request->user()->conversations()->whereHas('users', function ($query) use ($user) {
+        $conversation = $request->user()->conversations()->whereHas('users', function ($query) use ($user): void {
             $query->where('user_id', $user->id);
         })->first();
 

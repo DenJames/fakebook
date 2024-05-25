@@ -23,7 +23,7 @@ class Ticket extends Component
         ];
     }
 
-    public function toggleTicketStatus()
+    public function toggleTicketStatus(): void
     {
         if (! Auth::user()?->isAdmin() && ! $this->ticket->isAuthor()) {
             abort(403);
@@ -36,7 +36,7 @@ class Ticket extends Component
         event(new TicketStatusUpdatedEvent($this->ticket));
     }
 
-    public function updateTicket()
+    public function updateTicket(): void
     {
         if (! Auth::user()?->isAdmin() && ! $this->ticket->isAuthor()) {
             abort(403);
@@ -49,7 +49,7 @@ class Ticket extends Component
         event(new TicketUpdatedEvent($this->ticket));
     }
 
-    public function postReply()
+    public function postReply(): void
     {
         if ((! $this->ticket->isAuthor() && ! Auth::user()?->isAdmin()) || $this->ticket->closed_at) {
             abort(403);
@@ -66,7 +66,7 @@ class Ticket extends Component
         $this->reset('reply');
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->content = $this->ticket->content;
     }

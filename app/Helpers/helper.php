@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
 
-function formatDiffForHumans(\Carbon\Carbon $date) {
+function formatDiffForHumans(\Carbon\Carbon $date)
+{
     $now = \Carbon\Carbon::now();
     $diff = $date->diff($now);
 
@@ -16,6 +16,7 @@ function formatDiffForHumans(\Carbon\Carbon $date) {
 
     if ($diff->d >= 7) {
         $weeks = floor($diff->d / 7);
+
         return "{$weeks} w";
     }
 

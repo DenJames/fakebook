@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 
-
 readonly class ProfilePictureRepository
 {
     public function __construct(private ProfilePictureUpload $profilePictureUpload)
@@ -18,8 +17,9 @@ readonly class ProfilePictureRepository
 
     public function upload(User $user, ProfilePictureFormRequest $request, $storagePath = 'profile-photos'): JsonResponse|RedirectResponse
     {
-        if (!$user->isUserProfile()) {
+        if (! $user->isUserProfile()) {
             $message = 'You do not have permissions for this';
+
             return $request->wantsJson()
                 ? response()->json(['error' => $message], 403)
                 : redirect()->back()->withErrors($message);
@@ -27,6 +27,7 @@ readonly class ProfilePictureRepository
 
         if (! $request->hasFile('photo')) {
             $message = 'No file was uploaded';
+
             return $request->wantsJson()
                 ? response()->json(['error' => $message], 400)
                 : redirect()->back()->withErrors($message);
@@ -35,6 +36,7 @@ readonly class ProfilePictureRepository
         // If the profile picture upload fails, return an error message
         if (! $image = $this->profilePictureUpload->execute($user, $request->file('photo'), $storagePath)) {
             $message = 'Failed to upload profile picture';
+
             return $request->wantsJson()
                 ? response()->json(['error' => $message], 500)
                 : redirect()->back()->withErrors($message);
@@ -59,6 +61,7 @@ readonly class ProfilePictureRepository
 
 
             $message = 'The image has been uploaded successfully';
+
             return $request->wantsJson()
                 ? response()->json(['success' => $message])
                 : redirect()->back()->with('success', $message);
@@ -68,10 +71,11 @@ readonly class ProfilePictureRepository
             'type' => $type,
             'path' => $image['file_path'],
             'file_hash' => $image['file_hash'],
-            'is_current' => true
+            'is_current' => true,
         ]);
 
         $message = 'The image has been uploaded successfully';
+
         return $request->wantsJson()
             ? response()->json(['success' => $message])
             : redirect()->back()->with('success', $message);

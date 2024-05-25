@@ -11,7 +11,9 @@ use Illuminate\Queue\SerializesModels;
 
 class TicketStatusUpdatedEvent implements ShouldBroadcastNow
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public function __construct(public readonly Ticket $ticket)
     {
@@ -20,7 +22,7 @@ class TicketStatusUpdatedEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('ticket-status-updated-' . $this->ticket->user_id)
+            new PrivateChannel('ticket-status-updated-' . $this->ticket->user_id),
         ];
     }
 }

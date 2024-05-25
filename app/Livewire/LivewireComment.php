@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Events\CommentLiked;
 use App\Events\CommentReply;
-use App\Events\Post\CommentAdded;
 use App\Events\PostCommentDeletedEvent;
 use App\Models\Comment;
 use App\Models\Post as PostModel;
@@ -20,10 +19,10 @@ class LivewireComment extends Component
     public string $content = '';
     public Collection $comments;
 
-    public function replyComment()
+    public function replyComment(): void
     {
         $this->validate([
-            'content' => ['required', 'string']
+            'content' => ['required', 'string'],
         ]);
 
         if ($this->comment->commentable->commentable_type === 'App\Models\Comment') {
@@ -46,7 +45,7 @@ class LivewireComment extends Component
             $this->comment->likes()->where('user_id', Auth::id())->delete();
         } else {
             $this->comment->likes()->create([
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
         }
 
@@ -60,9 +59,8 @@ class LivewireComment extends Component
         PostCommentDeletedEvent::dispatch();
     }
 
-
     #[On('echo:comment-reply,CommentReply')]
-    public function loadComments()
+    public function loadComments(): void
     {
         $this->comments = $this->comment->comments()->latest()->limit(2)->get();
     }
@@ -73,7 +71,7 @@ class LivewireComment extends Component
         $this->comment = $this->comment->fresh();
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->loadComments();
     }

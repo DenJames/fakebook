@@ -12,7 +12,7 @@ class EnsureUserIsNotBanned
     {
         $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             return to_route('/');
         }
 
@@ -20,7 +20,7 @@ class EnsureUserIsNotBanned
             return to_route('dashboard');
         }
 
-        if ($user->isBanned() && !request()?->is('banned')) {
+        if ($user->isBanned() && ! request()?->is('banned')) {
             return redirect()->route('banned')->with('error', 'Your account has been banned.');
         }
 

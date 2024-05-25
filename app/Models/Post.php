@@ -20,7 +20,7 @@ class Post extends Model
         'edited_at' => 'datetime',
     ];
 
-    protected static function booted()
+    protected static function booted(): void
     {
         static::observe(PostObserver::class);
     }

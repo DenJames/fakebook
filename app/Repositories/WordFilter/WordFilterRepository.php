@@ -15,11 +15,13 @@ class WordFilterRepository
             if ($replacement->bannable) {
                 if (str_contains(strtolower($inputString), strtolower($replacement->word))) {
                     Ban::create(['user_id' => auth()->id(), 'reason' => 'You used a banned word ('.$replacement->word.')', 'expires_at' => now()->addDays(7)]);
+
                     return redirect()->route('banned');
                 }
             }
             $inputString = str_ireplace($replacement->word, $replacement->replacement, $inputString);
         }
+
         return $inputString;
     }
 }

@@ -69,7 +69,3 @@ class UserNotifications extends Component
         return view('livewire.user-notifications');
     }
 }
-
-
-
-

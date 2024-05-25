@@ -12,7 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Js;
 
 class FriendshipRepository
 {
@@ -35,6 +34,7 @@ class FriendshipRepository
         $user->notify(new FriendRequestReceivedNotification(Auth::user()));
 
         $message = 'Your friend request has been sent!';
+
         return $request->wantsJson()
             ? response()->json(['success' => $message], 200)
             : redirect()->back()->with('success', $message);
@@ -45,6 +45,7 @@ class FriendshipRepository
         Auth::user()?->friendship($user)?->delete();
 
         $message = 'Friend has been removed!';
+
         return $request->wantsJson()
             ? response()->json(['success' => $message], 200)
             : redirect()->back()->with('success', $message);
@@ -56,6 +57,7 @@ class FriendshipRepository
         $friendship->delete();
 
         $message = 'Friend has been removed!';
+
         return $request->wantsJson()
             ? response()->json(['success' => $message], 200)
             : redirect()->back()->with('success', $message);
@@ -74,6 +76,7 @@ class FriendshipRepository
         ]);
 
         $message = 'Friend request has been accepted!';
+
         return $request->wantsJson()
             ? response()->json(['success' => $message], 200)
             : redirect()->back()->with('success', $message);
@@ -86,7 +89,7 @@ class FriendshipRepository
         $friends2 = Auth::user()?->friendships->pluck('user_id');
 
         $friends = User::whereIn('id', $friends1)->orWhereIn('id', $friends2)->pluck('id');
-        $friends = $friends->filter(fn($id) => $id !== Auth::id());
+        $friends = $friends->filter(fn ($id) => $id !== Auth::id());
 
         $friendIds = $friends->toArray();
 

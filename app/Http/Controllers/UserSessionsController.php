@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Repositories\User\UserSessionRepository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class UserSessionsController extends Controller
 {

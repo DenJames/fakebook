@@ -7,7 +7,6 @@ use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
 
 readonly class CommentRepository
 {
@@ -21,6 +20,7 @@ readonly class CommentRepository
                 event(new PostBottomUpdateEvent($comment->commentable));
                 event(new PostBottomUpdateEvent($comment->commentable, true));
             }
+
             return response()->json(['message' => 'Like removed successfully']);
         }
 
@@ -29,6 +29,7 @@ readonly class CommentRepository
             event(new PostBottomUpdateEvent($comment->commentable));
             event(new PostBottomUpdateEvent($comment->commentable, true));
         }
+
         return response()->json(['message' => 'Comment liked successfully'], 201);
     }
 

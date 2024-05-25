@@ -41,7 +41,7 @@ class TicketRepository
         return Auth::user()?->tickets()->create($request->validated());
     }
 
-    public function destroy(Ticket $ticket)
+    public function destroy(Ticket $ticket): void
     {
         if (! $ticket->isAuthor() && ! Auth::user()?->isAdmin()) {
             abort(403);

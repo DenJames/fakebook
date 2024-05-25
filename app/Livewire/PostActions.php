@@ -12,13 +12,13 @@ class PostActions extends Component
 {
     public PostModel $post;
 
-    public function like()
+    public function like(): void
     {
         if ($this->post->hasLiked()) {
             $this->post->likes()->where('user_id', Auth::id())->delete();
         } else {
             $this->post->likes()->create([
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
         }
 

@@ -10,9 +10,11 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Blade;
 
-class PostCreateEvent implements  ShouldBroadcastNow
+class PostCreateEvent implements ShouldBroadcastNow
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /**
      * Create a new event instance.
@@ -29,10 +31,12 @@ class PostCreateEvent implements  ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-        if ($this->private)
+        if ($this->private) {
             return [
                 new PrivateChannel('me.'.$this->post->user_id.'.feeds'),
             ];
+        }
+
         return [
             new PrivateChannel('friend.'.$this->post->user_id.'.feeds'),
         ];

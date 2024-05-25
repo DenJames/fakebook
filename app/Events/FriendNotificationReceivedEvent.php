@@ -12,7 +12,9 @@ use Illuminate\Queue\SerializesModels;
 
 class FriendNotificationReceivedEvent implements ShouldBroadcastNow
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public function __construct(private readonly User $sender, private readonly User $receiver)
     {

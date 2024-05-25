@@ -42,8 +42,9 @@ readonly class PostRepository
             }
         }
 
-        if ($post->visibility === 'public' || $post->visibility === 'friends')
+        if ($post->visibility === 'public' || $post->visibility === 'friends') {
             event(new PostCreateEvent($post));
+        }
 
         event(new PostCreateEvent($post, true));
 
@@ -57,8 +58,9 @@ readonly class PostRepository
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        if ($post->visibility === 'public' || $post->visibility === 'friends')
+        if ($post->visibility === 'public' || $post->visibility === 'friends') {
             event(new PostDeleteEvent($post));
+        }
 
         event(new PostDeleteEvent($post, true));
         $post->delete();
@@ -89,9 +91,9 @@ readonly class PostRepository
         //if it goes from private to public or friends send the create
         if ($visibility === 'private' && ($post->visibility === 'public' || $post->visibility === 'friends')) {
             event(new PostCreateEvent($post));
-        } else if ($visibility !== 'private' && $post->visibility === 'private') {
+        } elseif ($visibility !== 'private' && $post->visibility === 'private') {
             event(new PostDeleteEvent($post));
-        } else if ($visibility !== 'private' && ($post->visibility === 'public' || $post->visibility === 'friends')) {
+        } elseif ($visibility !== 'private' && ($post->visibility === 'public' || $post->visibility === 'friends')) {
             event(new PostUpdateEvent($post));
         }
 
@@ -119,9 +121,10 @@ readonly class PostRepository
                 'url' => asset($image->url),
                 'size' => $image->size,
                 'name' => $image->name,
-                'id' => $image->id
+                'id' => $image->id,
             ];
         }
+
         return response()->json($response);
     }
 

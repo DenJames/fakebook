@@ -9,9 +9,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PostBottomUpdateEvent implements  ShouldBroadcastNow
+class PostBottomUpdateEvent implements ShouldBroadcastNow
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     /**
      * Create a new event instance.
@@ -28,10 +30,12 @@ class PostBottomUpdateEvent implements  ShouldBroadcastNow
      */
     public function broadcastOn(): array
     {
-        if ($this->private)
+        if ($this->private) {
             return [
                 new PrivateChannel('me.'.$this->post->user_id.'.feeds'),
             ];
+        }
+
         return [
             new PrivateChannel('friend.'.$this->post->user_id.'.feeds'),
         ];

@@ -9,7 +9,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class FriendshipController extends Controller{
+class FriendshipController extends Controller
+{
     public function __construct(private readonly FriendshipRepository $friendshipRepository)
     {
     }

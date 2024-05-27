@@ -26,7 +26,7 @@ class FriendshipRepository
                 : redirect()->back()->withErrors($message);
         }
 
-        if (!$user->privacySetting('allow_friend_requests')) {
+        if (! $user->privacySetting('allow_friend_requests')) {
             $message = "This user does not accept new friend requests.";
 
             return $request->wantsJson()

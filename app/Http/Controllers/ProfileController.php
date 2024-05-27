@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\PrivacySettings;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use App\Repositories\Profile\ProfileRepository;

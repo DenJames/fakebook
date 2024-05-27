@@ -19,7 +19,11 @@ class FriendshipController extends Controller
     {
         return view('profile.friends', [
             'friendRequests' => Friendship::where('friend_id', Auth::id())->whereNull('accepted_at')->with('user')->paginate(10),
-            'friends' => Friendship::where('user_id', Auth::id())->orWhere('friend_id', Auth::id())->whereNotNull('accepted_at')->paginate(10),
+            'friends' => Friendship::query()
+                ->whereNotNull('accepted_at')
+                ->where('user_id', Auth::id())
+                ->orWhere('friend_id', Auth::id())
+                ->paginate(10),
         ]);
     }
 

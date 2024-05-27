@@ -10,12 +10,14 @@ use Illuminate\Queue\SerializesModels;
 
 class PostLikedEvent implements ShouldBroadcastNow
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public function broadcastOn(): array
     {
         return [
-            new Channel('post-liked')
+            new Channel('post-liked'),
         ];
     }
 }

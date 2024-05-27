@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Blade;
 
 readonly class LikeRepository
 {
-
     public function __construct(private PostPictureRepository $postPictureUpload)
     {
     }

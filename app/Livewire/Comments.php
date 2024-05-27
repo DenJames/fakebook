@@ -3,18 +3,16 @@
 namespace App\Livewire;
 
 use App\Events\Post\CommentAdded;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\On;
 use Livewire\Component;
-use App\Models\Post;
 
 class Comments extends Component
 {
     public Post $post;
     public string $content = '';
     public Collection $comments;
-
 
     public function getListeners()
     {
@@ -24,15 +22,15 @@ class Comments extends Component
         ];
     }
 
-    public function postComment()
+    public function postComment(): void
     {
         $this->validate([
-            'content' => ['required', 'string']
+            'content' => ['required', 'string'],
         ]);
 
         $this->post->comments()->create([
             'user_id' => Auth::id(),
-            'content' => $this->content
+            'content' => $this->content,
         ]);
 
         $this->dispatch('commentAdded'); // Dispatch event to clear the comment input
@@ -40,12 +38,12 @@ class Comments extends Component
         event(new CommentAdded()); // Broadcast event
     }
 
-    public function loadComments()
+    public function loadComments(): void
     {
         $this->comments = $this->post->comments()->latest()->limit(2)->get();
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->loadComments();
     }

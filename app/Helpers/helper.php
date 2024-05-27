@@ -1,6 +1,8 @@
 <?php
 
-function formatDiffForHumans(\Carbon\Carbon $date) {
+
+function formatDiffForHumans(\Carbon\Carbon $date)
+{
     $now = \Carbon\Carbon::now();
     $diff = $date->diff($now);
 
@@ -14,6 +16,7 @@ function formatDiffForHumans(\Carbon\Carbon $date) {
 
     if ($diff->d >= 7) {
         $weeks = floor($diff->d / 7);
+
         return "{$weeks} w";
     }
 
@@ -30,4 +33,11 @@ function formatDiffForHumans(\Carbon\Carbon $date) {
     }
 
     return "{$diff->s} s";
+}
+
+function dynamicResponse(string $toRoute, mixed $routeParams = [], string|array $message = '', string $responseStatus = 'success', int $statusCode = 200)
+{
+    return request()?->wantsJson()
+        ? response()->json([$responseStatus => $message], $statusCode)
+        : redirect()->route($toRoute, $routeParams)->with($responseStatus, $message);
 }

@@ -14,7 +14,7 @@ class Tickets extends Component
     public Collection  $tickets;
     public string $ticketStatus = 'open';
 
-    public function changeStatus()
+    public function changeStatus(): void
     {
         $this->tickets = app(TicketRepository::class)->fetchTickets($this->ticketStatus);
     }

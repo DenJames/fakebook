@@ -4,15 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Enums\UserProfilePhotoTypes;
 use App\Filament\Resources\UserProfilePhotoResource\Pages;
-use App\Filament\Resources\UserProfilePhotoResource\RelationManagers;
 use App\Models\UserProfilePhoto;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserProfilePhotoResource extends Resource
 {

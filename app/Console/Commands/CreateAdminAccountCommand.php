@@ -16,7 +16,7 @@ class CreateAdminAccountCommand extends Command
     public function handle(): void
     {
         $user = User::where('name', 'Admin')->first();
-        if (!$user) {
+        if (! $user) {
             $user = User::create([
                 'name' => 'Admin',
                 'email' => 'admin@example.com',
@@ -27,14 +27,14 @@ class CreateAdminAccountCommand extends Command
         $this->info('Admin user created successfully');
 
         $role = Role::where('name', 'admin')->first();
-        if (!$role) {
+        if (! $role) {
             $role = Role::create(['name' => 'admin']);
         }
 
         $this->info('Admin role created successfully');
 
         $permission = Permission::where('name', 'access admin panel')->first();
-        if (!$permission) {
+        if (! $permission) {
             // If no permission exists, create a new one
             $permission = Permission::create(['name' => 'access admin panel']);
         }
@@ -43,7 +43,7 @@ class CreateAdminAccountCommand extends Command
 
         $user->assignRole($role);
 
-        if (!$user->privacySettings) {
+        if (! $user->privacySettings) {
             $user->privacySettings()->create();
         }
 

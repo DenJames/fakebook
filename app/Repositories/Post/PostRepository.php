@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Post;
 
-use App\Events\Post\PostBottomUpdateEvent;
 use App\Events\Post\PostCreateEvent;
 use App\Events\Post\PostDeleteEvent;
 use App\Events\Post\PostUpdateEvent;
@@ -18,9 +17,16 @@ use Illuminate\Support\Facades\Blade;
 
 readonly class PostRepository
 {
-
     public function __construct(private PostPictureRepository $postPictureUpload, private WordFilterRepository $wordFilterRepository)
     {
+    }
+
+    public function fetchPosts()
+    {
+        return Post::query()
+            ->whereIn('user_id', array_merge(Auth::user()->friendsArray, [Auth::user()->id]))
+            ->orderByDesc('id')
+            ->get();
     }
 
     public function store(PostStoreRequest $request): JsonResponse
@@ -36,8 +42,9 @@ readonly class PostRepository
             }
         }
 
-        if ($post->visibility === 'public' || $post->visibility === 'friends')
+        if ($post->visibility === 'public' || $post->visibility === 'friends') {
             event(new PostCreateEvent($post));
+        }
 
         event(new PostCreateEvent($post, true));
 
@@ -51,8 +58,9 @@ readonly class PostRepository
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        if ($post->visibility === 'public' || $post->visibility === 'friends')
+        if ($post->visibility === 'public' || $post->visibility === 'friends') {
             event(new PostDeleteEvent($post));
+        }
 
         event(new PostDeleteEvent($post, true));
         $post->delete();
@@ -83,9 +91,9 @@ readonly class PostRepository
         //if it goes from private to public or friends send the create
         if ($visibility === 'private' && ($post->visibility === 'public' || $post->visibility === 'friends')) {
             event(new PostCreateEvent($post));
-        } else if ($visibility !== 'private' && $post->visibility === 'private') {
+        } elseif ($visibility !== 'private' && $post->visibility === 'private') {
             event(new PostDeleteEvent($post));
-        } else if ($visibility !== 'private' && ($post->visibility === 'public' || $post->visibility === 'friends')) {
+        } elseif ($visibility !== 'private' && ($post->visibility === 'public' || $post->visibility === 'friends')) {
             event(new PostUpdateEvent($post));
         }
 
@@ -113,9 +121,10 @@ readonly class PostRepository
                 'url' => asset($image->url),
                 'size' => $image->size,
                 'name' => $image->name,
-                'id' => $image->id
+                'id' => $image->id,
             ];
         }
+
         return response()->json($response);
     }
 

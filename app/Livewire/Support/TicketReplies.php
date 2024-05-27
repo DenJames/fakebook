@@ -3,7 +3,6 @@
 namespace App\Livewire\Support;
 
 use App\Models\Ticket as TicketModel;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class TicketReplies extends Component

@@ -28,13 +28,14 @@ class ProfilePictureUpload
 
         if (! Storage::disk('public')->put($path, $file->getContent())) {
             Log::error('Failed to upload profile photo for user: ' . $user->email);
+
             return false;
         }
 
         return [
             'image_id' => null,
             'file_path' => $path,
-            'file_hash' => $fileHash
+            'file_hash' => $fileHash,
         ];
     }
 }

@@ -39,15 +39,15 @@ Broadcast::channel('friend-request-accepted-{userId}', function (User $user, $us
 
 // Tickets
 Broadcast::channel('ticket-replied-{userId}', function (User $user, $userId) {
-    return $user->id == $userId || $user->hasRole('admin');
+    return $user->id == $userId || $user->isAdmin();
 });
 
 Broadcast::channel('ticket-status-updated-{userId}', function (User $user, $userId) {
-    return $user->id == $userId || $user->hasRole('admin');
+    return $user->id == $userId || $user->isAdmin();
 });
 
 Broadcast::channel('ticket-updated-{userId}', function (User $user, $userId) {
-    return $user->id == $userId || $user->hasRole('admin');
+    return $user->id == $userId || $user->isAdmin();
 });
 
 

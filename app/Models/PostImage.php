@@ -14,7 +14,7 @@ class PostImage extends Model
 
     protected $guarded = [];
 
-    protected static function booted()
+    protected static function booted(): void
     {
         static::observe(PostImageObserver::class);
     }

@@ -9,20 +9,22 @@ use App\Observers\UserObserver;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory;
+    use Notifiable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -79,9 +81,21 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasOne(UserPrivacySetting::class);
     }
 
-    public function friendships(): HasMany
+    public function friendships()
     {
-        return $this->hasMany(Friendship::class)->orWhere('friend_id', $this->id);
+        return $this->hasMany(Friendship::class, 'user_id')
+            ->orWhere(function ($query): void {
+                $query->where('friend_id', $this->id);
+            });
+    }
+
+    public function activeFriendships(): HasMany
+    {
+        return $this->hasMany(Friendship::class, 'user_id')
+            ->whereNotNull('accepted_at')
+            ->orWhere(function ($query): void {
+                $query->where('friend_id', $this->id)->whereNotNull('accepted_at');
+            });
     }
 
     public function bans(): HasMany
@@ -116,27 +130,28 @@ class User extends Authenticatable implements FilamentUser
 
     public function pendingFriendship(self $user): Friendship|null
     {
-        return Friendship::where(function ($query) use ($user) {
+        return Friendship::where(function ($query) use ($user): void {
             $query->where('user_id', $this->id)
                 ->where('friend_id', $user->id)
                 ->whereNull('accepted_at');
         })
-            ->orWhere(function ($query) use ($user) {
+            ->orWhere(function ($query) use ($user): void {
                 $query->where('user_id', $user->id)
                     ->where('friend_id', $this->id)
                     ->whereNull('accepted_at');
             })
             ->first();
     }
+
     public function friendship(self $user): Friendship|null
     {
         return Friendship::query()
-            ->where(function ($query) use ($user) {
+            ->where(function ($query) use ($user): void {
                 $query->where('user_id', $this->id)
                     ->where('friend_id', $user->id)
                     ->whereNotNull('accepted_at');
             })
-            ->orWhere(function ($query) use ($user) {
+            ->orWhere(function ($query) use ($user): void {
                 $query->where('user_id', $user->id)
                     ->where('friend_id', $this->id)
                     ->whereNotNull('accepted_at');
@@ -165,7 +180,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function activeChat(self $user): Conversation|null
     {
-        return $this->conversations()->whereHas('users', function ($query) use ($user) {
+        return $this->conversations()->whereHas('users', function ($query) use ($user): void {
             $query->where('user_id', $user->id);
         })->first();
     }
@@ -185,7 +200,7 @@ class User extends Authenticatable implements FilamentUser
         // TODO: Replace this with a default profile photo
         $fallback = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-        $path =  $this->currentProfilePhoto()
+        $path = $this->currentProfilePhoto()
             ? 'storage/' . $this->currentProfilePhoto()->path
             : $fallback;
 
@@ -199,7 +214,7 @@ class User extends Authenticatable implements FilamentUser
         // TODO: Replace this with a default profile photo
         $fallback = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-        $path =  $this->currentCoverPhoto()
+        $path = $this->currentCoverPhoto()
             ? 'storage/' . $this->currentCoverPhoto()->path
             : $fallback;
 
@@ -218,9 +233,9 @@ class User extends Authenticatable implements FilamentUser
         return $this->privacySettings->visibility_type === ProfileVisibilityTypes::PUBLIC || $this->isUserProfile();
     }
 
-    public function widgetIsVisible(string $setting): bool
+    public function privacySetting(string $setting): bool
     {
-        if (!isset($this->privacySettings->{$setting})) {
+        if (! isset($this->privacySettings->{$setting})) {
             return false;
         }
 
@@ -229,7 +244,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasRole('admin') || $this->hasPermissionTo('access admin panel');
+        return $this->isAdmin() || $this->hasPermissionTo('access admin panel');
     }
 
     public function isBanned(): bool
@@ -239,11 +254,16 @@ class User extends Authenticatable implements FilamentUser
 
     public function isNotBanned(): bool
     {
-        return !$this->isBanned();
+        return ! $this->isBanned();
     }
 
     public function getBan()
     {
         return $this->bans()->where('expires_at', '>', now())->first();
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('admin');
     }
 }

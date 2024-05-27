@@ -15,13 +15,18 @@
                         </x-secondary-button>
                     @else
                         @if(Auth::user()->friendship($user))
-                            <x-secondary-button>
-                                <x-icons.trash/>
+                            <form action="{{ route('friends.destroy', $user) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
 
-                                <span class="ml-2">
-                                    Remove friend
-                                </span>
-                            </x-secondary-button>
+                                <x-secondary-button type="submit">
+                                    <x-icons.trash/>
+
+                                    <span class="ml-2">
+                                        Remove friend
+                                    </span>
+                                </x-secondary-button>
+                            </form>
 
                             @if(Auth::user()->activeChat($user))
                                 <a href="{{ route('conversations.show', Auth::user()->activeChat($user)) }}">
@@ -114,9 +119,9 @@
             <div class="flex flex-col gap-y-2 mt-4">
                 <h2 class="font-bold text-5xl">{{ $user->name }}</h2>
 
-                <p class="text-black/70">{{ $user->friendships()->whereNotNull('accepted_at')->count() }} friends</p>
+                <p class="text-black/70">{{ $user->activeFriendships->count() }} friends</p>
                 <div class="flex">
-                    @foreach($user->friendships()->whereNotNull('accepted_at')->get() as $key => $friend)
+                    @foreach($user->activeFriendships as $key => $friend)
                         <a class="h-10 w-10  -ml-3" href="{{ route('profile.show', $friend->getProfile($user)) }}"
                            style="z-index: {{ $user->friendships()->count() - $key }}">
                             <img class="w-full h-full rounded-full border-2 border-black/60"
@@ -135,7 +140,7 @@
                     <div class="w-full space-y-2">
                         <h2 class="text-2xl font-bold">Introduction</h2>
 
-                        @if($user->widgetIsVisible('show_biography'))
+                        @if($user->privacySetting('show_biography'))
                             <p>
                                 {{ $user->biography }}
                             </p>
@@ -149,7 +154,7 @@
                             </x-secondary-button>
                         @endif
 
-                        @if($user->widgetIsVisible('show_join_date'))
+                        @if($user->privacySetting('show_join_date'))
                             <div class="flex gap-x-2">
                                 <x-icons.clock/>
 
@@ -159,7 +164,7 @@
                     </div>
                 </x-content.card>
 
-                @if($user->widgetIsVisible('show_photo_list'))
+                @if($user->privacySetting('show_photo_list'))
                     <x-content.card content-classes="border">
                         <div class="w-full space-y-2">
                             <h2 class="text-2xl font-bold">Pictures</h2>
@@ -188,7 +193,7 @@
                     </x-content.card>
                 @endif
 
-                @if($user->widgetIsVisible('show_friend_list'))
+                @if($user->privacySetting('show_friend_list'))
                     <x-content.card content-classes="border">
                         <div class="w-full space-y-2">
                             <h2 class="text-2xl font-bold">Friends</h2>
@@ -218,7 +223,7 @@
                     <x-timeline.status/>
                 @endif
 
-                @if($user->widgetIsVisible('timeline_visible'))
+                @if($user->privacySetting('timeline_visible'))
                     <div class="max-h-96 lg:max-h-[calc(100vh-300px)] overflow-y-auto space-y-4">
                         @foreach($user->posts()->orderByDesc('id')->get() as $post)
                             <x-post.post :post="$post"/>
@@ -229,7 +234,7 @@
         </div>
     @endif
 
-    <x-modal name="add-biography" :show="$errors->isNotEmpty()" focusable>
+    <x-modal name="add-biography" focusable>
         <form method="post" action="{{ route('profile.biography.update') }}" class="p-6">
             @csrf
             @method('PUT')

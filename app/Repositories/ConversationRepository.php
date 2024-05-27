@@ -13,7 +13,7 @@ class ConversationRepository
         $query = $conversation->messages()->withTrashed();
 
         // Update messages read status
-        $conversation->messages()->where('read_at', null)->where('user_id', '!=' , auth()->id())->get()->each(function ($message) {
+        $conversation->messages()->where('read_at', null)->where('user_id', '!=', auth()->id())->get()->each(function ($message): void {
             $message->update(['read_at' => now()]);
             event(new MessageReadEvent($message->conversation->id, $message, $message->user_id));
         });
@@ -30,5 +30,4 @@ class ConversationRepository
 
         return $query->get();
     }
-
 }

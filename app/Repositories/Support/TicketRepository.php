@@ -16,7 +16,7 @@ class TicketRepository
             return $query->whereNotNull('closed_at');
         })->latest('updated_at')->get();
 
-        if (Auth::user()?->hasRole('admin')) {
+        if (Auth::user()?->isAdmin()) {
             $tickets = Ticket::query()->when($ticketStatus === 'open', function ($query) {
                 return $query->whereNull('closed_at');
             }, function ($query) {
@@ -29,7 +29,7 @@ class TicketRepository
 
     public function show(Ticket $ticket)
     {
-        if (! $ticket->isAuthor() && ! Auth::user()?->hasRole('admin')) {
+        if (! $ticket->isAuthor() && ! Auth::user()?->isAdmin()) {
             abort(403);
         }
 
@@ -41,9 +41,9 @@ class TicketRepository
         return Auth::user()?->tickets()->create($request->validated());
     }
 
-    public function destroy(Ticket $ticket)
+    public function destroy(Ticket $ticket): void
     {
-        if (! $ticket->isAuthor() && ! Auth::user()?->hasRole('admin')) {
+        if (! $ticket->isAuthor() && ! Auth::user()?->isAdmin()) {
             abort(403);
         }
 

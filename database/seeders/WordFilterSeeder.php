@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +15,7 @@ class WordFilterSeeder extends Seeder
         $badWords = [
             'abuse', 'asshole', 'bastard', 'bitch', 'bullshit', 'cunt',
             'damn', 'dick', 'faggot', 'fuck', 'motherfucker', 'nigger',
-            'nigga', 'piss', 'prick', 'pussy', 'shit', 'slut', 'whore'
+            'nigga', 'piss', 'prick', 'pussy', 'shit', 'slut', 'whore',
         ];
 
         foreach ($badWords as $word) {

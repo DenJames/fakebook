@@ -36,7 +36,7 @@ class ProfileRepository
         $rules['visibility_type'] = [
             'required',
             'integer',
-            Rule::in(array_map(fn($type) => $type->value, $visibilityTypes))
+            Rule::in(array_map(fn ($type) => $type->value, $visibilityTypes)),
         ];
 
 
@@ -44,7 +44,7 @@ class ProfileRepository
 
         $settings = [];
         foreach ($validatedData as $key => $value) {
-            if (in_array($key, array_map(fn($setting) => $setting->value, $privacySettings), true)) {
+            if (in_array($key, array_map(fn ($setting) => $setting->value, $privacySettings), true)) {
                 $settings[$key] = $value === 'true';
             }
         }

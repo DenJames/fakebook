@@ -1,53 +1,86 @@
 <x-app-layout>
-   <grid class="grid grid-cols-12 gap-4">
-       <div class="col-span-12 lg:col-span-4">
-           <h2 class="text-2xl font-bolt">Open previous chat</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 w-full gap-4">
+        <div class="space-y-4">
+            <div class="px-2">
+                <h2 class="text-lg font-bold">Active Chats</h2>
+            </div>
 
-           <div class="flex flex-col gap-y-2 mt-2 max-h-[calc(100vh-200px)] overflow-y-auto">
-               @forelse($conversations as $conversation)
-                   <a href="{{ route('conversations.show', $conversation->id) }}"
-                      class="flex flex-col p-4 bg-white border rounded">
-                       <p class="font-bold">
-                           {{ $conversation->participant->name }}
-                       </p>
+            <div class="max-h-[calc(100vh-200px)] overflow-y-auto px-2 space-y-3 py-1">
+                @foreach($conversations as $conversation)
+                    <div>
+                        <a href="{{ route('conversations.show', $conversation->id) }}">
+                            <x-content.card content-classes="transition-all hover:scale-[101%] duration-300">
+                                {{-- Unread message ping --}}
+                                @if($conversation->hasUnreadMessages())
+                                    <span class="absolute top-3 right-4 flex h-3 w-3">
+                                    <span
+                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
+                                </span>
+                                @endif
 
-                       <div class="flex gap-x-2 items-center">
-                           <p class="truncate text-sm w-full {{ $conversation->hasUnreadMessages() ? 'text-black text-bold' : 'text-black/50' }}">
-                               {{ $conversation->messages->last()?->content }}
-                           </p>
+                                <div class="flex flex-col w-full">
+                                    <div class="flex gap-x-2 items-center">
+                                        <img src="{{ asset($conversation->participant->profile_photo) }}"
+                                             alt="{{ $conversation->participant->name }}"
+                                             class="h-10 w-10 rounded-full">
 
-                           <p class="text-black text-xs text-black/50 mt-[2px] flex justify-end">
-                               @if($conversation->hasUnreadMessages())
-                                    <span class="w-[7px] h-[7px] bg-blue-500 rounded-3xl mt-1 mr-1"></span>
-                               @endif
-                               {{ formatDiffForHumans( $conversation->messages->last()->created_at ?? now()) }}
-                           </p>
-                       </div>
-                   </a>
-               @empty
-                   <div class="text-center text-2xl">
-                       No conversations found.
-                   </div>
-               @endforelse
-           </div>
-       </div>
+                                        <div class="flex flex-col w-full">
+                                            <p class="font-bold truncate">
+                                                {{ $conversation->participant->name }}
+                                            </p>
 
-       <div class="col-span-12 lg:col-span-8 ">
-           <h2 class="text-2xl font-bolt">Start new chat</h2>
-           <div class="flex flex-col gap-y-2 w-full mt-2 max-h-[calc(100vh-200px)] overflow-y-auto">
-               @forelse($users as $user)
-                   <a href="{{ route('conversations.start', $user) }}"
-                      class="flex flex-col p-4 bg-white border rounded">
-                       <p class="font-bold">
-                            {{ $user->name }}
-                       </p>
-                   </a>
-               @empty
-                   <div class="text-center text-2xl">
-                      No users found.
-                   </div>
-               @endforelse
-           </div>
-       </div>
-   </grid>
+                                            @if($conversation->messages->last())
+                                                <small class="text-black/70 w-[85%] truncate">
+                                                    {{ $conversation->messages()->latest()->first()->content }}
+                                                </small>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    @if($conversation->messages->last())
+                                        <small class="text-end absolute bottom-2 right-4 text-black/70">
+                                            Last message: {{ formatDiffForHumans($conversation->messages()->latest()->first()->created_at) }} ago
+                                        </small>
+                                    @endif
+                                </div>
+                            </x-content.card>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <hr class="block lg:hidden">
+
+        <div class="space-y-4">
+            <div class="px-2">
+                <h2 class="text-lg font-bold">Start a new chat</h2>
+            </div>
+
+            <div class="max-h-[calc(100vh-200px)] overflow-y-auto px-2 space-y-3 py-1">
+                @foreach($users as $user)
+                    <div>
+                        <a href="{{ route('conversations.start', $user) }}">
+                            <x-content.card content-classes="transition-all hover:scale-[101%] duration-300">
+                                <div class="flex flex-col w-full">
+                                    <div class="flex gap-x-2 items-center">
+                                        <img src="{{ asset($user->profile_photo) }}"
+                                             alt="{{ $user->name }}"
+                                             class="h-10 w-10 rounded-full">
+
+                                        <p class="font-bold truncate">
+                                            {{ $user->name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </x-content.card>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+
+
+        </div>
+    </div>
 </x-app-layout>

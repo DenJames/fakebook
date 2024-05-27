@@ -1,4 +1,4 @@
-<div class="relative z-50 lg:hidden" role="dialog" aria-modal="true" x-cloak>
+<div class="relative z-50 lg:hidden w-full" role="dialog" aria-modal="true" x-cloak>
     <div class="fixed inset-0 bg-gray-900/80"
          x-show="isSidebarOpen"
          x-transition:enter="transition-opacity ease-linear duration-300"
@@ -88,7 +88,7 @@
                                         Support
                                     </x-navigation.side-nav-link>
 
-                                    @if(Auth::user()->hasRole('admin'))
+                                    @if(Auth::user()->isAdmin())
                                         <x-navigation.side-nav-link href="/admin" target="_blank">
                                             <x-slot:icon>
                                                 <x-icons.user />

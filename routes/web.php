@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\DashboardController;
@@ -27,15 +28,7 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     // Chat related routes
-    Route::get('/chat', function () {
-        $latestChat = Auth::user()?->conversations()->latest('updated_at')->first();
-
-        if ($latestChat) {
-            return to_route('conversations.show', $latestChat);
-        }
-
-        return to_route('conversations.index');
-    })->name('chat.index');
+    Route::get('/chat', ChatController::class)->name('chat.index');
 
     Route::prefix('conversations')->name('conversations.')->group(function () {
         Route::get('/', [ConversationController::class, 'index'])->name('index');

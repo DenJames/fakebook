@@ -38,7 +38,6 @@ class FriendRequestNotifications extends Component
         ];
     }
 
-
     public function markAsRead(string $notificationId): void
     {
         $this->user->unreadNotifications()->where('id', $notificationId)->update([
@@ -63,7 +62,7 @@ class FriendRequestNotifications extends Component
     public function setNotifications(): void
     {
         $this->notifications = $this->user->unreadNotifications->whereIn('type', $this->notificationTypes);
-        $this->unreadNotificationsCount =  $this->notifications->count();
+        $this->unreadNotificationsCount = $this->notifications->count();
     }
 
     public function render(): Application|Factory|View|FoundationApplication|IlluminateView
@@ -71,7 +70,3 @@ class FriendRequestNotifications extends Component
         return view('livewire.friend-request-notifications');
     }
 }
-
-
-
-

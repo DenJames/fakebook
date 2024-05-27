@@ -32,6 +32,7 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function comments(): MorphMany
     {
         return $this->morphMany(self::class, 'commentable');

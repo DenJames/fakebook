@@ -7,7 +7,7 @@
                     <div @class([
                             'rounded bg-gray-100 w-full relative flex p-4 text-black',
                             '!bg-blue-600 text-white flex-col items-start' => !$reply->isAuthor(),
-                            '!bg-yellow-300 !text-black' => !$reply->isAuthor() && ($reply->user->hasRole('admin') && Auth::user()->hasRole('admin'))
+                            '!bg-yellow-300 !text-black' => !$reply->isAuthor() && ($reply->user->isAdmin() && Auth::user()->isAdmin())
                         ])>
                         <div class="flex gap-4">
                             <img src="{{ asset($reply->user->profile_photo) }}" alt=""

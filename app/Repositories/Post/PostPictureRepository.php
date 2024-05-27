@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 readonly class PostPictureRepository
 {
-
     public function __construct(private PostPictureUpload $postPictureUpload)
     {
     }
@@ -19,6 +18,7 @@ readonly class PostPictureRepository
         // If the profile picture upload fails, return an error message
         if (! $_image = $this->postPictureUpload->execute($post, $image)) {
             Log::debug('Failed to upload post picture');
+
             return 'Failed to upload post picture';
         }
 

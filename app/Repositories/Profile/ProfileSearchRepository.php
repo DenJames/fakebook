@@ -3,8 +3,6 @@
 namespace App\Repositories\Profile;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class ProfileSearchRepository

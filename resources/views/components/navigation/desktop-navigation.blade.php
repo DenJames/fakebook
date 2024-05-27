@@ -61,7 +61,7 @@
                                 Support
                             </x-navigation.side-nav-link>
 
-                            @if(Auth::user()->hasRole('admin'))
+                            @if(Auth::user()->isAdmin())
                                 <x-navigation.side-nav-link href="/admin" target="_blank">
                                     <x-slot:icon>
                                         <x-icons.user />

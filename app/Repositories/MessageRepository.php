@@ -2,12 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Events\Chat\MessageReadEvent;
 use App\Http\Requests\MessageFormRequest;
 use App\Models\Conversation;
 use App\Models\Message;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 
 class MessageRepository
 {

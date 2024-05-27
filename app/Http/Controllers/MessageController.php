@@ -10,14 +10,12 @@ use App\Http\Requests\MessageFormRequest;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Repositories\MessageRepository;
-use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
     public function __construct(private readonly MessageRepository $messageRepository)
     {
     }
-
 
     public function store(MessageFormRequest $request, Conversation $conversation)
     {

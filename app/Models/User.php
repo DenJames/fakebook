@@ -233,7 +233,7 @@ class User extends Authenticatable implements FilamentUser
         return $this->privacySettings->visibility_type === ProfileVisibilityTypes::PUBLIC || $this->isUserProfile();
     }
 
-    public function widgetIsVisible(string $setting): bool
+    public function privacySetting(string $setting): bool
     {
         if (! isset($this->privacySettings->{$setting})) {
             return false;

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Events\Chat\MessageReadEvent;
 use App\Models\Conversation;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 class ConversationRepository
@@ -29,5 +30,10 @@ class ConversationRepository
         }
 
         return $query->get();
+    }
+
+    public function fetchLatestMessage(User $user): Conversation|null
+    {
+        return $user->conversations()->latest('updated_at')->first();
     }
 }

@@ -45,6 +45,7 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
     });
 
     // Profile routes
+    // TODO: Refactor into repositories
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('profile.update');
@@ -64,6 +65,7 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
     Route::get('/search', ProfileSearchController::class)->name('profile.search');
 
     // Friends
+    // TODO: Refactor into repositories
     Route::prefix('friends')->group(function () {
         Route::get('/', [FriendshipController::class, 'index'])->name('friends.index');
         Route::delete('/{user}', [FriendshipController::class, 'destroy'])->name('friends.destroy');
@@ -108,6 +110,7 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
     });
 
 
+    // TODO: Refactor into repositories
     Route::prefix('api')->name('api.')->group(function () {
         Route::get('/friends', [FriendshipController::class, 'friends'])->name('friends');
     });

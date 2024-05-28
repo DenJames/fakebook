@@ -31,7 +31,7 @@ class PostObserver
         // Remove the post images from the storage
         $post->images->each->delete();
         // Delete the post content path
-        Storage::disk('public')->delete('posts/' . $post->user->id . '/' . $post->id);
+        Storage::disk('public')->deleteDirectory('posts/' . $post->user->id . '/' . $post->id);
     }
 
     /**

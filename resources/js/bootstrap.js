@@ -46,7 +46,7 @@ window.addEventListener('beforeinstallprompt', (event) => {
 
 function showAddToHomeScreenButton() {
     const addToHomeScreenButton = document.getElementById('pwa-banner');
-    addToHomeScreenButton.style.display = 'block';
+    addToHomeScreenButton.style.display = 'flex';
 
     document.getElementById('close-pwa-button').addEventListener('click', () => {
         addToHomeScreenButton.style.display = 'none';

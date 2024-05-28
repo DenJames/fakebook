@@ -4,6 +4,7 @@
         <x-text-input id="timeline_status_input" type="text" placeholder="What's on your mind, {{ Auth::user()->name }}?" class="w-full rounded-full" data-modal-target="default-modal" data-modal-toggle="default-modal" />
     </div>
 </div>
+
 <x-timeline.status-modal modal-id="default-modal"/>
 <div class="edit-post-modal"></div>
 

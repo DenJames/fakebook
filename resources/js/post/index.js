@@ -49,9 +49,6 @@ function sendAjax(url, method, data) {
         url: url,
         type: method,
         data: data,
-        error: function (response) {
-            console.log(response);
-        }
     });
 }
 

@@ -22,15 +22,12 @@ $(document).ready(function() {
     var user_id = $('meta[name="user-id"]').attr('content')
 
     $.get('/api/friends', function(response) {
-        console.log(response.friends);
         // friends is an object
         Object.keys(response.friends).forEach(function(friend_id) {
             const friend = response.friends[friend_id];
             freind_sockets[friend] = window.Echo.private('friend.' + friend + '.feeds');
 
-            freind_sockets[friend].subscribed(() => {
-                console.log("Subscribed to event channel friend." + friend + '.feeds');
-            }).listen('.PostCreated', (e) => {
+            freind_sockets[friend].listen('.PostCreated', (e) => {
                 $.get(e.url, function(response) {
                     $('.posts-container').prepend(response);
                     $('#post-' + e.id).find('.post-image').each(function () {
@@ -57,10 +54,7 @@ $(document).ready(function() {
         });
     });
 
-    window.Echo.private('me.' + user_id + '.feeds')
-        .subscribed(() => {
-            console.log("Subscribed to event channel me." + user_id + ".feeds");
-        }).listen('.PostCreated', (e) => {
+    window.Echo.private('me.' + user_id + '.feeds').listen('.PostCreated', (e) => {
             $.get(e.url, function(response) {
                 $('.posts-container').prepend(response);
 

@@ -134,7 +134,6 @@ $(document).ready(function () {
 });
 
 function autoResize(divElement, maxHeight) {
-    console.log("Update");
     divElement.style.height = 'auto'; // Temporarily shrink div to get accurate scrollHeight
     const shouldScroll = divElement.scrollHeight > maxHeight;
     divElement.style.overflowY = shouldScroll ? 'scroll' : 'hidden';

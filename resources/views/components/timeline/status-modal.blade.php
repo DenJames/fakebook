@@ -28,59 +28,10 @@
                             </select>
                         </div>
                     </div>
-                    <div x-data="editor('')" class="text-white">
 
-                        <template x-if="isLoaded()">
-                            <div class="menu flex items-center gap-2">
-                                <button @click="toggleHeading({ level: 1 })" :class="{ 'is-active': isActive('heading', { level: 1 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h1 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 2 })" :class="{ 'is-active': isActive('heading', { level: 2 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h2 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 3 })" :class="{ 'is-active': isActive('heading', { level: 3 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h3 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 4 })" :class="{ 'is-active': isActive('heading', { level: 4 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h4 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 5 })" :class="{ 'is-active': isActive('heading', { level: 5 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h5 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 6 })" :class="{ 'is-active': isActive('heading', { level: 6 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h6 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button
-                                    @click="toggleBold()"
-                                    :class="{ 'is-active' : isActive('bold', updatedAt) }"
-                                    type="button"
-                                >
-                                    <x-icons.bold width="w-3" height="h-3"/>
-                                </button>
-                                <button
-                                    @click="toggleItalic()"
-                                    :class="{ 'is-active' : isActive('italic', updatedAt) }"
-                                    type="button"
-                                >
-                                    <x-icons.italic width="w-3" height="h-3"/>
-                                </button>
-                            </div>
-                        </template>
+                    <livewire:tip-tap-editor />
 
-                        <div x-ref="element" x-data-placeholder="What's on your mind, {{ Auth::user()->name }}?" id="timeline-textarea-status" class="pt-1 text-white"></div>
-                    </div>
+
 {{--                    <textarea name="content" id="timeline-textarea-status" class="w-full h-min p-2 border border-gray-200 rounded-lg focus:ring-0 focus:border-none block sm:text-sm bg-transparent border-none outline-none text-white placeholder-gray-200 resize-none" placeholder="What's on your mind, {{ Auth::user()->name }}?"></textarea>--}}
                     <div class="flex flex-col timeline-image-container hidden" id="timeline-image-container">
                         <div class="items-center justify-center w-full">

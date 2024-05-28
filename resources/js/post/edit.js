@@ -30,8 +30,6 @@ $(document).ready(function () {
 
                 modal.show();
 
-                console.log($('#post-update').find('.preview-template').html());
-
                 myPostDropzone = new Dropzone("#post-update", {
                     url: "/posts/"+post_id+"/image", // replace with your upload URL
                     headers: {
@@ -62,7 +60,6 @@ $(document).ready(function () {
                 });
 
                 myPostDropzone.on("removedfile", function(file) {
-                    console.log(file);
                     if (file.id) {
                         $.ajax({
                             url: '/posts/image/' + file.id,
@@ -70,12 +67,6 @@ $(document).ready(function () {
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
-                            success: function (response) {
-                                console.log(response);
-                            },
-                            error: function (response) {
-                                console.log(response);
-                            }
                         });
                     }
                 });
@@ -93,8 +84,6 @@ $(document).ready(function () {
                 $.get('/posts/' + post_id + '/images', function(data) {
                     // For each image
                     $.each(data, function(key, value) {
-                        // Create a mock file
-                        console.log(data);
 
                         var mockFile = { name: value.name, size: value.size, id: value.id };
 

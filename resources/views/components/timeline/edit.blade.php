@@ -14,6 +14,7 @@
                 </h3>
             </div>
             <!-- Modal body -->
+
             <form action="{{ route('posts.update', $post) }}" method="post" class="dropzone" id="post-update">
                 @csrf
                 <div class="p-4 md:p-5 space-y-4">
@@ -28,63 +29,9 @@
                             </select>
                         </div>
                     </div>
-                    <div x-data="editor('')" class="text-white">
 
-                        <template x-if="isLoaded()">
-                            <div class="menu flex items-center gap-2">
-                                <button @click="toggleHeading({ level: 1 })" :class="{ 'is-active': isActive('heading', { level: 1 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h1 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 2 })" :class="{ 'is-active': isActive('heading', { level: 2 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h2 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 3 })" :class="{ 'is-active': isActive('heading', { level: 3 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h3 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 4 })" :class="{ 'is-active': isActive('heading', { level: 4 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h4 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 5 })" :class="{ 'is-active': isActive('heading', { level: 5 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h5 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button @click="toggleHeading({ level: 6 })" :class="{ 'is-active': isActive('heading', { level: 6 }, updatedAt) }" type="button">
-                                    <div class="text-white">
-                                        <x-icons.h6 width="w-[15px]"/>
-                                    </div>
-                                </button>
-                                <button
-                                    @click="toggleBold()"
-                                    :class="{ 'is-active' : isActive('bold', updatedAt) }"
-                                    type="button"
-                                >
-                                    <x-icons.bold width="w-3" height="h-3"/>
-                                </button>
-                                <button
-                                    @click="toggleItalic()"
-                                    :class="{ 'is-active' : isActive('italic', updatedAt) }"
-                                    type="button"
-                                >
-                                    <x-icons.italic width="w-3" height="h-3"/>
-                                </button>
-                            </div>
-                        </template>
+                    <livewire:tip-tap-editor :post="$post" editor-id="timeline-textarea-status-edit" />
 
-                        <div x-ref="element" id="timeline-textarea-status-edit" class="pt-1">
-
-                        </div>
-
-                        <div class="innterHTML" id="editor-text">{!! str_replace('<br class="ProseMirror-trailingBreak">', '', $post->content) !!}</div>
-                    </div>
                     <div class="flex flex-col timeline-image-container" id="timeline-image-container">
 {{--                        <div class="items-center justify-center w-full">--}}
 {{--                            <div class="flex flex-col items-center justify-center pt-5 pb-6 no-images-uploaded hover:bg-gray-800 rounded-xl">--}}

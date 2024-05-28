@@ -64,7 +64,6 @@ $(document).ready(function() {
         var scrollPosition = messages.scrollTop();
         var scrollHeight = messages[0].scrollHeight;
         $('#messages').append(e.html);
-        console.log(e.user_id, user_id)
         if (e.user_id != user_id) {
             $.ajax({
                 url: '/messages/' + e.message_id + '/read',

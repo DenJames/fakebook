@@ -66,9 +66,9 @@
                             <div class="text-green-600 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-30 timeline-image-button">
                                 <x-icons.image/>
                             </div>
-                            <div class="text-blue-600 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-30 timeline-tag-button">
-                                <x-icons.tag/>
-                            </div>
+{{--                            <div class="text-blue-600 rounded-full p-1 hover:bg-gray-200 hover:bg-opacity-30 timeline-tag-button">--}}
+{{--                                <x-icons.tag/>--}}
+{{--                            </div>--}}
                         </div>
                     </div>
                 </div>

@@ -244,7 +244,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->isAdmin() || $this->hasPermissionTo('access admin panel');
+        return $this->isAdmin();
     }
 
     public function isBanned(): bool
@@ -264,6 +264,6 @@ class User extends Authenticatable implements FilamentUser
 
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin');
+        return $this->hasRole('super_admin');
     }
 }

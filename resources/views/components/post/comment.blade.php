@@ -19,7 +19,7 @@
                 <button class="hover:underline replay-comment" data-post-id="{{ $comment->commentable->id }}" data-comment-id="{{ $comment->id }}">Reply</button>
 
                 @if($comment->userIsAuthor())
-                    <button class="hover:underline edit-comment" data-post-id="{{ $comment->commentable->id }}" data-comment-id="{{ $comment->id }}">Edit</button>
+{{--                    <button class="hover:underline edit-comment" data-post-id="{{ $comment->commentable->id }}" data-comment-id="{{ $comment->id }}">Edit</button>--}}
                     <button class="hover:underline delete-comment" data-post-id="{{ $comment->commentable->id }}" data-comment-id="{{ $comment->id }}">Delete</button>
                 @endif
 

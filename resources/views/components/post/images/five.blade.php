@@ -3,7 +3,7 @@
 <div class="flex flex-col gap-0.5 w-full">
     <div class="flex flex-row gap-0.5">
         @for($i = 0; $i < 2; $i++)
-            <div class="h-auto overflow-hidden max-h-[380px]">
+            <div class="h-auto overflow-hidden max-h-[380px] w-full">
                 <a data-fslightbox="post-{{$images[$i]->post_id}}" href="{{  asset($images[$i]->url) }}" class="w-full h-full">
                     <div class="flex items-center justify-center h-full w-full">
                         <img src="{{  asset($images[$i]->url) }}" alt="{{ $images[$i]->name }}" class="post-image">

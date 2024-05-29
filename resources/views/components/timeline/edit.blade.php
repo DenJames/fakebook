@@ -10,7 +10,7 @@
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <h3 class="relative text-xl font-semibold text-gray-900 dark:text-white text-center w-full">
-                    Create post
+                    Edit post
                 </h3>
             </div>
             <!-- Modal body -->

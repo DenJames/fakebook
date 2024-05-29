@@ -61,7 +61,8 @@ class FriendshipRepository
 
     public function removeRequest(Friendship $friendship, Request $request): JsonResponse|RedirectResponse
     {
-        $request->user()->unreadNotifications()->where('data->sent_from', $friendship->user->name)?->delete();
+        $friendship->friend->unreadNotifications()->where('data->sender->id', $request->user()->id)?->delete();
+        // $request->user()->unreadNotifications()->where('data->sender->id', $friendship->user->id)?->delete();
         $friendship->delete();
 
         $message = 'Friend has been removed!';

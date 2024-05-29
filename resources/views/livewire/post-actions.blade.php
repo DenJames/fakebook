@@ -21,16 +21,16 @@
         </div>
     @endif
 
-    <div class="grid grid-cols-2 pt-1">
+    <div class="grid grid-cols-1 pt-1">
         <button class="flex flex-row gap-2 items-center justify-center hover:bg-gray-300 py-1 rounded-md rounded-r-none like-post transition-all {{ $post->hasLiked() ? 'text-blue-500' : '' }}" wire:click="like">
             <x-icons.like/>
             <span>Like post</span>
         </button>
 
-        <button class="flex flex-row gap-2 items-center justify-center hover:bg-gray-300 py-1 rounded-md rounded-l-none share- transition-all" data-post-id="{{ $post->id }}">
-            <x-icons.share/>
-            <span>Share</span>
-        </button>
+{{--        <button class="flex flex-row gap-2 items-center justify-center hover:bg-gray-300 py-1 rounded-md rounded-l-none share- transition-all" data-post-id="{{ $post->id }}">--}}
+{{--            <x-icons.share/>--}}
+{{--            <span>Share</span>--}}
+{{--        </button>--}}
     </div>
 
     <livewire:comments :post="$post" />

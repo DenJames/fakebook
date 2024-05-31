@@ -4,7 +4,7 @@
         <form action="{{ route('support.tickets.store') }}" method="POST" class="grid grid-cols-2 gap-4 w-full">
             @csrf
 
-            <div class="flex flex-col">
+            <div class="flex flex-col col-span-2 lg:col-span-1">
                 <label for="category">
                     Category
                 </label>
@@ -22,7 +22,7 @@
                 </select>
             </div>
 
-            <div class="flex flex-col">
+            <div class="flex flex-col col-span-2 lg:col-span-1">
                 <label for="subject">
                     Subject
                 </label>

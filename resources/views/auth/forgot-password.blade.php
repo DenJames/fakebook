@@ -1,4 +1,6 @@
-<x-app-layout>
+<x-guest-layout>
+    @push('title', 'Forgot password')
+
     <div class="w-full flex justify-center">
         <div class="w-full lg:w-1/3">
             <x-content.card>
@@ -32,4 +34,4 @@
             </x-content.card>
         </div>
     </div>
-</x-app-layout>
+</x-guest-layout>

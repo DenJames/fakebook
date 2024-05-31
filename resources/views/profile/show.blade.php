@@ -1,4 +1,6 @@
 <x-app-layout>
+    @push('title', $user->name . ' profile')
+
     <div class="bg-gray-100 rounded pb-4">
         <div class="w-full h-72 relative rounded rounded-b-none"
              style="background-image: url({{ asset($user->cover_photo) }}); background-size: cover; background-position: center">

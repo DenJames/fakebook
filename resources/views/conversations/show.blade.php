@@ -1,4 +1,6 @@
 <x-app-layout>
+    @push('title', 'Chat with ' . $conversation->participant()->name)
+
     <div class="relative rounded bg-gray-100 p-4 w-full h-[calc(100vh-150px)] space-y-6">
         <div class="space-y-6 overflow-y-auto p-4 max-h-[calc(100vh-350px)]" id="messages">
             @foreach($messages as $message)

@@ -9,7 +9,7 @@
         <meta name="user-id" content="{{ auth()->user()->id }}">
     @endif
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }} - @stack('title')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

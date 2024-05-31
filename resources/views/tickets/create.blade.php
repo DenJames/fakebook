@@ -1,5 +1,5 @@
 <x-app-layout>
-
+    @push('title', 'Create ticket')
     <x-content.card>
         <form action="{{ route('support.tickets.store') }}" method="POST" class="grid grid-cols-2 gap-4 w-full">
             @csrf

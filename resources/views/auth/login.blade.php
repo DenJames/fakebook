@@ -9,6 +9,8 @@
 </script>
 
 <x-guest-layout>
+    @push('title', 'Login')
+
     <div class="w-full flex justify-center">
         <div class="w-full lg:w-1/2">
             <!-- Session Status -->

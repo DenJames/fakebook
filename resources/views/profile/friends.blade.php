@@ -1,4 +1,6 @@
 <x-app-layout>
+    @push('title', 'Friends')
+
     <div class="grid grid-cols-1 lg:grid-cols-2 w-full gap-4">
         <div class="space-y-4">
             <div class="px-2">

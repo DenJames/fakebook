@@ -1,4 +1,6 @@
 <x-app-layout>
+    @push('title', 'Timeline')
+
     <div class="overflow-hidden shadow-sm sm:rounded-lg">
         <div class="text-gray-900 ">
             <x-timeline.status/>

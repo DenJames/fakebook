@@ -22,6 +22,11 @@ class Conversation extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function scopeParticipant()
+    {
+        return $this->users->where('id', '!=', Auth::id())->first();
+    }
+
     public function hasUnreadMessages()
     {
         return $this->messages()->where('read_at', null)->where('user_id', '!=', Auth::user()->id)->exists();

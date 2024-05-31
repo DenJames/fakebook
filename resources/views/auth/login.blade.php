@@ -17,15 +17,14 @@
             <x-auth-session-status class="mb-4" :status="session('status')"/>
 
             <div class="w-full relative">
-                @if(config('app.env') === 'local')
-                    <div class="w-full flex justify-end">
-                        <a href="{{ route('test-auth') }}">
-                            <x-secondary-button class="text-white !bg-gray-900">
-                                Test login
-                            </x-secondary-button>
-                        </a>
-                    </div>
-                @endif
+                <div class="w-full flex justify-end">
+                    <a href="{{ route('test-auth') }}">
+                        <x-secondary-button class="text-white !bg-gray-900">
+                            Test login
+                        </x-secondary-button>
+                    </a>
+                </div>
+                
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
 

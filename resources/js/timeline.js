@@ -1,4 +1,4 @@
-import './post/comment.js';
+// import './post/comment.js';
 import './post/edit.js';
 import './post/index.js';
 import './post/create.js';

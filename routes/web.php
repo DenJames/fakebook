@@ -118,12 +118,7 @@ Route::middleware(['auth', EnsureUserIsNotBanned::class])->group(function () {
     Route::view('/banned', 'banned')->name('banned');
 });
 
-// TODO: Important! Remove this before production
 Route::get('/test-auth', function() {
-    if (config('app.env') === 'production') {
-        abort(404);
-    }
-
     if (User::count() === 0) {
         User::factory()->create();
     }

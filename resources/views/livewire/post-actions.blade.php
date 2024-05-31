@@ -15,14 +15,14 @@
                     @if($post->comments()->count())
                         <span>{{ $post->comments()->count() }} comment{{ $post->comments()->count() == 1 ? '' : 's' }}</span>
                     @endif
-                    {{--                <span>9 shars</span>--}}
+                    {{-- <span>9 shars</span>--}}
                 </div>
             </div>
         </div>
     @endif
 
     <div class="grid grid-cols-1 pt-1">
-        <button class="flex flex-row gap-2 items-center justify-center hover:bg-gray-300 py-1 rounded-md rounded-r-none like-post transition-all {{ $post->hasLiked() ? 'text-blue-500' : '' }}" wire:click="like">
+        <button class="flex flex-row gap-2 items-center justify-center hover:bg-gray-300 py-1 rounded-md like-post transition-all {{ $post->hasLiked() ? 'text-blue-500' : '' }}" wire:click="like">
             <x-icons.like/>
             <span>Like post</span>
         </button>

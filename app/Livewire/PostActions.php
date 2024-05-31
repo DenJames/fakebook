@@ -5,12 +5,20 @@ namespace App\Livewire;
 use App\Events\PostLikedEvent;
 use App\Models\Post as PostModel;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class PostActions extends Component
 {
     public PostModel $post;
+
+    public function getListeners()
+    {
+        return [
+            'echo:post-liked,PostLikedEvent' => '$refresh',
+            "echo:post-comment-deleted,PostCommentDeletedEvent" => '$refresh',
+            "echo:comment-posted,.CommentAdded" => '$refresh',
+        ];
+    }
 
     public function like(): void
     {
@@ -23,12 +31,6 @@ class PostActions extends Component
         }
 
         PostLikedEvent::dispatch();
-    }
-
-    #[On('echo:post-liked,PostLikedEvent')]
-    public function refreshPost(): void
-    {
-        $this->post = $this->post->fresh();
     }
 
     public function render()

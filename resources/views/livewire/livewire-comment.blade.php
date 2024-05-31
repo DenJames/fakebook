@@ -22,7 +22,7 @@
                     </button>
                 @endif
 
-                @if($comment->userIsAuthor())
+                @if($this->comment->commentable_type !== 'App\Models\Comment' && $comment->userIsAuthor())
 {{--                    <button class="hover:underline edit-comment" data-post-id="{{ $comment->commentable->id }}"--}}
 {{--                            data-comment-id="{{ $comment->id }}">Edit--}}
 {{--                    </button>--}}

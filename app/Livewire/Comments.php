@@ -40,7 +40,7 @@ class Comments extends Component
 
     public function loadComments(): void
     {
-        $this->comments = $this->post->comments()->latest()->limit(2)->get();
+        $this->comments = $this->post->comments()->latest()->limit(50)->get();
     }
 
     public function mount(): void

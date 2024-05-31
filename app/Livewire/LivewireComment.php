@@ -62,7 +62,7 @@ class LivewireComment extends Component
     #[On('echo:comment-reply,CommentReply')]
     public function loadComments(): void
     {
-        $this->comments = $this->comment->comments()->latest()->limit(2)->get();
+        $this->comments = $this->comment->comments()->latest()->limit(50)->get();
     }
 
     #[On('echo:comment-liked,CommentLiked')]

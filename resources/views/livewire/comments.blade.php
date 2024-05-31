@@ -1,7 +1,9 @@
 <div>
-    @foreach($comments as $comment)
-        <livewire:livewire-comment :comment="$comment" :key="$comment->id"/>
-    @endforeach
+    <div class="lg:max-h-[280px] lg:overflow-y-auto">
+        @foreach($comments as $comment)
+            <livewire:livewire-comment :comment="$comment" :key="$comment->id"/>
+        @endforeach
+    </div>
 
     {{-- Post new comment --}}
     <form wire:submit.prevent="postComment" class="flex flex-row gap-2 items-center justify-center py-2">

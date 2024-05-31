@@ -5,7 +5,6 @@ namespace App\Livewire;
 use App\Events\PostLikedEvent;
 use App\Models\Post as PostModel;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class PostActions extends Component

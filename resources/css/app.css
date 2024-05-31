@@ -51,3 +51,8 @@
 .prose {
     max-width: 100%;
 }
+
+.profile-page {
+    max-height: 120vh !important;
+    overflow-y: hidden;
+}

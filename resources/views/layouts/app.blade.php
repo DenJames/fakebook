@@ -26,7 +26,7 @@
     }
 </style>
 
-<body class="h-full font-sans antialiased" x-data="{ isSidebarOpen: false }">
+<body class="h-full font-sans antialiased {{ request()->is('profile*') ? 'lg:max-h-screen lg:overflow-hidden' : '' }}" x-data="{ isSidebarOpen: false }">
 <div>
     <x-navigation.mobile-navigation/>
 

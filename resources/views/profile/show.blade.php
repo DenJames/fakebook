@@ -198,7 +198,7 @@
                         <div class="w-full space-y-2">
                             <h2 class="text-2xl font-bold">Friends</h2>
 
-                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-60 overflow-y-auto">
+                            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-32 overflow-y-auto">
                                 @foreach($user->friendships()->whereNotNull('accepted_at')->get() as $friend)
                                     <div class="flex flex-col">
                                         <a href="{{ route('profile.show', $friend->getProfile($user)) }}">
@@ -224,7 +224,7 @@
                 @endif
 
                 @if($user->privacySetting('timeline_visible'))
-                    <div class="max-h-96 lg:max-h-[calc(100vh-300px)] overflow-y-auto space-y-4">
+                    <div class="lg:max-h-96 lg:max-h-[690px] lg:overflow-y-auto space-y-4 lg:pb-24">
                         @foreach($user->posts()->orderByDesc('id')->get() as $post)
                             <x-post.post :post="$post"/>
                         @endforeach

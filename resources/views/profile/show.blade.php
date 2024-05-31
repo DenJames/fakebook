@@ -201,7 +201,7 @@
                             <h2 class="text-2xl font-bold">Friends</h2>
 
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-32 overflow-y-auto">
-                                @foreach($user->friendships()->whereNotNull('accepted_at')->get() as $friend)
+                                @foreach($user->activeFriendships as $friend)
                                     <div class="flex flex-col">
                                         <a href="{{ route('profile.show', $friend->getProfile($user)) }}">
                                             <img class="w-full h-24 object-cover rounded"
